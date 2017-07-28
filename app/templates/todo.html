@@ -1,0 +1,491 @@
+{% extends "base.html" %}
+{% block title %}任务跟进{% endblock %}
+{% block content %}
+<div class="todohead">
+    <div class="row" id="bugfilter">
+        <ul class="nav nav-pills">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle textOverHiden" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">项目版本：全部 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu product-dropdown-menu">
+                    <li><a href="javascript:void(0)" data-value="">全部</a></li>
+                    <li><a href="javascript:void(0)" data-value="890">syf1.1.1</a></li>
+                    <li><a href="javascript:void(0)" data-value="893">syf2.0.0</a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle textOverHiden" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">产品模块：全部 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu product-dropdown-menu">
+                <li><a href="javascript:void(0)" data-value="">全部</a></li>
+                <li><a href="javascript:void(0)" data-value="890">病理评估</a></li>
+                <li><a href="javascript:void(0)" data-value="893">时点测评</a></li>
+                <li><a href="javascript:void(0)" data-value="892">预约管理</a></li>
+                <li><a href="javascript:void(0)" data-value="891">综合检查</a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">问题类型：全部 <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu bugType-dropdown-menu">
+                    <li><a href="javascript:void(0)" data-value="">全部</a></li>
+                    <li><a href="javascript:void(0)" data-value="Bug">缺陷</a></li>
+                    <li><a href="javascript:void(0)" data-value="Task">任务</a></li>
+                    <li><a href="javascript:void(0)" data-value="Require">需求</a></li>
+                </ul>
+            </li>
+            
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">状态：全部活动 <span class="caret"></span></a>
+                <ul class="dropdown-menu states-dropdown-menu">
+                <li><a href="javascript:void(0)" data-value="Active">全部活动</a></li>
+                <li><a href="javascript:void(0)" data-value="Open">未解决</a></li>
+                <li><a href="javascript:void(0)" data-value="Fixed">已完成</a></li>
+                <li><a href="javascript:void(0)" data-value="Rejected">已拒绝</a></li>
+                </ul>
+            </li>
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">计划日期：全部 <span class="caret"></span></a>
+                <ul class="dropdown-menu planDate-dropdown-menu">
+                <li><a href="javascript:void(0)" data-value="">全部</a></li>
+                <li><a href="javascript:void(0)" data-value="Expired">已过期</a></li>
+                <li><a href="javascript:void(0)" data-value="Today">今天</a></li>
+                <li><a href="javascript:void(0)" data-value="TodayStart">今天开始</a></li>
+                <li><a href="javascript:void(0)" data-value="TodayExit">今天结束</a></li>
+                <li><a href="javascript:void(0)" data-value="Tomorrow">明天</a></li>
+                <li><a href="javascript:void(0)" data-value="TomorrowStart">明天开始</a></li>
+                <li><a href="javascript:void(0)" data-value="TomorrowExit">明天结束</a></li>
+                <li><a href="javascript:void(0)" data-value="Week">本周</a></li>
+                <li><a href="javascript:void(0)" data-value="WeekStart">本周开始</a></li>
+                <li><a href="javascript:void(0)" data-value="WeekExit">本周结束</a></li>
+                <li><a href="javascript:void(0)" data-value="NextWeek">下周</a></li>
+                <li><a href="javascript:void(0)" data-value="NextWeekStart">下周开始</a></li>
+                <li><a href="javascript:void(0)" data-value="NextWeekExit">下周结束</a></li>
+                <li><a href="javascript:void(0)" data-value="Started">已开始</a></li>
+                <li><a href="javascript:void(0)" data-value="NotStarted">未开始</a>
+                </li><li><a href="javascript:void(0)" data-value="HavePlan">已计划</a></li>
+                <li><a href="javascript:void(0)" data-value="NoPlan">未计划</a></li>
+                </ul>
+            </li>
+
+        </ul>    
+    
+        <div class="buttool">
+        <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">任务添加</button>
+        <button class="btn btn-primary">导出</button>
+    </div>
+    
+        <!-- Modal -->
+        <div class="modal fade" id="addtodo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-inline" action="" method='POST'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">任务添加</h4>
+                    </div>
+                    <div class="modal-body">
+
+                            <div class="form-group">
+                            <label for="project">项目名称</label>
+                            <select class="form-control" id="project" name="project">
+                               <option>邵逸夫项目</option>
+                               <option>DataVue项目</option>
+
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="worktype">项目版本</label>
+                            <select class="form-control" id="version" name="version">
+                               <option>syf1.1.1</option>
+                               <option>syf2.0.0</option>
+
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="worktype">类型</label>
+                            <select class="form-control" id="worktype" name="worktype">
+                               <option>需求</option>
+                               <option>需求变更</option>
+                               <option>BUG</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="module">模块</label>
+
+                            <select class="form-control" id="module" name="module">
+                                <option value="预约管理">预约管理</option>
+                                <option value="术前检查">术前检查</option>
+                                <option value="病情分析">病情分析</option>
+                                <option value="时点测评">时点测评</option>
+                                <option value="报告采集">报告采集</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" style="width: 620px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="description">描述</label>
+                            <textarea  class="form-control" id="description" name="description" style="height: 130px;width:620px;"></textarea>
+                          </div>
+                          <div class="form-group">
+                            <label for="developer">开发人员</label>
+
+                            <select  class="form-control multiple" id="developer" name="developer[]" multiple="true">
+                                <option value=1>张路</option>
+                                <option value=2>李小满</option>
+                                <option value=3>徐郁</option>
+                                <option value=4>陈梦梦</option>
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="tester">测试人员</label>
+                            <select  class="form-control multiple" id="tester" name="tester[]" multiple="multiple">
+                                <option value=1>高文琪</option>
+                                <option value=2>俞利芳</option>
+                                <option value=3>王健</option>
+
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="status">状态</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="未完成">未完成</option>
+                                <option value="已完成">已完成</option>
+                                <option value="已关闭">已关闭</option>
+
+                            </select>
+                          </div>
+                          <div class="form-group">
+                            <label for="createtime">创建日期</label>
+                            <input type="Date" id="createtime"  name="createtime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="completetime">完成日期</label>
+                            <input type="Date" id="completetime" name="completetime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="remarks">备注</label>
+                            <textarea  class="form-control" id="remarks" name="remarks" style="width: 620px;"></textarea>
+                          </div>
+
+                            <!--<button  type="submit" class="btn btn-default">Submit &nbsp</button>-->
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="add_todo">保存</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div>
+    <table id="todolist" class="table table-hover">
+    </table>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            initTable();
+
+            //下拉多选
+            $('.multiple').selectpicker();
+        })
+//
+        var data={{todolist|safe}};
+        function initTable(){
+
+            $('#todolist').bootstrapTable({
+                method:'post',
+                toolbar:'#toolbar',
+                data:data,
+                dataType:'json',
+                striped:false,  //是否行间隔色显示
+                cache:false,//是否试用缓存，默认为true
+                pagination:true, //s是否分页
+                sortable:true,  //是否启用排序
+                sortOrder:"ID asc", // 排序方式
+                pageNumber:1, //初始化加载第一页，默认第一页
+                pageSize:15 , //每页的记录行数
+                // pageList:[6,20,50] ,  //可供选择的每页行数
+                url:'/todo',
+                queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+                sidePagination:"client",// 分页方式，client为客户端分页，server为服务端分页
+                strictSearch:true,
+                clickToSelect:true,  //是否启动点击选中行
+                search:false,
+                // height:$(window).height() - 500,
+                columns:[
+                    
+                            {   
+                                title:"",
+                                field:'state',
+                                checkbox:true,
+                                align:'center',
+                                valign:'middle',
+
+                                // width:20
+                            },
+                            {
+                                title:'ID',
+                                field:'id',
+                                align:'left',
+                                valign:'middle',
+                                width:35,
+                                sortable:true,
+                                class:'text-overflow'                           
+                            },{
+                                title:'Version',
+                                field:'version',
+                                align:'left',
+                                valign:'middle',
+                                class:'text-overflow',
+                                switchable:true
+                            },{
+                                title:'WorkType',
+                                field:'worktype',
+                                align:'left',
+                                valign:'middle',
+                                class:'text-overflow',
+                                switchable:true    
+                            },{
+                                title:'Module',
+                                field:'module',
+                                align:'center',
+                                valign:'middle',
+                                sortable:true,
+                                editable: {
+                                    type: 'select',
+                                    title: '模块',
+                                    mode: "inline",
+                                    emptytext: "--",
+                                    source:[{value:"预约管理",text:"预约管理"},
+                                        {value:"术前检查",text:"术前检查"},
+                                        {value:"病情分析",text:"病情分析"},
+                                        {value:"时点测评",text:"时点测评"},
+                                        {value:"报告采集",text:"报告采集"}],
+                                    validate: function (v) {
+                                        if (!v) return '任务类型不能为空';
+
+                                    },
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
+                                },
+                                switchable:true
+                            },{
+                                title:'Title',
+                                field:'title',
+                                align:'left',
+                                valign:'middle',
+                                editable: {
+                                    type: 'text',
+                                    title: '标题',
+                                    mode: "inline",
+                                    emptytext: "--",
+                                    validate: function (v) {
+                                        if (!v) return '标题不能为空';
+                                    },
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
+                                },
+                                width:200,
+                                sortable:true
+                            },{
+                                title:'Description',
+                                field:'description',
+                                align:'left',
+                                valign:'middle',
+                                width:360,
+                                editable: {
+                                    type: 'textarea',
+                                    title: '描述',
+                                    mode: "inline",
+                                    emptytext: "--",
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
+                                }   
+                            },{
+                                title:'Developer',
+                                field:'developer',
+                                align:'center',
+                                valign:'middle',
+
+                                editable:{
+                                    type: 'checklist',
+                                    pk:'1',
+                                    separator:",",
+                                    value:"' + row[that.options.idField] + '",
+                                    title: '开发人员',
+                                    mode: "inline",
+                                    emptytext: "--",
+                                    source:[{value:1,text:"张路"},
+                                            {value:2,text:"李小满"},
+                                            {value:3,text:"徐郁"},
+                                            {value:4,text:"陈梦梦"}],
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
+                                }
+                            },{
+                                title:'Tester',
+                                field:'tester',
+                                align:'center',
+                                valign:'middle',
+                                switchable:false,
+                                editable: {
+                                    type: 'checklist',
+                                    separator:",",
+                                    title: '测试人员',
+                                    emptytext: "--",
+                                    mode: "popup",
+                                    source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
+                                },
+                                sortable:true
+                            },{
+                                title:'Status',
+                                field:'status',
+                                align:'center',
+                                valign:'middle',
+                                editable: {
+                                    type: 'select',
+                                    title: '状态',
+                                    emptytext: "--",
+                                    mode: "popup",
+                                    source:[
+                                            {value: '未完成', text: '未完成'},
+                                            {value: '已完成', text: '已完成'},
+                                            {value: '已关闭', text: '已关闭'}],
+                                    url:'/edit_todo',
+                                    pk:6,
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                sortable:true
+                            },{
+                                title:'备注',
+                                field:'remarks',
+                                align:'center',
+                                valign:'middle',
+                                editable: {
+                                    type: 'textarea',
+                                    title: '描述',
+                                    emptytext: "--",
+                                    mode: "popup"
+                                },
+                                sortable:true
+                            }
+                        ],
+                showColumns:false,   // 是否显示列
+                minimumCountColumns:2,
+                showRefresh:false,  // 是否刷新
+                showToggle:false,
+                formatLoadingMessage: function () {
+                    return ;
+                },
+//                onEditableSave: function (field, row, Value, $el) {
+//                    row['field']=field;
+//                    alert(row['field']);
+//                    alert(row["'+ row['field'] + '"]);
+//                    alert(row['tester']);
+//                    $.ajax({
+//                        type: "post",
+//                        url: "/edit_todo",
+//                        data: row,
+////                        dataType: 'JSON',
+//                        success: function (data) {
+//
+//                                alert('提交数据成功');
+////                                alert(data);
+//                        },
+//                        error: function (e,XMLResponse) {
+//                            alert(XMLResponse);
+//                            console.error(e);
+//                        },
+//                        complete: function () {
+//
+//                        }
+//
+//                    });
+//                }
+            });
+        };
+
+        $("#add_todo").click(function () {
+            if ($("#title").val().trim() == "") {
+                $("#title").focus();
+                alert("请输入必填项！");
+                return false;
+            }
+            postdata ={
+                "project":$('#project').val(),
+                "version":$('#version').val(),
+                "worktype":$('#worktype').val(),
+                "module":$('#module').val(),
+                "title":$('#title').val(),
+                "description":$('#description').val(),
+                "developer":$('#developer').val(),
+                "tester":$('#tester').val(),
+                "status":$('#status').val(),
+                "createtime":$('#createtime').val(),
+                "completetime":$('#completetime').val(),
+                "remarks":$('#remarks').val()
+            };
+            alert(postdata.developer);
+            $.ajax({
+                //提交数据的类型 POST GET
+                type:"POST",
+                //提交的网址
+                url:"/add_todo",
+                //提交的数据
+                data:postdata,
+                //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+//                datatype: "json",
+                //ajax请求成功后的事件
+                    success:function(){
+
+                    alert("保存成功！");
+                    $('.modal').modal('hide');
+                    // $('#tosolist').html($(data).find('#todolist').html());
+                    <!--onchange();-->
+                    },
+                    error: function(e){
+                    //请求出错处理
+                    alert(e);
+                },
+            });
+        });
+    </script>
+</div>
+
+{% endblock %}

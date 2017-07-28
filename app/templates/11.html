@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>{% block title %} {% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-editable.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-select.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/mdstyle.css">
+	<!--<script src="../static/js/jquery.min.js"></script>-->
+	 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="../static/js/echarts-all.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-table.min.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-editable.min.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-table-editable.js"></script>
+	<script type="text/javascript" src="../static/js/events.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-select.js"></script>
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	<nav class="navbar navbar-fixed-top " role="navigation">
+		<div class="navbar-header">
+			<!--<img class="img-responsive" src="../static/images/md3.png" >-->
+			<a class="dropdown-toggle" id="project" data-toggle="dropdown" href="#">MD测试实战</a>
+		</div>
+
+     	<ul class="nav navbar-nav panel-title">
+			<li class="active"><a href="{{ url_for('todo') }}">任务跟进</a></li>
+			<li><a href="index">前端性能测试</a> </li>
+			<li><a href="ui_auto">UI自动化测试</a></li>
+			<li><a href="case_detail">接口自动化测试</a> </li>
+			<li><a href="">性能测试</a> </li>
+			<li><a href="per_auto">全局变量</a></li>
+
+      	</ul>
+
+	</nav>
+
+	<div id="main" class="container-fluid" >
+
+	<div id="content" class="container-fluid">
+		{% block content %}
+
+		<br>
+		<br>
+		<br>
+		<br>
+        <a href="#" id="options" data-type="checklist" data-pk="1" data-url="/post" data-title="Select options"></a>
+		<table id="test"></table>
+<script type="text/javascript">
+	$(function(){
+
+    $('#options').editable({
+        value: [2, 3],
+        source: [
+              {value: 1, text: 'option1'},
+              {value: 2, text: 'option2'},
+              {value: 3, text: 'option3'}
+           ]
+    });
+});
+	var data=[{ "status": "未完成", "tester": "[2, 3]", "module": "预约管理", "remarks": "", "id": 1, "developer": "[\"徐郁\", \"李小满\"]"}, {"status": "未完成", "description": "飞凤飞飞凤飞飞凤飞飞", "tester": "[\"俞利芳\", \"王健\"]", "module": "预约管理", "remarks": "", "id": 2, "developer": "[\"徐郁\", \"陈梦梦\"]"}, {"status": "未完成", "tester": "[\"\\u4fde\\u5229\\u82b3\", \"\\u738b\\u5065\"]", "module": "预约管理", "remarks": "", "id": 3, "developer": "[\"\\u5f90\\u90c1\", \"\\u9648\\u68a6\\u68a6\"]", "title": "的点点滴滴", "project": "", "version": "syf1.1.1", "createtime": "", "completetime": "", "worktype": "需求"}];
+
+	$('#test').bootstrapTable({
+                data:data,
+                dataType:'json',
+                striped:false,  //是否行间隔色显示
+                cache:false,//是否试用缓存，默认为true
+                pagination:true, //s是否分页
+                sortable:true,  //是否启用排序
+                sortOrder:"ID asc", // 排序方式
+                pageNumber:1, //初始化加载第一页，默认第一页
+                pageSize:15 , //每页的记录行数
+                queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+                sidePagination:"client",// 分页方式，client为客户端分页，server为服务端分页
+                strictSearch:true,
+                clickToSelect:true,  //是否启动点击选中行
+                search:false,
+                columns:[
+                            {
+                                title:"",
+                                field:'state',
+                                checkbox:true,
+                                align:'center',
+                                valign:'middle'
+                            }, {
+                                title:'Module',
+                                field:'module',
+                                align:'center',
+                                valign:'middle',
+                                sortable:true,
+                                editable: {
+                                    type: 'select',
+                                    title: '模块',
+                                    mode: "inline",
+                                    source:[{value:"预约管理",text:"预约管理"},
+                                        {value:"术前检查",text:"术前检查"},
+                                        {value:"病情分析",text:"病情分析"},
+                                        {value:"时点测评",text:"时点测评"},
+                                        {value:"报告采集",text:"报告采集"}],
+                                    validate: function (v) {
+                                        if (!v) return '任务类型不能为空';
+
+                                    },
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                switchable:true
+                            },{
+                                title:'Developer',
+                                field:'developer',
+                                align:'center',
+                                valign:'middle',
+
+                                editable:{
+                                    type: 'checklist',
+                                    pk:'1',
+                                    separator:",",
+                                    value:"' + row[that.options.idField] + '",
+                                    title: '开发人员',
+                                    mode: "inline",
+                                    source:[{value:"张路",text:"张路"},
+                                            {value:"李小满",text:"李小满"},
+                                            {value:"徐郁",text:"徐郁"},-
+                                            {value:"陈梦梦",text:"陈梦梦"}],
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                }
+                            },{
+                                title:'Tester',
+                                field:'tester',
+                                align:'center',
+                                valign:'middle',
+                                switchable:false,
+                                editable: {
+                                    type: 'checklist',
+                                    separator:",",
+                                    title: '测试人员',
+                                    mode: "popup",
+                                    source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                sortable:true
+                            },{
+                                title:'Status',
+                                field:'status',
+                                align:'center',
+                                valign:'middle',
+                                editable: {
+                                    type: 'select',
+                                    value:'1',
+                                    title: '状态',
+                                    mode: "popup",
+                                    source:[
+                                            {value: '未完成', text: '未完成'},
+                                            {value: '已完成', text: '已完成'},
+                                            {value: '已关闭', text: '已关闭'}],
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                sortable:true
+                            },{
+                                title:'备注',
+                                field:'remarks',
+                                align:'center',
+                                valign:'middle',
+                                editable: {
+                                    type: 'textarea',
+                                    title: '描述',
+                                    mode: "inline"
+                                },
+                                sortable:true
+                            }
+                        ],
+                formatLoadingMessage: function () {
+                    return ;
+                },
+                onEditableSave: function (field, row, oldValue, $el) {
+                    row['field']=field
+
+                    $.ajax({
+                        type: "post",
+                        url: "/edit_todo",
+                        data: row,
+//                        dataType: 'JSON',
+                        success: function (data) {
+
+                                alert('提交数据成功');
+//                                alert(data);
+                        },
+                        error: function (e,XMLResponse) {
+                            alert(XMLResponse);
+                            console.log(e);
+                        },
+                        complete: function () {
+
+                        }
+
+                    });
+                }
+
+                // onPostBody: function () {
+                //     $('#todolist').editableTableWidget({editor: $('<textarea>')});
+                // }
+            });
+	console.error('hello world');
+
+
+
+
+
+</script>
+		{% endblock %}
+	</div>
+
+</body>
+</html>
