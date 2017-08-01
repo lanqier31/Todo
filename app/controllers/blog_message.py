@@ -62,26 +62,35 @@ def add_todo(charset='utf-8'):
 @app.route('/edit_todo',methods=['GET','POST'])
 def edit_todo():
     try:
-
-        id = request.form.get("id","null")
-        field=request.form.get("field","null")
-        print field
-        title= request.form.get("title","null")
-        description =request.form.get("description","null")
-        developer = map(int, request.form.getlist('developer[]'))
-        developer = str(developer)
-        tester = map(int, request.form.getlist('tester[]'))
-        tester = str(tester)
-        print tester
-        status = request.form.get("status","null")
-        remarks = request.form.get("remarks","null")
+        id = request.form.get("pk","null")
+        field=request.form.get("name","null")
+        value=request.form.get("value",'null')
         todo = Todo.query.get(id)
-        todo.title= request.form.get(title,"null")
-        print todo.field
-        db.session.commit()
+        if(field=='status'):
+            todo.status=value
+        elif(field=='developer'):
+
+            developer = map(int, request.form.getlist('value[]'))
+            developer = str(developer)
+            todo.developer=developer
+        elif(field=='tester'):
+            tester=map(int,request.form.getlist('value[]'))
+            tester=str(tester)
+            todo.tester=tester
+        elif(field=='remarks'):
+            todo.remarks=value
+        elif (field == 'description'):
+            todo.description=value
+        elif(field=='title'):
+            todo.title=value
+        elif(field=='module'):
+            todo.module=value
+        elif(field=='worktype'):
+            todo.worktype=value
+        todo.save()
         return 'success';
     except IOError:
-        print "error"
+        return "error"
 
 
 @app.route('/add',methods={'POST'})

@@ -254,6 +254,25 @@
                                 align:'left',
                                 valign:'middle',
                                 class:'text-overflow',
+                                editable: {
+                                    type: 'select',
+                                    title: '模块',
+                                    mode: "popup",
+                                    emptytext: "--",
+                                    source:[{value:"需求",text:"需求"},
+                                        {value:"需求变更",text:"需求变更"},
+                                        {value:"BUG",text:"BUG"}],
+                                    validate: function (v) {
+                                        if (!v) return '任务类型不能为空';
+
+                                    },
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
                                 switchable:true    
                             },{
                                 title:'Module',
@@ -264,7 +283,7 @@
                                 editable: {
                                     type: 'select',
                                     title: '模块',
-                                    mode: "inline",
+                                    mode: "popup",
                                     emptytext: "--",
                                     source:[{value:"预约管理",text:"预约管理"},
                                         {value:"术前检查",text:"术前检查"},
@@ -275,12 +294,12 @@
                                         if (!v) return '任务类型不能为空';
 
                                     },
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 },
                                 switchable:true
                             },{
@@ -291,17 +310,17 @@
                                 editable: {
                                     type: 'text',
                                     title: '标题',
-                                    mode: "inline",
+                                    mode: "popup",
                                     emptytext: "--",
                                     validate: function (v) {
                                         if (!v) return '标题不能为空';
                                     },
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 },
                                 width:200,
                                 sortable:true
@@ -316,12 +335,12 @@
                                     title: '描述',
                                     mode: "inline",
                                     emptytext: "--",
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 }   
                             },{
                                 title:'Developer',
@@ -341,12 +360,12 @@
                                             {value:2,text:"李小满"},
                                             {value:3,text:"徐郁"},
                                             {value:4,text:"陈梦梦"}],
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 }
                             },{
                                 title:'Tester',
@@ -361,12 +380,12 @@
                                     emptytext: "--",
                                     mode: "popup",
                                     source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                           return response.msg;
+                                        }
+                                    }
                                 },
                                 sortable:true
                             },{
@@ -401,7 +420,14 @@
                                     type: 'textarea',
                                     title: '描述',
                                     emptytext: "--",
-                                    mode: "popup"
+                                    mode: "popup",
+                                    url:'/edit_todo',
+                                    pk:6,
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 },
                                 sortable:true
                             }
