@@ -93,6 +93,21 @@ def edit_todo():
         return "error"
 
 
+@app.route('/delete_todo',methods=['GET','POST'])
+def delete_todo():
+    try:
+        ids=map(int,request.form.getlist('ids[]'))
+        print ids
+        for id in ids:
+            todo=Todo.query.get(id)
+            db.session.delete(todo)
+            db.session.commit()
+        return 'success'
+    except IOError:
+        print IOError
+        return 'error'
+
+
 @app.route('/add',methods={'POST'})
 def add_entry():
     if not session.get('login_in'):
