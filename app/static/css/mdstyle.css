@@ -155,8 +155,8 @@ table thead{
 }
 .buttool{
 	position: absolute;
-	top: -0px;
-	right: 0px;
+	top: 30px;
+	left: 0px;
 }
 .buttool .btn{
 	padding: 4px 12px;

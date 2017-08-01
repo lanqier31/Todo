@@ -18,10 +18,10 @@
                 </a>
                 <ul class="dropdown-menu product-dropdown-menu">
                 <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                <li><a href="javascript:void(0)" data-value="890">病理评估</a></li>
-                <li><a href="javascript:void(0)" data-value="893">时点测评</a></li>
-                <li><a href="javascript:void(0)" data-value="892">预约管理</a></li>
-                <li><a href="javascript:void(0)" data-value="891">综合检查</a></li>
+                <li><a href="javascript:void(0)" data-value="890">预约管理</a></li>
+                <li><a href="javascript:void(0)" data-value="893">术前检查</a></li>
+                <li><a href="javascript:void(0)" data-value="892">病理评估</a></li>
+                <li><a href="javascript:void(0)" data-value="891">时点测评</a></li>
                 </ul>
             </li>
             <li role="presentation" class="dropdown">
@@ -29,9 +29,9 @@
                 </a>
                 <ul class="dropdown-menu bugType-dropdown-menu">
                     <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                    <li><a href="javascript:void(0)" data-value="Bug">缺陷</a></li>
-                    <li><a href="javascript:void(0)" data-value="Task">任务</a></li>
-                    <li><a href="javascript:void(0)" data-value="Require">需求</a></li>
+                    <li><a href="javascript:void(0)" data-value="Bug">BUG</a></li>
+                    <li><a href="javascript:void(0)" data-value="Task">需求</a></li>
+                    <li><a href="javascript:void(0)" data-value="Require">需求变更</a></li>
                 </ul>
             </li>
             
@@ -42,37 +42,31 @@
                 <li><a href="javascript:void(0)" data-value="Open">未解决</a></li>
                 <li><a href="javascript:void(0)" data-value="Fixed">已完成</a></li>
                 <li><a href="javascript:void(0)" data-value="Rejected">已拒绝</a></li>
+                <li><a href="javascript:void(0)" data-value="Closed">已关闭</a></li>
                 </ul>
             </li>
             <li role="presentation" class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">计划日期：全部 <span class="caret"></span></a>
                 <ul class="dropdown-menu planDate-dropdown-menu">
                 <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                <li><a href="javascript:void(0)" data-value="Expired">已过期</a></li>
+                <li><a href="javascript:void(0)" data-value="未解决">未解决</a></li>
+                <li><a href="javascript:void(0)" data-value="已完成">已完成</a>
+                <li><a href="javascript:void(0)" data-value="已关闭">已关闭</a></li>
+                <li><a href="javascript:void(0)" data-value="已拒绝">已拒绝</a>
                 <li><a href="javascript:void(0)" data-value="Today">今天</a></li>
-                <li><a href="javascript:void(0)" data-value="TodayStart">今天开始</a></li>
-                <li><a href="javascript:void(0)" data-value="TodayExit">今天结束</a></li>
-                <li><a href="javascript:void(0)" data-value="Tomorrow">明天</a></li>
-                <li><a href="javascript:void(0)" data-value="TomorrowStart">明天开始</a></li>
-                <li><a href="javascript:void(0)" data-value="TomorrowExit">明天结束</a></li>
                 <li><a href="javascript:void(0)" data-value="Week">本周</a></li>
-                <li><a href="javascript:void(0)" data-value="WeekStart">本周开始</a></li>
-                <li><a href="javascript:void(0)" data-value="WeekExit">本周结束</a></li>
-                <li><a href="javascript:void(0)" data-value="NextWeek">下周</a></li>
-                <li><a href="javascript:void(0)" data-value="NextWeekStart">下周开始</a></li>
-                <li><a href="javascript:void(0)" data-value="NextWeekExit">下周结束</a></li>
-                <li><a href="javascript:void(0)" data-value="Started">已开始</a></li>
-                <li><a href="javascript:void(0)" data-value="NotStarted">未开始</a>
-                </li><li><a href="javascript:void(0)" data-value="HavePlan">已计划</a></li>
-                <li><a href="javascript:void(0)" data-value="NoPlan">未计划</a></li>
                 </ul>
             </li>
 
         </ul>    
     
         <div class="buttool">
-        <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">任务添加</button>
-        <button class="btn btn-primary">导出</button>
+            <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">
+                <i class="glyphicon glyphicon-plus"></i>添加</button>
+            <button id="remove" class="btn btn-danger">
+                <i class="glyphicon glyphicon-trash"></i> 删除
+            </button>
+        <!--<button class="btn btn-primary" data-table="todolist" aria-label="export type">导出</button>-->
     </div>
     
         <!-- Modal -->
@@ -152,8 +146,9 @@
                           <div class="form-group">
                             <label for="status">状态</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="未完成">未完成</option>
+                                <option value="未完成">未解决</option>
                                 <option value="已完成">已完成</option>
+                                <option value="已拒绝">已拒绝</option>
                                 <option value="已关闭">已关闭</option>
 
                             </select>
@@ -194,7 +189,6 @@
     <script type="text/javascript">
         $(document).ready(function () {
             initTable();
-
             //下拉多选
             $('.multiple').selectpicker();
         })
@@ -221,7 +215,7 @@
                 strictSearch:true,
                 clickToSelect:true,  //是否启动点击选中行
                 search:false,
-                // height:$(window).height() - 500,
+
                 columns:[
                     
                             {   
@@ -399,8 +393,9 @@
                                     emptytext: "--",
                                     mode: "popup",
                                     source:[
-                                            {value: '未完成', text: '未完成'},
+                                            {value: '未解决', text: '未解决'},
                                             {value: '已完成', text: '已完成'},
+                                            {value: '已拒绝', text: '已拒绝'},
                                             {value: '已关闭', text: '已关闭'}],
                                     url:'/edit_todo',
                                     pk:6,
@@ -430,12 +425,20 @@
                                     }
                                 },
                                 sortable:true
+                            },{
+                                title:"CreateTime",
+                                field:"createtime",
+                                sortable:true,
+                                align:'center',
                             }
                         ],
-                showColumns:false,   // 是否显示列
+                showColumns:true,   // 是否显示列
                 minimumCountColumns:2,
-                showRefresh:false,  // 是否刷新
-                showToggle:false,
+                showRefresh:true,  // 是否刷新
+                showToggle:true,
+                showExport:true,
+                exportDataType: "selected",   //basic', 'all', 'selected'.
+                exportTypes:['excel'],
                 formatLoadingMessage: function () {
                     return ;
                 },
@@ -511,6 +514,29 @@
                 },
             });
         });
+        $("#remove").click(function () {
+            var ids = getIdSelections();
+                if (ids.length < 1) {
+                alert("请选中要删除的行！");
+                return;
+            }
+            if (confirm("确定删除选中行吗？")) {
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    url: "/delete_todo",
+                    data: { ids: getIdSelections.join(',') },
+                    success: function (data) {
+
+                    }
+                });
+            }
+        });
+        function getIdSelections() {
+            return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
+            return row.id
+        });
+        }
     </script>
 </div>
 
