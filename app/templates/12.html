@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta>
     <title>Bootstrap Table Examples</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/bootstrap-table/src/bootstrap-table.css">
@@ -44,6 +45,22 @@
            data-url="/examples/bootstrap_table/data"
            data-response-handler="responseHandler">
     </table>
+
+    <button id="Province" type="button" class="" data-toggle="dropdown" aria-expanded="false">
+            省/直辖市/自治区<span class=""></span>
+        </button>
+        <input type="hidden" id="HidPro" />
+        <ul class="dropdown-menu" id="Province" role="menu" aria-labelledby="Province">
+            <li>
+                <a href="#" onclick="change()" code="请选择">请选择</a>
+            </li>
+
+
+                <li>
+                    <a href="#" onclick="" code="@item.StudentID">@item.StudentName</a>
+                </li>
+
+        </ul>
 </div>
 
 <script>

@@ -55,7 +55,7 @@ a{
     white-space: nowrap;
 }
 table thead{
-	background-color:#337ab7;
+	background-color:rgb(34, 178, 197);
 	color:#fff;
 }
 .header{
@@ -83,8 +83,8 @@ table thead{
 }
 .nav>li> a:hover,
 .nav>li > a:focus{
-	color:#337ab7;
-	border-bottom: 3px solid #337ab7;
+	color:#rgb(34, 178, 197);
+	border-bottom: 3px solid rgb(34, 178, 197);
 	background-color: transparent;
 }
 .navbar-nav > .active > a,
@@ -92,7 +92,7 @@ table thead{
 .navbar-nav > .active > a:focus {
 	color: #337ab7;
 	/*background-color: #e7e7e7;*/
-	border-bottom: 3px solid #337ab7;
+	border-bottom: 3px solid rgb(34, 178, 197);
 }
 .title > a ,.title > a > h4{
 	color: #fff;
@@ -155,14 +155,27 @@ table thead{
 }
 .buttool{
 	position: absolute;
-	top: 30px;
+	top: 32px;
 	left: 0px;
 }
 .buttool .btn{
 	padding: 4px 12px;
+	border-radius:3px;
 }
 #bugfilter .nav>li>a{
 	padding: 6px 15px;
 	border-radius: 1px;
 	border-bottom: 0px;
+}
+.bugfilter{
+	border: none;
+	padding: 6px;
+	font-size: middle;
+	background-color:rgb(34, 178, 197);
+	color:#FFFFFF;
+	border-radius:3px;
+}
+#bugfilter ul li{
+	background-color: rgb(34, 178, 197);
+	border-radius: 3px;
 }

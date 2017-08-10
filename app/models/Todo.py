@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-：
 from app import db
+
 import sys
 
-#
-# reload(sys)
-# sys.setdefaultencoding("utf-8")
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 
@@ -61,6 +63,3 @@ class Todo(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def query_row_id(self, rid):
-        obj = self.filter_by(id=rid).first()
-        return obj

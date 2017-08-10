@@ -5,6 +5,7 @@ from app.models.Category import Category
 from app.models.Todo import Todo
 import os ,json,sys
 from app import app,db
+from sqlalchemy import func
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -17,12 +18,73 @@ def show_entries():
 @app.route('/todo',methods=['GET','POST'])
 def todo():
     todolists=[]
-    todolist=Todo.query.all()
+
+    data={}
+
+    version=request.args.get('version')
+    module=request.args.get('module')
+    worktype=request.args.get('worktype')
+    status=request.args.get('status')
+
+    print version ,module,worktype,status
+    query=Todo.query
+    if (version != "all") and (version is not None):
+        query = query.filter_by(version=version)
+    if(module!='all') and (module is not None):
+        query=query.filter_by(module=module)
+    if (worktype != 'all') and (worktype is not None):
+        query=query.filter_by(worktype=worktype)
+    if(status !='all') and (status is not None):
+        query=query.filter_by(status=status)
+    todolist=query.all()
+    total=len(todolist)
+
     for todo in todolist:
         todolists.append(todo.to_dict())
-    todos=json.dumps(todolists, ensure_ascii=False)
+    rows=json.dumps(todolists, ensure_ascii=False)
+    data['total']=total
+    data['rows']=rows
+    data=json.dumps(data)
+    print rows
+    return render_template('todo.html',data=data,rows=rows)
 
-    return render_template('todo.html', todolist=todos)
+def query_todo():
+    try:
+        todolists = []
+        params = json.dumps(request.form)
+        params = eval(params)
+        print params
+        version=request.form.get('version','null')
+        print version
+        status=request.form.get('status','null')
+        print status
+        module=request.form.get('module','null')
+        worktype=request.form.get('worktype','null')
+        createtime=request.form.get('createtime','null')
+        if (version == u'all') or (version == 'null'):
+            params.pop('version')
+        if (module == u'all') or (module == u'null'):
+            params.pop('module')
+        if (worktype == u'all') or (worktype == u'null'):
+            params.pop('worktype')
+
+        if (status == u'all') or (status == u'null'):
+            params.pop('status')
+        if (len(params) > 0):
+            print params
+            todolist = Todo.query.filter_by(**params).all()
+
+        else:
+            print params
+            todolist = Todo.query.all()
+        for todo in todolist:
+            todolists.append(todo.to_dict())
+        todolist=json.dumps(todolists,ensure_ascii=False)
+        print todolist
+
+        return render_template('todo.html', todolist=todolist)
+    except IOError:
+        return "error"
 
 
 @app.route('/add_todo',methods={'POST'})
@@ -106,6 +168,9 @@ def delete_todo():
     except IOError:
         print IOError
         return 'error'
+
+
+
 
 
 @app.route('/add',methods={'POST'})
