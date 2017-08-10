@@ -4,58 +4,50 @@
 <div class="todohead">
     <div class="row" id="bugfilter">
         <ul class="nav nav-pills">
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle textOverHiden" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">项目版本：全部 <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu product-dropdown-menu">
-                    <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                    <li><a href="javascript:void(0)" data-value="890">syf1.1.1</a></li>
-                    <li><a href="javascript:void(0)" data-value="893">syf2.0.0</a></li>
-                </ul>
+            <li role="presentation" role="button">项目版本
+                <select id="version_filter"  class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="syf1.1.1">syf1.1.1</option>
+                    <option value="syf1.2.0">syf1.2.0</option>
+                </select>
             </li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle textOverHiden" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">产品模块：全部 <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu product-dropdown-menu">
-                <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                <li><a href="javascript:void(0)" data-value="890">预约管理</a></li>
-                <li><a href="javascript:void(0)" data-value="893">术前检查</a></li>
-                <li><a href="javascript:void(0)" data-value="892">病理评估</a></li>
-                <li><a href="javascript:void(0)" data-value="891">时点测评</a></li>
-                </ul>
+            <li role="presentation" role="button">产品模块
+                <select id="module_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="Appointment">预约管理</option>
+                    <option value="Preoperation">术前检查</option>
+                    <option value="Evaluation">病理评估</option>
+                    <option value="Timepoint">时点测评</option>
+                    <option value="Report">报告采集</option>
+                </select>
+
             </li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">问题类型：全部 <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu bugType-dropdown-menu">
-                    <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                    <li><a href="javascript:void(0)" data-value="Bug">BUG</a></li>
-                    <li><a href="javascript:void(0)" data-value="Task">需求</a></li>
-                    <li><a href="javascript:void(0)" data-value="Require">需求变更</a></li>
-                </ul>
+            <li role="presentation" role="button">问题类型
+                <select id="worktype_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="requirement">需求</option>
+                    <option value="bug">BUG</option>
+                    <option value="changerequest">需求变更</option>
+                </select>
             </li>
             
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">状态：全部活动 <span class="caret"></span></a>
-                <ul class="dropdown-menu states-dropdown-menu">
-                <li><a href="javascript:void(0)" data-value="Active">全部活动</a></li>
-                <li><a href="javascript:void(0)" data-value="Open">未解决</a></li>
-                <li><a href="javascript:void(0)" data-value="Fixed">已完成</a></li>
-                <li><a href="javascript:void(0)" data-value="Rejected">已拒绝</a></li>
-                <li><a href="javascript:void(0)" data-value="Closed">已关闭</a></li>
-                </ul>
+            <li role="presentation" class="dropdown">状态
+                <select id="status_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="Unresolved">未解决</option>
+                    <option value="Completed">已完成</option>
+                    <option value="Closed">已关闭</option>
+                    <option value="Rejected">已拒绝</option>
+                </select>
             </li>
-            <li role="presentation" class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">计划日期：全部 <span class="caret"></span></a>
-                <ul class="dropdown-menu planDate-dropdown-menu">
-                <li><a href="javascript:void(0)" data-value="">全部</a></li>
-                <li><a href="javascript:void(0)" data-value="未解决">未解决</a></li>
-                <li><a href="javascript:void(0)" data-value="已完成">已完成</a>
-                <li><a href="javascript:void(0)" data-value="已关闭">已关闭</a></li>
-                <li><a href="javascript:void(0)" data-value="已拒绝">已拒绝</a>
-                <li><a href="javascript:void(0)" data-value="Today">今天</a></li>
-                <li><a href="javascript:void(0)" data-value="Week">本周</a></li>
-                </ul>
+            <li role="presentation" class="dropdown">创建日期
+                <select id="createtime_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="today">今日</option>
+                    <option value="thisweek">本周</option>
+                    <option value="thismonth">本月</option>
+                    <option value="thisyear">本年</option>
+                </select>
             </li>
 
         </ul>    
@@ -84,36 +76,36 @@
                             <div class="form-group">
                             <label for="project">项目名称</label>
                             <select class="form-control" id="project" name="project">
-                               <option>邵逸夫项目</option>
-                               <option>DataVue项目</option>
+                               <option value="syf">邵逸夫项目</option>
+                               <option value="datavue">DataVue项目</option>
 
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="worktype">项目版本</label>
                             <select class="form-control" id="version" name="version">
-                               <option>syf1.1.1</option>
-                               <option>syf2.0.0</option>
+                               <option value="syf1.1.1">syf1.1.1</option>
+                               <option value="syf1.2.0">syf2.0.0</option>
 
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="worktype">类型</label>
                             <select class="form-control" id="worktype" name="worktype">
-                               <option>需求</option>
-                               <option>需求变更</option>
-                               <option>BUG</option>
+                               <option value="requirement">需求</option>
+                               <option value="changerequest">需求变更</option>
+                               <option value="bug">BUG</option>
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="module">模块</label>
 
                             <select class="form-control" id="module" name="module">
-                                <option value="预约管理">预约管理</option>
-                                <option value="术前检查">术前检查</option>
-                                <option value="病情分析">病情分析</option>
-                                <option value="时点测评">时点测评</option>
-                                <option value="报告采集">报告采集</option>
+                                <option value="Appointment">预约管理</option>
+                                <option value="Preoperation">术前检查</option>
+                                <option value="Evaluation">病理评估</option>
+                                <option value="Timepoint">时点测评</option>
+                                <option value="Report">报告采集</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -146,10 +138,10 @@
                           <div class="form-group">
                             <label for="status">状态</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="未完成">未解决</option>
-                                <option value="已完成">已完成</option>
-                                <option value="已拒绝">已拒绝</option>
-                                <option value="已关闭">已关闭</option>
+                                <option value="Unresolved">未解决</option>
+                                <option value="Completed">已完成</option>
+                                <option value="Closed">已关闭</option>
+                                <option value="Rejected">已拒绝</option>
 
                             </select>
                           </div>
@@ -188,30 +180,39 @@
     </table>
     <script type="text/javascript">
         $(document).ready(function () {
+            // 初始化table
             initTable();
+            $("#status_filter").bind("change", initTable);
+            if(localStorage.getItem("username")!="admin"){//权限控制
+                $("#remove").remove();
+            }
             //下拉多选
             $('.multiple').selectpicker();
         })
-//
-        var data={{todolist|safe}};
+
         function initTable(){
 
+            $('#todolist').bootstrapTable('destroy');  //先销毁表格
+            data={{rows|safe}};
             $('#todolist').bootstrapTable({
-                method:'post',
+                url:'/todo',
+                method:'get',
+//                contentType : "application/x-www-form-urlencoded",
                 toolbar:'#toolbar',
                 data:data,
-                dataType:'json',
+//                dataType:'json',
                 striped:false,  //是否行间隔色显示
                 cache:false,//是否试用缓存，默认为true
                 pagination:true, //s是否分页
                 sortable:true,  //是否启用排序
                 sortOrder:"ID asc", // 排序方式
                 pageNumber:1, //初始化加载第一页，默认第一页
-                pageSize:15 , //每页的记录行数
-                // pageList:[6,20,50] ,  //可供选择的每页行数
-                url:'/todo',
+                pageSize:20 , //每页的记录行数
+                pageList:[6,20,50] ,  //可供选择的每页行数
+                responseHandler:"responseHandler",   //加载服务器数据之前的处理程序，可以用来格式化数据.参数：res为从服务器请求到的数据
                 queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
-                sidePagination:"client",// 分页方式，client为客户端分页，server为服务端分页
+                queryParams: queryParams,
+                sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
                 strictSearch:true,
                 clickToSelect:true,  //是否启动点击选中行
                 search:false,
@@ -253,9 +254,9 @@
                                     title: '模块',
                                     mode: "popup",
                                     emptytext: "--",
-                                    source:[{value:"需求",text:"需求"},
-                                        {value:"需求变更",text:"需求变更"},
-                                        {value:"BUG",text:"BUG"}],
+                                    source:[{value:"requirement",text:"需求"},
+                                        {value:"changerequest",text:"需求变更"},
+                                        {value:"bug",text:"BUG"}],
                                     validate: function (v) {
                                         if (!v) return '任务类型不能为空';
 
@@ -279,11 +280,11 @@
                                     title: '模块',
                                     mode: "popup",
                                     emptytext: "--",
-                                    source:[{value:"预约管理",text:"预约管理"},
-                                        {value:"术前检查",text:"术前检查"},
-                                        {value:"病情分析",text:"病情分析"},
-                                        {value:"时点测评",text:"时点测评"},
-                                        {value:"报告采集",text:"报告采集"}],
+                                    source:[{value:"Appoinement",text:"预约管理"},
+                                        {value:"Preoperation",text:"术前检查"},
+                                        {value:"Evaluation",text:"病理评估"},
+                                        {value:"Timepoint",text:"时点测评"},
+                                        {value:"Report",text:"报告采集"}],
                                     validate: function (v) {
                                         if (!v) return '任务类型不能为空';
 
@@ -393,10 +394,10 @@
                                     emptytext: "--",
                                     mode: "popup",
                                     source:[
-                                            {value: '未解决', text: '未解决'},
-                                            {value: '已完成', text: '已完成'},
-                                            {value: '已拒绝', text: '已拒绝'},
-                                            {value: '已关闭', text: '已关闭'}],
+                                            {value: 'Unresolved', text: '未解决'},
+                                            {value: 'Completed', text: '已完成'},
+                                            {value: 'Rejected', text: '已拒绝'},
+                                            {value: 'Closed', text: '已关闭'}],
                                     url:'/edit_todo',
                                     pk:6,
                                     success: function(response, newValue) {
@@ -440,36 +441,42 @@
                 exportDataType: "selected",   //basic', 'all', 'selected'.
                 exportTypes:['excel'],
                 formatLoadingMessage: function () {
-                    return ;
-                },
-//                onEditableSave: function (field, row, Value, $el) {
-//                    row['field']=field;
-//                    alert(row['field']);
-//                    alert(row["'+ row['field'] + '"]);
-//                    alert(row['tester']);
-//                    $.ajax({
-//                        type: "post",
-//                        url: "/edit_todo",
-//                        data: row,
-////                        dataType: 'JSON',
-//                        success: function (data) {
-//
-//                                alert('提交数据成功');
-////                                alert(data);
-//                        },
-//                        error: function (e,XMLResponse) {
-//                            alert(XMLResponse);
-//                            console.error(e);
-//                        },
-//                        complete: function () {
-//
-//                        }
-//
-//                    });
-//                }
+                    return
+                }
+
             });
+            };
+        function queryParams(params) {  //配置参数
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                pageSize: params.limit,   //页面大小
+                pageNumber: params.pageNumber,  //页码
+                sort: params.sort,  //排序列名
+                sortOrder: params.order,//排位命令（desc，asc）
+                version: $("#version_filter").val(),
+                module: $("#module_filter").val(),
+                worktype: $("#worktype_filter").val(),
+                status: $("#status_filter").val(),
+                createtime:$("#createtime_filter").val()
+            };
+            return temp;
+        };
+        function responseHandler(res) {
+            res={{data|safe}};
+            alert(res.total);
+            return {
+                        "total": res.total,
+                        "rows": res.rows
+                    };
+
+        };
+        function getIdSelections() {
+            return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
+            return row.id
+        });
         };
 
+
+        //添加todo操作
         $("#add_todo").click(function () {
             if ($("#title").val().trim() == "") {
                 $("#title").focus();
@@ -505,6 +512,7 @@
 
                     alert("保存成功！");
                     $('.modal').modal('hide');
+                    location.reload();
                     // $('#tosolist').html($(data).find('#todolist').html());
                     <!--onchange();-->
                     },
@@ -514,6 +522,7 @@
                 },
             });
         });
+        //删除操作
         $("#remove").click(function () {
             var ids = getIdSelections();
             alert(ids);
@@ -526,7 +535,6 @@
                     type: "post",
                     url: "/delete_todo",
                     data:{"ids":ids},
-                        type: "post",
                         success:function(){
                             alert("删除成功！");
                             location.reload();
@@ -538,11 +546,7 @@
                     });
             }
         });
-        function getIdSelections() {
-            return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
-            return row.id
-        });
-        }
+
     </script>
 </div>
 
