@@ -193,14 +193,12 @@
         function initTable(){
 
             $('#todolist').bootstrapTable('destroy');  //先销毁表格
-//            rows={{rows|safe}};
-//            console.error(rows);
+
             $('#todolist').bootstrapTable({
                 url:'/query_todo',
                 method:'get',
 //                contentType : "application/x-www-form-urlencoded",
                 toolbar:'#toolbar',
-//                data:rows,
                 dataType:'json',
                 striped:false,  //是否行间隔色显示
                 cache:false,//是否试用缓存，默认为true
@@ -208,10 +206,10 @@
                 sortable:true,  //是否启用排序
                 sortOrder:"ID asc", // 排序方式
                 pageNumber:1, //初始化加载第一页，默认第一页
-                pageSize:5 , //每页的记录行数
+                pageSize:10 , //每页的记录行数
                 pageList:[5,20,50] ,  //可供选择的每页行数
-                responseHandler:"responseHandler",   //加载服务器数据之前的处理程序，可以用来格式化数据.参数：res为从服务器请求到的数据
-                queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+//                responseHandler:"responseHandler",   //加载服务器数据之前的处理程序，可以用来格式化数据.参数：res为从服务器请求到的数据
+                queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
                 strictSearch:true,
@@ -449,10 +447,10 @@
             };
         function queryParams(params) {  //配置参数
             var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
-                pageSize: params.limit,   //页面大小
-                pageNumber: params.pageNumber,  //页码
+                limit: params.limit,   //每页的个数
+                offset: params.offset,  //分页时数据偏移量
                 sort: params.sort,  //排序列名
-                sortOrder: params.order,//排位命令（desc，asc）
+                order: params.order,//排位命令（desc，asc）
                 version: $("#version_filter").val(),
                 module: $("#module_filter").val(),
                 worktype: $("#worktype_filter").val(),
@@ -461,12 +459,13 @@
             };
             return temp;
         };
-        function responseHandler(res) {
-
-
-            return {"rows":res};
-
-        };
+//        function responseHandler(res) {
+//
+//            return {
+//                "total":res.total,
+//                "rows":res.rows};
+//
+//        };
         function getIdSelections() {
             return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
             return row.id

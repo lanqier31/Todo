@@ -17,49 +17,19 @@ def show_entries():
 
 @app.route('/todo',methods=['GET','POST'])
 def todo():
-    todolists = []
-    data = {}
-
-    version = request.args.get('version')
-    module = request.args.get('module')
-    worktype = request.args.get('worktype')
-    status = request.args.get('status')
-
-    print version, module, worktype, status
-    query = Todo.query
-    if (version != "all") and (version is not None):
-        query = query.filter_by(version=version)
-    if (module != 'all') and (module is not None):
-        query = query.filter_by(module=module)
-    if (worktype != 'all') and (worktype is not None):
-        query = query.filter_by(worktype=worktype)
-    if (status != 'all') and (status is not None):
-        query = query.filter_by(status=status)
-    todolist = query.all()
-    total = len(todolist)
-
-    for todo in todolist:
-        todolists.append(todo.to_dict())
-    rows = json.dumps(todolists, ensure_ascii=False)
-    data['total'] = total
-    data['rows'] = rows
-    # data = json.dumps(data)
-    print rows
-    return render_template('todo.html',rows=rows)
+    return render_template('todo.html')
 
 
 @app.route('/query_todo',methods=['GET','POST'])
 def query_todo():
     try:
         todolists = []
-        data = {}
-
         version = request.args.get('version')
         module = request.args.get('module')
         worktype = request.args.get('worktype')
         status = request.args.get('status')
-
-        print version, module, worktype, status
+        limit = request.args.get('limit')
+        offset = request.args.get('offset')
         query = Todo.query
         if (version != "all") and (version is not None):
             query = query.filter_by(version=version)
@@ -74,12 +44,9 @@ def query_todo():
 
         for todo in todolist:
             todolists.append(todo.to_dict())
-        rows = json.dumps(todolists, ensure_ascii=False)
-        data['total'] = total
-        data['rows'] = rows
-        data = json.dumps(data)
-        print rows
-        return rows
+
+        return jsonify({"total":total,'rows': todolists[int(offset):(int(offset) + int(limit))]})
+
     except IOError:
         return "error"
 
