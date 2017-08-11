@@ -182,7 +182,7 @@
         $(document).ready(function () {
             // 初始化table
             initTable();
-            $("#status_filter").bind("change", initTable);
+
             if(localStorage.getItem("username")!="admin"){//权限控制
                 $("#remove").remove();
             }
@@ -193,22 +193,23 @@
         function initTable(){
 
             $('#todolist').bootstrapTable('destroy');  //先销毁表格
-            data={{rows|safe}};
+//            rows={{rows|safe}};
+//            console.error(rows);
             $('#todolist').bootstrapTable({
-                url:'/todo',
+                url:'/query_todo',
                 method:'get',
 //                contentType : "application/x-www-form-urlencoded",
                 toolbar:'#toolbar',
-                data:data,
-//                dataType:'json',
+//                data:rows,
+                dataType:'json',
                 striped:false,  //是否行间隔色显示
                 cache:false,//是否试用缓存，默认为true
                 pagination:true, //s是否分页
                 sortable:true,  //是否启用排序
                 sortOrder:"ID asc", // 排序方式
                 pageNumber:1, //初始化加载第一页，默认第一页
-                pageSize:20 , //每页的记录行数
-                pageList:[6,20,50] ,  //可供选择的每页行数
+                pageSize:5 , //每页的记录行数
+                pageList:[5,20,50] ,  //可供选择的每页行数
                 responseHandler:"responseHandler",   //加载服务器数据之前的处理程序，可以用来格式化数据.参数：res为从服务器请求到的数据
                 queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
@@ -461,12 +462,9 @@
             return temp;
         };
         function responseHandler(res) {
-            res={{data|safe}};
-            alert(res.total);
-            return {
-                        "total": res.total,
-                        "rows": res.rows
-                    };
+
+
+            return {"rows":res};
 
         };
         function getIdSelections() {
@@ -474,6 +472,9 @@
             return row.id
         });
         };
+        $(".bugfilter").change(function(){
+            $('#todolist').bootstrapTable('refresh',{url: '/query_todo'});
+        });
 
 
         //添加todo操作
