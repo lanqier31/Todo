@@ -147,7 +147,10 @@ table thead{
 .form-inline label{
 	width: 62px;
 	text-align: right;
-}  
+}
+.editable-checklist label{
+	text-align:left;
+}
 .indent{
 	margin-left: -220px;
 }
@@ -185,6 +188,6 @@ table thead{
 	padding:3px 5px;
 }
 .redBackground{
-	background-color: #ac2925;
+	background-color: #d9534f;
 	color: #fff;
 }

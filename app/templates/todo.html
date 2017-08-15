@@ -263,7 +263,13 @@
                                     },
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
-                                        location.reload();
+                                        if(newValue=='bug'){
+                                            $(this).addClass("redBackground");
+                                        }
+                                        else {
+                                            $(this).removeClass("redBackground");
+                                        }
+
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
@@ -405,7 +411,12 @@
                                     url:'/edit_todo',
                                     pk:6,
                                     success: function(response, newValue) {
-                                        location.reload();
+                                        if(newValue=='Unresolved'){     //控制颜色显示
+                                            $(this).addClass("redBackground");
+                                        }
+                                        else {
+                                            $(this).removeClass("redBackground");
+                                        }
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
