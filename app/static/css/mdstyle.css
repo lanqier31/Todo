@@ -191,3 +191,6 @@ table thead{
 	background-color: #d9534f;
 	color: #fff;
 }
+.editable-input .form-control {
+	width:480px;
+}

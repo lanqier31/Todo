@@ -310,6 +310,7 @@
                             },{
                                 title:'Title',
                                 field:'title',
+                                width:200,
                                 align:'left',
                                 valign:'middle',
                                 editable: {
@@ -334,11 +335,11 @@
                                 field:'description',
                                 align:'left',
                                 valign:'middle',
-                                width:360,
+                                width:480,
                                 editable: {
                                     type: 'textarea',
                                     title: '描述',
-                                    mode: "inline",
+                                    mode: "popup",
                                     emptytext: "--",
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
