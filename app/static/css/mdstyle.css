@@ -53,6 +53,7 @@ a{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+	vertical-align: middle;
 }
 table thead{
 	background-color:rgb(34, 178, 197);
@@ -178,4 +179,12 @@ table thead{
 #bugfilter ul li{
 	background-color: rgb(34, 178, 197);
 	border-radius: 3px;
+}
+.workType{
+	color: #ffffff;
+	padding:3px 5px;
+}
+.redBackground{
+	background-color: #ac2925;
+	color: #fff;
 }

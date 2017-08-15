@@ -182,10 +182,11 @@
         $(document).ready(function () {
             // 初始化table
             initTable();
-
-            if(localStorage.getItem("username")!="admin"){//权限控制
-                $("#remove").remove();
-            }
+            setworkType();
+//
+//            if(localStorage.getItem("username")!="admin"){//权限控制
+//                $("#remove").remove();
+//            }
             //下拉多选
             $('.multiple').selectpicker();
         })
@@ -208,7 +209,6 @@
                 pageNumber:1, //初始化加载第一页，默认第一页
                 pageSize:10 , //每页的记录行数
                 pageList:[5,20,50] ,  //可供选择的每页行数
-//                responseHandler:"responseHandler",   //加载服务器数据之前的处理程序，可以用来格式化数据.参数：res为从服务器请求到的数据
                 queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
@@ -223,9 +223,7 @@
                                 field:'state',
                                 checkbox:true,
                                 align:'center',
-                                valign:'middle',
-
-                                // width:20
+                                valign:'middle'
                             },
                             {
                                 title:'ID',
@@ -262,12 +260,15 @@
                                     },
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
+                                        location.reload();
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
                                     }
                                 },
-                                switchable:true    
+                                switchable:true
+
+
                             },{
                                 title:'Module',
                                 field:'module',
@@ -290,6 +291,7 @@
                                     },
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
+
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
@@ -400,6 +402,7 @@
                                     url:'/edit_todo',
                                     pk:6,
                                     success: function(response, newValue) {
+                                        location.reload();
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
@@ -441,7 +444,8 @@
                 exportTypes:['excel'],
                 formatLoadingMessage: function () {
                     return
-                }
+                },
+
 
             });
             };
@@ -459,13 +463,18 @@
             };
             return temp;
         };
-//        function responseHandler(res) {
-//
-//            return {
-//                "total":res.total,
-//                "rows":res.rows};
-//
-//        };
+        var setworkType = function ()  {
+            try{
+                var d = $("#todolist").html().replace("BUG", "<span class='workType typeBug'>BUG</span>");
+                    d = d.replace("需求", "<div class='workType typeRe'>需求</div>");
+                    d = d.replace("需求变更", "<div class='workType typeChange'>需求变更</div>");
+
+                    $("#todolist").html(d);
+            }catch (msg)
+            {alert (msg)}
+
+        };
+
         function getIdSelections() {
             return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
             return row.id
@@ -497,7 +506,6 @@
                 "completetime":$('#completetime').val(),
                 "remarks":$('#remarks').val()
             };
-            alert(postdata.developer);
             $.ajax({
                 //提交数据的类型 POST GET
                 type:"POST",
@@ -525,7 +533,6 @@
         //删除操作
         $("#remove").click(function () {
             var ids = getIdSelections();
-            alert(ids);
             if (ids.length < 1) {
                 alert("请选中要删除的行！");
                 return;

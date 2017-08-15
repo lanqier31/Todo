@@ -5,7 +5,8 @@ from app.models.Category import Category
 from app.models.Todo import Todo
 import os ,json,sys
 from app import app,db
-from sqlalchemy import func
+from datetime import datetime,date
+from sqlalchemy import extract
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -24,12 +25,13 @@ def todo():
 def query_todo():
     try:
         todolists = []
+        limit = request.args.get('limit')
+        offset = request.args.get('offset')
         version = request.args.get('version')
         module = request.args.get('module')
         worktype = request.args.get('worktype')
         status = request.args.get('status')
-        limit = request.args.get('limit')
-        offset = request.args.get('offset')
+        time = request.args.get('createtime')
         query = Todo.query
         if (version != "all") and (version is not None):
             query = query.filter_by(version=version)
@@ -39,6 +41,17 @@ def query_todo():
             query = query.filter_by(worktype=worktype)
         if (status != 'all') and (status is not None):
             query = query.filter_by(status=status)
+        if (time == 'today'):
+            today=date.today()
+            query = query.filter_by(createtime=today)
+        if (time =='thisyear'):
+            year=date.today().year
+            query = query.filter(extract('year', Todo.createtime)==year)
+        if (time== 'thismonth'):
+            month= date.today().month
+            query = query.filter(extract('month', Todo.createtime)==month)
+
+
         todolist = query.all()
         total = len(todolist)
 

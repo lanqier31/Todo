@@ -783,8 +783,8 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                var idKey = valueProp || 'value';
                valueProp = function (e) { return e[idKey]; };
            }
-           if (value.substr(0, 1) == ',') value = value.substr(1);
-                value = value.split(',');
+           // if (value.substr(0, 1) == ',') value = value.substr(1);
+           //      value = value.split(',');
            var isValArray = $.isArray(value),
            result = [], 
            that = this;
@@ -1521,13 +1521,18 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             
             //add 'editable' class to every editable element
             this.$element.addClass('editable');
+
+            //add custom class
+            if (this.value=='bug'||this.value=='Unresolved'){
+                this.$element.addClass('redBackground');
+            }
+
             
             //specifically for "textarea" add class .editable-pre-wrapped to keep linebreaks
             if(this.input.type === 'textarea') {
                 this.$element.addClass('editable-pre-wrapped');
             }
-            
-            //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
+              //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
             if(this.options.toggle !== 'manual') {
                 this.$element.addClass('editable-click');
                 this.$element.on(this.options.toggle + '.editable', $.proxy(function(e){
