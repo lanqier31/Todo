@@ -44,7 +44,7 @@
                 <select id="createtime_filter" class="bugfilter" >
                     <option value="all">全部</option>
                     <option value="today">今日</option>
-                    <option value="thisweek">本周</option>
+                    <option value="thisweek" selected = "selected">本周</option>
                     <option value="thismonth">本月</option>
                     <option value="thisyear">本年</option>
                 </select>
@@ -210,8 +210,8 @@
                 sortable:true,  //是否启用排序
                 sortOrder:"ID asc", // 排序方式
                 pageNumber:1, //初始化加载第一页，默认第一页
-                pageSize:10 , //每页的记录行数
-                pageList:[5,20,50] ,  //可供选择的每页行数
+                pageSize:20 , //每页的记录行数
+                pageList:[10,20,50] ,  //可供选择的每页行数
                 queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页

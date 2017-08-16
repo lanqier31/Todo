@@ -5,7 +5,7 @@ from app.models.Category import Category
 from app.models.Todo import Todo
 import os ,json,sys
 from app import app,db
-from datetime import datetime,date
+from datetime import datetime,date,timedelta
 from sqlalchemy import extract
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -48,9 +48,15 @@ def query_todo():
             year=date.today().year
             query = query.filter(extract('year', Todo.createtime)==year)
         if (time== 'thismonth'):
+            year = date.today().year
             month= date.today().month
-            query = query.filter(extract('month', Todo.createtime)==month)
+            query = query.filter(extract('year', Todo.createtime)==year).filter(extract('month', Todo.createtime)==month)
 
+        if (time == 'thisweek'):
+            today= date.today()
+            weekday = date.today().isoweekday()
+            monday = today-timedelta(days=weekday)
+            query = query.filter(Todo.createtime.between(monday,today))
 
         todolist = query.all()
         total = len(todolist)
