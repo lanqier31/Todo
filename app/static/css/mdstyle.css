@@ -194,3 +194,11 @@ table thead{
 .editable-input .input-large {
 	width:480px;
 }
+.greyBackground{
+	background-color: #888888;
+	color: #2d2d2d;
+}
+.blueBackground{
+	background-color:#5cb85c;
+	color: #fff;
+}

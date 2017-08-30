@@ -413,10 +413,29 @@
                                     pk:6,
                                     success: function(response, newValue) {
                                         if(newValue=='Unresolved'){     //控制颜色显示
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("greyBackground");
+                                            $(this).removeClass("blueBackground");
                                             $(this).addClass("redBackground");
                                         }
-                                        else {
+                                        else if(newValue=='Rejected'){
+                                            $(this).css("backgroundColor", "");
                                             $(this).removeClass("redBackground");
+                                            $(this).removeClass("blueBackground");
+                                            $(this).addClass("greyBackground");
+
+                                        }
+                                        else if (newValue=='Completed'){
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("redBackground");
+                                            $(this).removeClass("greyBackground");
+                                            $(this).addClass("blueBackground");
+                                        }
+                                        else {
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("redBackground");
+                                            $(this).removeClass("greyBackground");
+                                            $(this).removeClass("blueBackground");
                                         }
                                         if(response.status =='error') {
                                             return response.msg;

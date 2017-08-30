@@ -72,8 +72,8 @@ def query_todo():
 
 @app.route('/add_todo',methods={'POST'})
 def add_todo(charset='utf-8'):
-    if not session.get('login_in'):
-        abort(401)
+    # if not session.get('login_in'):
+    #     abort(401)
     try:
         data = str(request.values)
         # print data

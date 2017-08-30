@@ -1526,6 +1526,12 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             if (this.value=='bug'||this.value=='Unresolved'){
                 this.$element.addClass('redBackground');
             }
+            else if (this.value=='Completed'){
+                this.$element.addClass('blueBackground');
+            }
+            else if (this.value=='Rejected'){
+                this.$element.addClass('greyBackground');
+            }
 
             
             //specifically for "textarea" add class .editable-pre-wrapped to keep linebreaks
