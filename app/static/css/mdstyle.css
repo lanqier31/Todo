@@ -28,9 +28,7 @@ a{
 	margin-right:20px;
 	margin-left:10px;
 }
-// .jiankong{
-// 	margin-top: 10px;
-// }
+
 .toolbar{
 	position: relative;
 	float: left;
@@ -102,9 +100,7 @@ table thead{
 	font-weight: bold;
 }
 
-// .btn{
-// 	background-color:#fff;
-// }
+
 .navbar-right{
 	margin-right: 0;
 }
@@ -121,6 +117,9 @@ table thead{
 #main{
 	margin-top: 60px;
 
+}
+#content{
+	padding:0;
 }
 
 .sidebar{
@@ -201,4 +200,7 @@ table thead{
 .blueBackground{
 	background-color:#5cb85c;
 	color: #fff;
+}
+#todolist{
+	margin-top: -58px;!important;
 }

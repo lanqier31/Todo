@@ -32,6 +32,9 @@ def query_todo():
         worktype = request.args.get('worktype')
         status = request.args.get('status')
         time = request.args.get('createtime')
+        developer =request.args.get('developer')
+        tester= request.args.get('tester')
+
         query = Todo.query
         if (version != "all") and (version is not None):
             query = query.filter_by(version=version)
@@ -44,6 +47,14 @@ def query_todo():
         if (time == 'today'):
             today=date.today()
             query = query.filter_by(createtime=today)
+        if (developer != 'all') and (developer is not None):
+            developer = '%' + str(developer) + '%'
+            query = query.filter(Todo.developer.ilike(developer))
+
+        if (tester != 'all') and (tester is not None):
+            tester = '%' + str(tester) + '%'
+            query = query.filter(Todo.tester.ilike(tester))
+
         if (time =='thisyear'):
             year=date.today().year
             query = query.filter(extract('year', Todo.createtime)==year)
@@ -51,7 +62,6 @@ def query_todo():
             year = date.today().year
             month= date.today().month
             query = query.filter(extract('year', Todo.createtime)==year).filter(extract('month', Todo.createtime)==month)
-
         if (time == 'thisweek'):
             today= date.today()
             weekday = date.today().isoweekday()
@@ -91,10 +101,11 @@ def add_todo(charset='utf-8'):
         tester=str(tester)
         status = request.form.get('status')
         createtime = request.form.get('createtime')
+        plantime = request.form.get('plantime')
         completetime = request.form.get('completetime')
         remarks = request.form.get('remarks')
         print tester
-        todo = Todo(project,version,worktype,module,title,description,developer,tester,status,createtime,completetime,remarks)
+        todo = Todo(project,version,worktype,module,title,description,developer,tester,status,createtime,plantime,completetime,remarks)
         print todo
         db.session.add(todo)
         db.session.commit()
@@ -132,8 +143,12 @@ def edit_todo():
             todo.module=value
         elif(field=='worktype'):
             todo.worktype=value
+        elif(field=='plantime'):
+            todo.plantime = value
+        elif(field=='completetime'):
+            todo.completetime=value
         todo.save()
-        return 'success';
+        return 'success'
     except IOError:
         return "error"
 
@@ -169,7 +184,7 @@ def add_entry():
     return redirect(url_for('show_entries'))
 
 
-@app.route('/',methods=['GET','POST'])
+@app.route('/index',methods=['GET','POST'])
 def login():
     error = None
     if request.method=='POST':

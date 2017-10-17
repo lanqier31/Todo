@@ -49,6 +49,23 @@
                     <option value="thisyear">本年</option>
                 </select>
             </li>
+            <li role="presentation" class="dropdown">开发
+                <select id="developer_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="1">张路</option>
+                    <option value="2">李小满</option>
+                    <option value="3">徐郁</option>
+                    <option value="4">陈梦梦</option>
+                </select>
+            </li>
+            <li role="presentation" class="dropdown">测试
+                <select id="tester_filter" class="bugfilter" >
+                    <option value="all">全部</option>
+                    <option value="1">高文琪</option>
+                    <option value="2">俞利芳</option>
+                    <option value="3">王健</option>
+                </select>
+            </li>
 
         </ul>    
     
@@ -150,6 +167,10 @@
                             <input type="Date" id="createtime"  name="createtime" class="form-control" />
                           </div>
                           <div class="form-group">
+                            <label for="completetime">计划日期</label>
+                            <input type="Date" id="plantime" name="plantime" class="form-control" />
+                          </div>
+                          <div class="form-group">
                             <label for="completetime">完成日期</label>
                             <input type="Date" id="completetime" name="completetime" class="form-control" />
                           </div>
@@ -176,7 +197,7 @@
 </div>
 
 <div>
-    <table id="todolist" class="table table-hover">
+    <table id="todolist" class="table table-hover top_fix_table">
     </table>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -217,8 +238,8 @@
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
                 strictSearch:true,
                 clickToSelect:true,  //是否启动点击选中行
-                search:false,
-
+                search:true,
+                height:680,
                 columns:[
                     
                             {   
@@ -233,7 +254,7 @@
                                 field:'id',
                                 align:'left',
                                 valign:'middle',
-                                width:35,
+                                width:50,
                                 sortable:true,
                                 class:'text-overflow'                           
                             },{
@@ -248,6 +269,7 @@
                                 field:'worktype',
                                 align:'left',
                                 valign:'middle',
+                                width:60,
                                 class:'text-overflow',
                                 editable: {
                                     type: 'select',
@@ -308,9 +330,9 @@
                                 },
                                 switchable:true
                             },{
-                                title:'Title',
+                                title:'标题',
                                 field:'title',
-                                width:200,
+                                width:160,
                                 align:'left',
                                 valign:'middle',
                                 editable: {
@@ -328,14 +350,13 @@
                                         }
                                     }
                                 },
-                                width:200,
                                 sortable:true
                             },{
-                                title:'Description',
+                                title:'描述',
                                 field:'description',
                                 align:'left',
                                 valign:'middle',
-                                width:480,
+                                width:400,
                                 editable: {
                                     type: 'textarea',
                                     title: '描述',
@@ -349,7 +370,7 @@
                                     }
                                 }   
                             },{
-                                title:'Developer',
+                                title:'开发',
                                 field:'developer',
                                 align:'center',
                                 valign:'middle',
@@ -374,7 +395,7 @@
                                     }
                                 }
                             },{
-                                title:'Tester',
+                                title:'测试',
                                 field:'tester',
                                 align:'center',
                                 valign:'middle',
@@ -463,10 +484,59 @@
                                 },
                                 sortable:true
                             },{
-                                title:"CreateTime",
+                                title:"创建日期",
                                 field:"createtime",
                                 sortable:true,
-                                align:'center',
+                                editable: {
+                                    type: 'text',
+                                    title: '创建日期',
+                                    emptytext: "--",
+                                    mode: "popup",
+                                    url:'/edit_todo',
+                                    pk:6,
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                align:'center'
+                            },{
+                                title:"计划日期",
+                                field:"plantime",
+                                sortable:true,
+                                editable: {
+                                    type: 'text',
+                                    title: '计划日期',
+                                    emptytext: "--",
+                                    mode: "popup",
+                                    url:'/edit_todo',
+                                    pk:6,
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                align:'center'
+                            },{
+                                title:"完成日期",
+                                field:"completetime",
+                                sortable:true,
+                                editable: {
+                                    type: 'text',
+                                    title: '完成日期',
+                                    emptytext: "--",
+                                    mode: "popup",
+                                    url:'/edit_todo',
+                                    pk:6,
+                                    success: function(response, newValue) {
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
+                                },
+                                align:'center'
                             }
                         ],
                 showColumns:true,   // 是否显示列
@@ -493,7 +563,9 @@
                 module: $("#module_filter").val(),
                 worktype: $("#worktype_filter").val(),
                 status: $("#status_filter").val(),
-                createtime:$("#createtime_filter").val()
+                createtime:$("#createtime_filter").val(),
+                developer:$("#developer_filter").val(),
+                tester:$("#tester_filter").val(),
             };
             return temp;
         };
@@ -544,6 +616,7 @@
                 "tester":$('#tester').val(),
                 "status":$('#status').val(),
                 "createtime":$('#createtime').val(),
+                "plantime":$('#plantime').val(),
                 "completetime":$('#completetime').val(),
                 "remarks":$('#remarks').val()
             };

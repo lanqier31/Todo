@@ -22,10 +22,11 @@ class Todo(db.Model):
     tester = db.Column(db.String(36))
     status = db.Column(db.String(10))
     createtime = db.Column(db.String(16))
+    plantime = db.Column(db.String(16))
     completetime = db.Column(db.String(16))
     remarks = db.Column(db.String(100))
 
-    def __init__(self,project,version,worktype,module,title,description,developer,tester,status,createtime,completetime,remarks):
+    def __init__(self,project,version,worktype,module,title,description,developer,tester,status,createtime,plantime,completetime,remarks):
         self.project = project
         self.version = version
         self.worktype = worktype
@@ -36,6 +37,7 @@ class Todo(db.Model):
         self.tester = tester
         self.status = status
         self.createtime = createtime
+        self.plantime=plantime
         self.completetime = completetime
         self.remarks = remarks
 
@@ -55,8 +57,9 @@ class Todo(db.Model):
             "tester": self.tester,
             "status":self.status,
             "createtime": self.createtime,
-            "completetime":self.completetime,
-            "remarks": self.remarks,
+            "plantime": self.plantime,
+            "completetime": self.completetime,
+            "remarks": self.remarks
         }
 
     def save(self):
