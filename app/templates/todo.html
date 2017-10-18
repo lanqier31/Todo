@@ -75,6 +75,7 @@
             <button id="remove" class="btn btn-danger">
                 <i class="glyphicon glyphicon-trash"></i> 删除
             </button>
+            <input class="form-control  search" type="text" placeholder="Id">
         <!--<button class="btn btn-primary" data-table="todolist" aria-label="export type">导出</button>-->
     </div>
     
@@ -197,13 +198,13 @@
 </div>
 
 <div>
-    <table id="todolist" class="table table-hover top_fix_table">
+    <table id="todolist" class="table table-hover top_fix_table ">
     </table>
     <script type="text/javascript">
         $(document).ready(function () {
             // 初始化table
             initTable();
-            setworkType();
+//            setworkType();
 //
 //            if(localStorage.getItem("username")!="admin"){//权限控制
 //                $("#remove").remove();
@@ -236,10 +237,10 @@
                 queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
-                strictSearch:true,
+                strictSearch:false,
                 clickToSelect:true,  //是否启动点击选中行
-                search:true,
-                height:680,
+                search:false,
+                height:630,
                 columns:[
                     
                             {   
@@ -256,12 +257,15 @@
                                 valign:'middle',
                                 width:50,
                                 sortable:true,
+                                searchable:true,
                                 class:'text-overflow'                           
                             },{
                                 title:'Version',
                                 field:'version',
                                 align:'left',
                                 valign:'middle',
+                                sortable:false,
+                                searchable:false,
                                 class:'text-overflow',
                                 switchable:true
                             },{
@@ -270,6 +274,8 @@
                                 align:'left',
                                 valign:'middle',
                                 width:60,
+                                sortable:false,
+                                searchable:false,
                                 class:'text-overflow',
                                 editable: {
                                     type: 'select',
@@ -296,8 +302,8 @@
                                             return response.msg;
                                         }
                                     }
-                                },
-                                switchable:true
+                                }
+
 
 
                             },{
@@ -305,7 +311,8 @@
                                 field:'module',
                                 align:'center',
                                 valign:'middle',
-                                sortable:true,
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'select',
                                     title: '模块',
@@ -335,6 +342,8 @@
                                 width:160,
                                 align:'left',
                                 valign:'middle',
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'text',
                                     title: '标题',
@@ -349,13 +358,15 @@
                                             return response.msg;
                                         }
                                     }
-                                },
-                                sortable:true
+                                }
+
                             },{
                                 title:'描述',
                                 field:'description',
                                 align:'left',
                                 valign:'middle',
+                                sortable:false,
+                                searchable:false,
                                 width:400,
                                 editable: {
                                     type: 'textarea',
@@ -374,7 +385,8 @@
                                 field:'developer',
                                 align:'center',
                                 valign:'middle',
-
+                                sortable:false,
+                                searchable:false,
                                 editable:{
                                     type: 'checklist',
                                     pk:'1',
@@ -400,6 +412,8 @@
                                 align:'center',
                                 valign:'middle',
                                 switchable:false,
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'checklist',
                                     separator:",",
@@ -420,6 +434,7 @@
                                 field:'status',
                                 align:'center',
                                 valign:'middle',
+                                searchable:false,
                                 editable: {
                                     type: 'select',
                                     title: '状态',
@@ -463,12 +478,14 @@
                                         }
                                     }
                                 },
-                                sortable:true
+                                sortable:false
                             },{
                                 title:'备注',
                                 field:'remarks',
                                 align:'center',
                                 valign:'middle',
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'textarea',
                                     title: '描述',
@@ -481,12 +498,12 @@
                                             return response.msg;
                                         }
                                     }
-                                },
-                                sortable:true
+                                }
                             },{
                                 title:"创建日期",
                                 field:"createtime",
-                                sortable:true,
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'text',
                                     title: '创建日期',
@@ -504,7 +521,8 @@
                             },{
                                 title:"计划日期",
                                 field:"plantime",
-                                sortable:true,
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'text',
                                     title: '计划日期',
@@ -522,7 +540,8 @@
                             },{
                                 title:"完成日期",
                                 field:"completetime",
-                                sortable:true,
+                                sortable:false,
+                                searchable:false,
                                 editable: {
                                     type: 'text',
                                     title: '完成日期',
@@ -541,8 +560,8 @@
                         ],
                 showColumns:true,   // 是否显示列
                 minimumCountColumns:2,
-                showRefresh:true,  // 是否刷新
-                showToggle:true,
+                showRefresh:false,  // 是否刷新
+                showToggle:false,
                 showExport:true,
                 exportDataType: "selected",   //basic', 'all', 'selected'.
                 exportTypes:['excel'],
@@ -566,9 +585,14 @@
                 createtime:$("#createtime_filter").val(),
                 developer:$("#developer_filter").val(),
                 tester:$("#tester_filter").val(),
+                searchText:$('.search').val().trim(),
             };
             return temp;
         };
+
+
+
+
         var setworkType = function ()  {
             try{
                 var d = $("#todolist").html().replace("BUG", "<span class='workType typeBug'>BUG</span>");
@@ -587,8 +611,21 @@
         });
         };
         $(".bugfilter").change(function(){
+            $('.search').val("");
             $('#todolist').bootstrapTable('refresh',{url: '/query_todo'});
         });
+        //Search
+        $search = $('.search');
+        $search.off('keyup drop blur').on('keyup drop blur', function (event) {
+            if (event.keyCode !== 13)
+                return;
+
+            if ($.inArray(event.keyCode, [37, 38, 39, 40]) > -1)
+                return;
+            $('#todolist').bootstrapTable('refresh',{url: '/query_todo'});
+
+        })
+
 
         // 监听模态框事件
         $(function () { $('#addtodo').on('shown.bs.modal', function () {
@@ -636,7 +673,7 @@
                     $('.modal').modal('hide');
                     location.reload();
                     // $('#tosolist').html($(data).find('#todolist').html());
-                    <!--onchange();-->
+
                     },
                     error: function(e){
                     //请求出错处理

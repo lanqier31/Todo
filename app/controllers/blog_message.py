@@ -34,7 +34,9 @@ def query_todo():
         time = request.args.get('createtime')
         developer =request.args.get('developer')
         tester= request.args.get('tester')
+        searchText=request.args.get('searchText')
 
+        print searchText
         query = Todo.query
         if (version != "all") and (version is not None):
             query = query.filter_by(version=version)
@@ -67,7 +69,8 @@ def query_todo():
             weekday = date.today().isoweekday()
             monday = today-timedelta(days=weekday)
             query = query.filter(Todo.createtime.between(monday,today))
-
+        if (searchText !=''):
+            query = Todo.query.filter_by(id=searchText)
         todolist = query.all()
         total = len(todolist)
 
@@ -104,9 +107,7 @@ def add_todo(charset='utf-8'):
         plantime = request.form.get('plantime')
         completetime = request.form.get('completetime')
         remarks = request.form.get('remarks')
-        print tester
         todo = Todo(project,version,worktype,module,title,description,developer,tester,status,createtime,plantime,completetime,remarks)
-        print todo
         db.session.add(todo)
         db.session.commit()
         flash('New todo was successfully posted')
@@ -166,9 +167,6 @@ def delete_todo():
     except IOError:
         print IOError
         return 'error'
-
-
-
 
 
 @app.route('/add',methods={'POST'})
