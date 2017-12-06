@@ -20,4 +20,4 @@ lm.login_view='login'
 oid=OpenID(app,os.path.join(basedir,'tmp'))
 
 from app.models import User,Category,Todo
-from app.controllers import blog_message
+from app.controllers import blog_message,frontPerform

@@ -10,5 +10,5 @@ class Category(db.Model):
         self.content = content
 
     def __repr__(self):
-        return '<Category %r>' %self.title
+        return '<Category %r>' %(self.title)
 

@@ -5,7 +5,7 @@ from app.models.Category import Category
 from app.models.Todo import Todo
 import os ,json,sys
 from app import app,db
-from datetime import datetime,date,timedelta
+from datetime import date,timedelta
 from sqlalchemy import extract
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -36,7 +36,7 @@ def query_todo():
         tester= request.args.get('tester')
         searchText=request.args.get('searchText')
 
-        print searchText
+        # print searchText
         query = Todo.query
         if (version != "all") and (version is not None):
             query = query.filter_by(version=version)
@@ -69,6 +69,17 @@ def query_todo():
             weekday = date.today().isoweekday()
             monday = today-timedelta(days=weekday)
             query = query.filter(Todo.createtime.between(monday,today))
+        if (time == 'last7day'):
+            today = date.today()
+            beginday = today - timedelta(7)
+            query = query.filter(Todo.createtime.between(beginday, today))
+
+        if(time == 'last30day'):
+            today= date.today()
+            beginday = today-timedelta(30)
+            query = query.filter(Todo.createtime.between(beginday,today))
+
+
         if (searchText !=''):
             query = Todo.query.filter_by(id=searchText)
         todolist = query.all()
