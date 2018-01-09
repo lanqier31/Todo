@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+{% block title %}测试技术{% endblock %}
+
+{% block content %}
+
+	<!-- include summernote css/js-->
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+	<style>
+		body{
+			background-color: #f4f4f4;
+			line-height: 24px;
+			/*overflow: hidden;*/
+		}
+		.buttool{
+			position: fixed;
+			top:60px;
+		}
+		.search{
+			width:60%;
+		}
+		.affix{
+			top:120px;
+		}
+		.modal-dialog{
+			width:1030px;
+		}
+
+		.menu_article{
+			list-style:none;
+		}
+		section{
+			margin-bottom: 8px;
+			border-bottom: 1px solid #f4f4f4;
+    		padding: 10px;
+			background-color: #fff;
+		}
+		section > h2{
+			padding: 0 29px;
+			color: #2c3033;
+			font-size: 24px;
+			font-weight: 100;
+			line-height: 38px;
+		}
+		.subtitle{
+			padding: 0 29px 8px;
+			color: #888;
+			border-bottom: 1px solid #e5e5e5;
+			font-size: 14px;
+			line-height: 38px;
+			margin-top: 5px;
+		}
+		.time{
+			float:left;
+			display: inline-block;
+			color: #bbb;
+			font-size: 14px;
+			margin-right: 10px;
+		}
+		ul.right_bar{
+			float: right;
+    		margin-top: 5px;
+
+		}
+		.right_bar li{
+			list-style: none;
+			float: left;
+			margin-left: 30px;
+			line-height: 28px;
+		}
+		article{
+			margin-bottom: 30px;
+			color: #454545;
+			padding: 20px 30px 0;
+		}
+		.menu_title{
+			text-overflow: ellipsis;
+    		white-space: nowrap;
+		}
+		.btn-noborder{
+			line-height: 24px;
+			font-size: 14px;
+			color: #888;
+			padding: 3px;
+			border: 0;
+			background-color: #fff;
+		}
+		.btn-noborder:active,.btn-noborder:after{
+			border: 0;
+			border-size:none;
+		}
+	</style>
+
+
+
+
+	<!-- Modal new-->
+	<div class="modal fade" id="addarticle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-inline" action="" method='POST'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">文章添加</h4>
+                    </div>
+					<div class="modal-body">
+
+					  	<div class="form-group">
+                            <label for="category">类目</label>
+							<input type="text" class="form-control" id="category" name="category" style="width: 310px;" />
+
+					  	</div>
+						<div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" style="width: 500px;" />
+					  	</div>
+					  	<div class="form-group">
+						  	<div id="summernote"></div>
+						</div>
+					  	<div class="form-group">
+                            <label for="developer">作者</label>
+
+                            <select class="form-control" id="author" name="author">
+                                <option value="1">高文琪</option>
+                                <option value="2">俞利芳</option>
+                                <option value="3">王健</option>
+                                <option value="4">张路</option>
+                                <option value="5">李小满</option>
+								<option value="6">徐郁</option>
+								<option value="7">陈梦梦</option>
+                            </select>
+					  	</div>
+
+						<div class="form-group">
+                            <label for="createtime">创建日期</label>
+                            <input type="Date" id="createtime"  name="createtime" class="form-control" />
+					  	</div>
+
+                    </div>
+					<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="save_article">保存</button>
+                    </div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	<!-- Modal edit-->
+	<div class="modal fade" id="editarticle" tabindex="-1" role="dialog" aria-labelledby="editAtricle">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-inline" action="" method='POST'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="editAtricle">文章编辑</h4>
+                    </div>
+					<div class="modal-body">
+
+					  	<div class="form-group">
+                            <label for="category">类目</label>
+							<input type="text" class="form-control" id="category" name="category" style="width: 310px;" />
+
+					  	</div>
+						<div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" style="width: 500px;" />
+					  	</div>
+					  	<div class="form-group">
+						  	<div id="summernote"></div>
+						</div>
+					  	<div class="form-group">
+                            <label for="developer">作者</label>
+
+                            <select class="form-control" id="author" name="author">
+                                <option value="1">高文琪</option>
+                                <option value="2">俞利芳</option>
+                                <option value="3">王健</option>
+                                <option value="4">张路</option>
+                                <option value="5">李小满</option>
+								<option value="6">徐郁</option>
+								<option value="7">陈梦梦</option>
+                            </select>
+					  	</div>
+
+						<div class="form-group">
+                            <label for="createtime">创建日期</label>
+                            <input type="Date" id="createtime"  name="createtime" class="form-control" />
+					  	</div>
+
+                    </div>
+					<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="save_article">保存</button>
+                    </div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+	<div class="row" data-spy="scroll" data-target="#myScrollspy"  data-offset="60" >
+		<div class="col-md-2">
+			<div class="buttool">
+				<button class="btn btn-success" data-toggle="modal" data-target="#addarticle">
+					<i class="glyphicon glyphicon-plus"></i>添加</button>
+				<input class="form-control  search" type="text" placeholder="">
+
+        	</div>
+
+			<div class="menu" id="myScrollspy">
+				<nav class="hidden-print hidden-xs hidden-sm" id="myNav"  data-spy="affix" >
+					<ul class="menu_article">
+					  {% for article in articles %}
+						<li><a href=#{{article.id}} class="menu_title" >{{ article.title }}</a>
+					  {% else %}
+						<li><em>Unbelievable.  No categories here so far</em>
+					  {% endfor %}
+			  		</ul>
+				</nav>
+			</div>
+
+		</div>
+		<div class="col-md-10">
+			<div class="articlebody" data-spy="scroll" data-target="#articlelist">
+				{% for article in articles %}
+				<section >
+					<h2 id={{article.id}}>{{ article.title }}</h2>
+					<div class="subtitle">
+						<span class="time">{{article.createtime}}</span>
+						<span class="author">{{article.author}}</span>
+						<ul class="right_bar">
+						   <li class="edit" >
+								<button class="btn-noborder" >
+									<i class="glyphicon glyphicon-edit"></i><span class="txt">编辑</span>
+								</button>
+                			</li>
+							<li class="del" >
+								<button class="btn-noborder remove"  >
+									<i class="glyphicon glyphicon-trash"></i><span class="txt">删除</span>
+								</button>
+							</li>
+            			</ul>
+					</div>
+					<article>{{article.body|safe}}</article>
+				</section>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+
+
+	<script>
+	$(document).ready(function () {
+	    //富文本编辑
+		$("#summernote").summernote();
+
+		//滚动监听
+		$('a[href^="#"]').click(function(e){
+			e.preventDefault();
+			var tempId = $(this).attr("href");
+			$('html, body').animate({scrollTop: $(tempId).offset().top-60}, 400);
+		});
+
+	});
+	var $s = $("#summernote")
+	$s.summernote({
+            // 语言
+            lang:'zh-CN',
+            // 高度与焦点
+            height:600,
+            width:1000,
+            // 对话框显示在body而非summernote
+            dialogsInBody: true,
+            dialogsFade:true,
+            // 自定义工具栏
+            toolbar: [
+			// [groupName, [list of button]]
+			['style', ['bold', 'italic', 'underline', 'clear']],
+			['font', ['strikethrough', 'superscript', 'subscript']],
+			['fontsize', ['fontsize']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['height', ['height']]
+		  ],
+            // 图片上传
+            callbacks: {
+                // summernote提供的API：onImageUpload
+                onImageUpload:function (files) {
+                    img = sendFile(files[0])
+                }
+            }
+        });
+
+
+	//添加article操作
+	$("#save_article").click(function () {
+
+		if ($("#category").val().trim() == "") {
+			$("#category").focus();
+			alert("请输入必填项！");
+			return false;
+		}
+		if ($("#title").val().trim() == "") {
+			$("#title").focus();
+			alert("请输入必填项！");
+			return false;
+		}
+		postdata ={
+			"category":$('#category').val(),
+			"title":$('#title').val(),
+			"body":$('#summernote').summernote('code'),
+			"author":$('#author').val(),
+			"createtime":$('#createtime').val(),
+		};
+		$.ajax({
+			//提交数据的类型 POST GET
+			type:"POST",
+			//提交的网址
+			url:"/addarticle",
+			//提交的数据
+			data:postdata,
+			//返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+//                datatype: "json",
+			//ajax请求成功后的事件
+				success:function(){
+
+				alert("保存成功！");
+				$('.modal').modal('hide');
+				location.reload();
+				// $('#tosolist').html($(data).find('#todolist').html());
+
+				},
+				error: function(e){
+				//请求出错处理
+				alert(e);
+			},
+		});
+	});
+	//删除操作
+	$(".remove").click(function () {
+		var id= $(this).closest("section").find("h2").attr("id");
+		if (confirm("确定删除该文章吗？")) {
+			$.ajax({
+				type: "post",
+				url: "/delete_article",
+				data:{"id":id},
+					success:function(){
+						alert("删除成功！");
+						location.reload();
+					},
+					error:function(e){
+						alert(e);
+						console.error(e);
+					}
+				});
+		}
+	});
+	//编辑
+	$(".edit").click(function(){
+	    var id= $(this).closest("section").find("h2").attr("id");
+	     $.ajax({
+			 type:"post",
+			 url:"/edit_article",
+			 data:{"id":id},
+				success:function(data){
+					alert(data);
+					location.reload();
+				},
+				error:function(e){
+					alert(e);
+					console.error(e);
+				}
+		 });
+		$("#editarticle").modal()
+	})
+
+
+
+</script>
+{% endblock %}
+
+
