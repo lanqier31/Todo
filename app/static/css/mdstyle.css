@@ -21,6 +21,9 @@ a{
 	z-index: 999;
 	background-color: #fff;
 }
+.navbar{
+	border: 0px;
+}
 .navbar-header img{
 	/*background-image: url(images/md3.png);*/
 	height: 50px;
@@ -88,7 +91,7 @@ table thead{
 }
 .navbar-nav > .active > a,
 .navbar-nav > .active > a:hover,
-.navbar-nav > .active > a:focus {
+.navbar-nav > .active > a:focus{
 	color: #337ab7;
 	/*background-color: #e7e7e7;*/
 	border-bottom: 3px solid rgb(34, 178, 197);
@@ -114,12 +117,10 @@ table thead{
 	display: inline-block;
 	width:auto;
 }
-#main{
-	margin-top: 60px;
 
-}
 #content{
 	padding:0;
+	margin-top: 60px;
 }
 
 .sidebar{
@@ -187,7 +188,11 @@ table thead{
 	padding:3px 5px;
 }
 .redBackground{
-	background-color: #d9534f;
+	background-color: #de0000;
+	color: #fff;
+}
+.PinkBackground{
+	background-color: #d43f3a;
 	color: #fff;
 }
 .editable-input .input-large {
