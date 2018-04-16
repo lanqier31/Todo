@@ -1523,14 +1523,17 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             this.$element.addClass('editable');
 
             //add custom class
-            if (this.value=='bug'||this.value=='Unresolved'){
+            if (this.value=='bug'||this.value=='Unresolved'||this.value=='exHigh'){
                 this.$element.addClass('redBackground');
             }
-            else if (this.value=='Completed'){
+            else if (this.value=='Completed'||this.value=='Middle'){
                 this.$element.addClass('blueBackground');
             }
             else if (this.value=='Rejected'){
                 this.$element.addClass('greyBackground');
+            }
+            else if(this.value=='High'){
+                this.$element.addClass('PinkBackground');
             }
 
             
@@ -5069,7 +5072,7 @@ Editableform based on Twitter Bootstrap 3
 			o.weekStart %= 7;
 			o.weekEnd = ((o.weekStart + 6) % 7);
 
-			var format = DPGlobal.parseFormat(o.format)
+			var format = DPGlobal.parseFormat(o.format);
 			if (o.startDate !== -Infinity) {
 				o.startDate = DPGlobal.parseDate(o.startDate, format, o.language);
 			}
@@ -5877,7 +5880,7 @@ Editableform based on Twitter Bootstrap 3
 		// Check if "de-DE" style date is available, if not language should
 		// fallback to 2 letter code eg "de"
 		if (!dates[lang]) {
-			lang = lang.split('-')[0]
+			lang = lang.split('-')[0];
 			if (!dates[lang])
 				return;
 		}

@@ -14,10 +14,11 @@ app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)                          #创建数据库实例
 
-lm=LoginManager()
-lm.init_app(app)
-lm.login_view='login'
+login_manager=LoginManager()
+login_manager.session_protection = "basic"
+login_manager.init_app(app)
+login_manager.login_view='login'
 oid=OpenID(app,os.path.join(basedir,'tmp'))
 
-from app.models import User,Category,Todo
-from app.controllers import blog_message,frontPerform
+from app.models import Category,Todo,WebLoad,PageDetail,TestSuite,Roles,PermType,Permission,User
+from app.controllers import todo,frontPerform,knowledge,setting

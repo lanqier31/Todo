@@ -25,85 +25,36 @@
 <body>
 	<nav class="navbar navbar-fixed-top " role="navigation">
 		<div class="navbar-header">
-			<!--<img class="img-responsive" src="../static/images/md3.png" >-->
-			<a class="dropdown-toggle" id="project" data-toggle="dropdown" href="#">MD测试实战</a>
+			<img class="img-responsive" src="../static/images/md3.png" >
+			<!--<a class="dropdown-toggle" id="project"  href="#">MD测试实战</a>-->
 		</div>
 
-     	<ul class="nav navbar-nav panel-title">
-			<li class="active"><a href="{{ url_for('todo') }}">任务跟进</a></li>
-			<li><a href="frontPerform">前端性能测试</a> </li>
+     	<ul class="nav navbar-nav ">
+			<li><a href="{{ url_for('todo') }}">任务跟进</a></li>
+			<li><a href="{{ url_for('frontPerform') }}">前端性能测试</a> </li>
 			<li><a href="ui_auto">UI自动化测试</a></li>
 			<li><a href="case_detail">接口自动化测试</a> </li>
 			<li><a href="">性能测试</a> </li>
 			<li><a href="per_auto">全局变量</a></li>
-
+			<li><a href="{{ url_for('knowledge') }}">技术荟萃</a></li>
       	</ul>
 
 	</nav>
+	<script>
 
-	<div id="main" class="" >
-		<!--<div class="row">-->
-			<!--<div class="col-md-2 sidebar">-->
-				<!--<div class=" hidden-xs hidden-sm hidden-print jquery-accordion-menu blue" id="menu">-->
-					<!--<div class="jquery-accordion-menu-header" id="menu">Menu-->
-					<!--</div>-->
-				<!--&lt;!&ndash; This is yeartimeeidt list &ndash;&gt;-->
-					<!--<ul class="" id="menulist">-->
-						<!--<li class="active"><a href="{{ url_for('todo') }}">任务跟进</a></li>-->
-					    <!--<li><a href="index">前端性能测试</a> </li>-->
-					    <!--<li><a href="ui_auto">UI自动化测试</a></li>-->
-					    <!--<li><a href="case_detail">接口自动化测试</a> </li>-->
-					    <!--<li><a href="">性能测试</a> </li>-->
-					    <!--<li><a href="per_auto">全局变量</a></li>-->
+		$(function () {
+        $(".navbar-nav").find("li").each(function () {
+            var a = $(this).find("a:first")[0];
+            if ($(a).attr("href") === location.pathname) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    })
+	</script>
 
 
-					<!--</ul>-->
-		    	<!--</div>-->
-			<!--</div>-->
-			<!--<script type="text/javascript">-->
-
-				<!--jQuery("#menu").jqueryAccordionMenu();-->
-
-				<!--//侧边栏缩进-->
-				<!--$('#menu').click(function(){-->
-					<!--if ($('.sidebar').hasClass('indent')){-->
-						<!--$('.sidebar').removeClass("indent");-->
-						<!--$('.sidebar').addClass("col-md-2");-->
-						<!--$('.sidebar').removeClass("col-md-1");-->
-						<!--$('#content').addClass("col-md-10");-->
-						<!--$('#content').removeClass("col-md-11");-->
-
-					<!--}-->
-					<!--else{-->
-						<!--$('.sidebar').addClass("indent");-->
-						<!--$('.sidebar').addClass("col-md-1");-->
-						<!--$('.sidebar').removeClass("col-md-2");-->
-						<!--$('#content').addClass("col-md-11");-->
-						<!--$('#content').removeClass("col-md-10");-->
-
-					<!--}-->
-				<!--})-->
-				<!--// 固定侧别栏-->
-				<!--// $(function(){-->
-
-				    <!--var offset=$(".sidebar").offset();-->
-				    <!--$(window).scroll(function(){-->
-				        <!--var scrollTop=$(window).scrollTop();-->
-				        <!--if(offset<scrollTop){-->
-				            <!--$(".sidebar").addClass("fixed");-->
-				        <!--}else{-->
-				            <!--$(".sidebar").removeClass("fixed");-->
-				        <!--}-->
-				    <!--});-->
-
-				<!--// })-->
-
-
-			<!--</script>-->
-
-		<!--</div>-->
-
-	<!--</div>-->
 	<div id="content" class="container-fluid">
 		{% block content %}
 		{% endblock %}

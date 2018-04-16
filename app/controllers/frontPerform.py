@@ -1,30 +1,24 @@
 # -*-coding:utf-8-*-
 from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
-from app.models.User import User
-
-import os ,json,sys
+from selenium import webdriver
+from app.models.WebLoad import WebLoad
+from app.models.PageDetail import PageDetail
+import os ,json,sys,time
 from app import app,db
-from datetime import date,timedelta
+import requests
+import config
 from sqlalchemy import extract
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
 
-# 定义路由index
+# 定义路由frontPerform
 @app.route('/frontPerform', methods=['GET', 'POST'])
 def frontPerform():
-    if request.method == 'POST':
-        version = request.form.get("selected_version", "null")
-
-    else:
-        version = 'syf1.1.1'
-    g.db = sqlite3.connect(config.db_dir)
-    summary_data_sql = 'select page_name, url, dns, request, dom_parser, dom_ready, load_event, whitewait, loadall ' \
-                       + " from WebLoad where version='" + str(version) + "'"
-    page_load_result = query_db(summary_data_sql)
-
-    g.db.close()
+    version = request.args.get('version')
     project_version = config.project_version_info
+
+    page_load_result = WebLoad.query.filter_by(version=version).all()
     # 将页面信息转换为Echarts使用的数据
     page_chart_data = {}
     chart_list = []
@@ -34,8 +28,25 @@ def frontPerform():
             page_chart_data[value] = chart_list
         chart_list = []
 
-    return render_template('index.html', project_version=project_version, page_load_result=page_load_result,
-                           page_chart_data=page_chart_data)
+    return render_template('frontPerform.html',project_version=project_version,page_chart_data=page_chart_data,page_load_result=page_load_result)
+
+
+@app.route('/query_webload',methods=['GET','POST'])
+def query_webload():
+    try:
+        webloads=[]
+        limit = request.args.get('limit')
+        offset = request.args.get('offset')
+        version = request.args.get('version')
+
+        query = WebLoad.query
+        webloadlist = query.filter_by(version=version).all()
+        total = len(webloadlist)
+        for webload in webloadlist:
+            webloads.append(webload.to_dict())
+        return jsonify({"total":total,'rows': webloads[int(offset):(int(offset) + int(limit))]})
+    except IOError:
+        return "error"
 
 
 # 定义重新执行脚本的路由
@@ -61,15 +72,12 @@ def redo():
             # index页面资源的信息 登录页专用
             page_index_info = []
             # 将统计数据保存到sqlite
-            connection = sqlite3.connect(config.db_dir)
-            cursor = connection.cursor()
             # 先删除页面资源细分表webDetailLoad所有数据
-            clear_resource_sql = "delete from PageDetail where project='Clinical' and version='" + env_for_test + "'"
-            cursor.execute(clear_resource_sql)
-            # 先清理上次的数据
-            clear_webload_sql = "delete from WebLoad where project='Clinical' and version='" + env_for_test + "'"
-            cursor.execute(clear_webload_sql)
-            connection.commit()
+            clear = PageDetail.query.filter_by(project='Clinical',version=env_for_test).all()
+            print clear
+            # clear = PageDetail.query.filter_by(project='Clinical',version=env_for_test).all()
+            # db.session.delete(clear)
+            # db.session.commit()
             # get到clinical登录页(登录页需要单独收集其页面加载性能指标)
             driver = webdriver.Chrome()
             login_url = current_env + '/login/index'
@@ -113,14 +121,11 @@ def redo():
                 # 将登录页资源信息存入列表
                 page_index_info.append(page_index_resource)
                 # 将登录页资源列表信息存入字典对象 对应key为Index
-                save_resource_sql = 'insert into PageDetail ' + "values('Clinical','" + str(
-                    env_for_test) + "'," + "'" + str(
-                    'Index') + "'," + "'" + str(page_index_resource['name']) + "'," + "'" + str(
-                    page_index_resource['resourceType']) + "'," + "'" \
-                                    + str(page_index_resource['transferSize']) + "'," + "'" + str(
-                    page_index_resource['duration']) + "'," + 'CURRENT_TIMESTAMP)'
-                cursor.execute(save_resource_sql)
-                connection.commit()
+                save = PageDetail('Clinical',str(env_for_test),str('Index'),str(page_index_resource['name']),
+                                str(page_index_resource['resourceType']),str(page_index_resource['transferSize']),
+                                str(page_index_resource['duration']),CURRENT_TIMESTAMP)
+                db.session.add(save)
+                db.session.commit()
 
             # 登录系统后 对其他所有页面进行遍历以收集其页面加载性能数据
             driver.find_element_by_id('txtUserName').send_keys('30048')
@@ -167,39 +172,25 @@ def redo():
                     # 资源耗时
                     current_resources['duration'] = items['duration']
                     # 保存资源
-                    save_resource_sql = 'insert into PageDetail ' + "values('Clinical','" + str(
-                        env_for_test) + "'," + "'" + str(
-                        page) + "'," + "'" + str(
-                        current_resources['name']) + "'," \
-                                        + "'" + str(current_resources['resourceType']) + "'," + "'" + str(
-                        current_resources['transferSize']) + "'," + "'" + str(
-                        current_resources['duration']) + "'," + 'CURRENT_TIMESTAMP)'
-                    cursor.execute(save_resource_sql)
-                    connection.commit()
+
+                    resource = PageDetail('Clinical',str(env_for_test),str(page),str(current_resources['resourceType']),
+                                          str(current_resources['transferSize']),str(current_resources['duration']),
+                                          CURRENT_TIMESTAMP)
+                    db.session.add(resource)
+                    db.session.commit()
             # 退出chrome driver进程
             driver.quit()
             # 更新WebLoad表中的数据
             for name in all_page_data.keys():
                 page_time = all_page_data[name]
                 if name == 'Index':
-                    insert_sql = 'insert into WebLoad ' + "values('Clinical','" + str(env_for_test) + "'," + "'" \
-                                 + str(name) + "'," + "'" + str(current_env) + "/login/index'," + str(page_time['dns']) \
-                                 + ',' + str(page_time['request']) + ',' + str(page_time['dom_parser']) + ',' + str(
-                        page_time['dom_ready']) \
-                                 + ',' + str(page_time['load_event']) + ',' + str(page_time['whitewait']) + ',' + str(
-                        page_time['loadall']) + ',' + 'CURRENT_TIMESTAMP)'
-                else:
-                    insert_sql = 'insert into WebLoad ' + "values('Clinical','" + str(env_for_test) + "'," + "'" \
-                                 + str(name) + "'," + "'" + str(current_env) + str(page_urls[name]) + "'," + str(
-                        page_time['dns']) \
-                                 + ',' + str(page_time['request']) + ',' + str(page_time['dom_parser']) + ',' + str(
-                        page_time['dom_ready']) \
-                                 + ',' + str(page_time['load_event']) + ',' + str(page_time['whitewait']) + ',' + str(
-                        page_time['loadall']) + ',' + 'CURRENT_TIMESTAMP)'
-                cursor.execute(insert_sql)
-                connection.commit()
-            connection.close()
-
+                    page_urls[name] = '/login/index'
+                webload = WebLoad('Clinical',str(env_for_test),str(name),str(current_env),str(page_urls['name']),
+                                  str(page_time['dns']),str(page_time['request']),str(page_time['dom_parser']),
+                                  str(page_time['dom_ready']),str(page_time['load_event']),str(page_time['whitewait']),
+                                  str(page_time['loadall']),str(CURRENT_TIMESTAMP))
+                db.session.add(webload)
+                db.session.commit()
             return 'success'
         else:
             return 'environment is not exist'
@@ -251,16 +242,9 @@ def ui_auto():
         version = request.form.get("selected_version", "null")
     else:
         version = 'Syf1.1.1'
-    g.db = sqlite3.connect(config.db_dir)
-    g.db.text_factory = str
-    testSuites_sql = 'select testsuitename,subsuite,totalcase,passedcase,failedcase, duration from TestSuite' + " where projectname ='" + str(
-        version) + "'"
-    testSuites = query_db(testSuites_sql)
 
-    # testSuites = testSuites.encode('utf-8')
-    # print testSuites[0]['testsuitename'].encode('gb2312','ignore')
+    testSuites= TestSuite.query.filter_by(version=version).all()
 
-    g.db.close()
     project_version = config.project_version_info
 
     return render_template('ui_auto.html', project_version=project_version, testSuites=testSuites)
@@ -311,46 +295,6 @@ def cap_auto():
 def per_auto():
     return render_template('per_auto.html')
 
-
-@app.route('/savetodo', methods=['GET', 'POST'])
-def savetodo():
-    if request.method == 'POST':
-        rid = request.form.get("id", "null")
-        project = request.form.get("project", "null")
-        version = request.form.get("version", "null")
-        worktype = request.form.get("worktype", "null")
-        module = request.form.get("module", "null")
-        title = request.form.get("title", "null")
-        description = request.form.get("description", "null")
-        developer = request.form.get("developer", "null")
-        tester = request.form.get("tester", "null")
-        status = request.form.get("status", "null")
-        createtime = request.form.get("createtime", "null")
-        completetime = request.form.get("completetime", "null")
-        remarks = request.form.get("remarks", "null")
-        CURRENT = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-        # 将统计数据保存到sqlite
-
-        connection = sqlite3.connect(config.db_dir)
-        cursor = connection.cursor()
-
-        save_sql = "insert into todolist values ('" + str(rid) + "','" + str(project) + "','" + str(
-            version) + "','" + str(worktype) + "','" + str(module) + "',\
-        '" + str(title) + "','" + str(description) + "','" + str(developer) + "','" + str(tester) + "','" + str(
-            status) + "','" + str(createtime) + "','" + str(completetime) + "','" + str(remarks) + "','" + str(
-            CURRENT) + "')"
-        cursor.execute(save_sql)
-        connection.commit()
-        connection.close()
-        # 重新读取数据库的信息
-        g.db = sqlite3.connect(config.db_dir)
-        g.db.text_factory = str
-
-        select_sql = 'select rid,version,worktype,module,title,description,developer,tester,status,createtime,completetime,remarks ' \
-                     + "from todolist where project='" + str(project) + "'"
-        todolists = query_db(select_sql)
-        g.db.close()
-        return render_template('todo.html', todolists=todolists)
 
 
 

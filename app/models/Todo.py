@@ -16,6 +16,7 @@ class Todo(db.Model):
     version = db.Column(db.String(10))
     worktype = db.Column(db.String(10))
     module = db.Column(db.String(10))
+    priority = db.Column(db.String(6))
     title =  db.Column(db.String(100))
     description = db.Column(db.String(500))
     developer = db.Column(db.String(36))
@@ -26,11 +27,12 @@ class Todo(db.Model):
     completetime = db.Column(db.String(16))
     remarks = db.Column(db.String(100))
 
-    def __init__(self,project,version,worktype,module,title,description,developer,tester,status,createtime,plantime,completetime,remarks):
+    def __init__(self,project,version,worktype,module,priority,title,description,developer,tester,status,createtime,plantime,completetime,remarks):
         self.project = project
         self.version = version
         self.worktype = worktype
         self.module = module
+        self.priority = priority
         self.title = title
         self.description = description
         self.developer = developer
@@ -51,6 +53,7 @@ class Todo(db.Model):
             "version": self.version,
             "worktype": self.worktype,
             "module": self.module,
+            "priority":self.priority,
             "title": self.title,
             "description": self.description,
             "developer": self.developer,
@@ -66,3 +69,47 @@ class Todo(db.Model):
         db.session.add(self)
         db.session.commit()
 
+class subTodo(db.Model):
+    __tablename__ = 'subtodos'
+    id = db.Column(db.Integer, primary_key=True)
+    patientid = db.Column(db.Integer)
+    subtitle = db.Column(db.String(100))
+    description = db.Column(db.String(500))
+    developer = db.Column(db.String(36))
+    tester = db.Column(db.String(36))
+    status = db.Column(db.String(10))
+    createtime = db.Column(db.String(16))
+    plantime = db.Column(db.String(16))
+    completetime = db.Column(db.String(16))
+    remarks = db.Column(db.String(100))
+
+    def __init__(self,patientid,subtitle,description,developer,tester,status,createtime,plantime,completetime,remarks):
+
+        self.patientid = patientid
+        self.subtitle = subtitle
+        self.description = description
+        self.developer = developer
+        self.tester = tester
+        self.status = status
+        self.createtime = createtime
+        self.plantime=plantime
+        self.completetime = completetime
+        self.remarks = remarks
+
+    def __repr__(self):
+        return '<subTodo %r>' % self.subtitle
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "patientid":self.patientid,
+            "subtitle": self.subtitle,
+            "description": self.description,
+            "developer": self.developer,
+            "tester": self.tester,
+            "status":self.status,
+            "createtime": self.createtime,
+            "plantime": self.plantime,
+            "completetime": self.completetime,
+            "remarks": self.remarks
+        }

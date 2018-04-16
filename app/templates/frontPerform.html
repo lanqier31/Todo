@@ -1,9 +1,6 @@
 {% extends "base.html" %}
-{% block title %}平台主页{% endblock %}
-{% block scripts %}
-  {{super()}}
-  <script type="text/javascript" src="../static/js/echarts-all.js"></script>
-{% endblock %}
+{% block title %}前端性能{% endblock %}
+
 {% block content %}
     <div class="row">
     	
@@ -18,15 +15,15 @@
     	<table id="pages_summary" class="table table-hover">
     	</table>
     	<script type="text/javascript">
-		$(document).ready(function () { initTable(); })
-		gdata=JSON.parse('{{page_load_result|tojson}}');
+		$(document).ready(function () { initTable(); });
 
 		function initTable(){
 			
 			$('#pages_summary').bootstrapTable({
-				method:'post',
+
+				url:'/query_webload',
+				method:'get',
 				toolbar:'#toolbar',
-				data:gdata,
 				dataType:'json',
 				striped:false,  //是否行间隔色显示
 				cache:false,//是否试用缓存，默认为true
@@ -35,13 +32,12 @@
 				sortOrder:"page_name asc", // 排序方式
 				pageNumber:1, //初始化加载第一页，默认第一页
 				pageSize:10 , //每页的记录行数
-				// pageList:[6,20,50] ,  //可供选择的每页行数
-				// url:'/webloadlist',
-				queryParamsType:'', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
-				sidePagination:"client",// 分页方式，client为客户端分页，server为服务端分页
+				pageList:[6,20,50] ,  //可供选择的每页行数
+				queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+				sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
 				strictSearch:true,
 				clickToSelect:true,  //是否启动点击选中行
-				
+                queryParams: queryParams,
 				search:false,
 				// height:$(window).height() - 500,
 				columns:[
@@ -126,27 +122,37 @@
 							}
 						
 						],
-				showColumns:true,   // 是否显示列
+				showColumns:false,   // 是否显示列
 				minimumCountColumns:2,
-				showRefresh:true,  // 是否刷新
-				showToggle:true,
+				showRefresh:false,  // 是否刷新
+				showToggle:false,
 				formatLoadingMessage: function () {
-					return ;
+
 				}
 			});
-		};
-		function actionFormatter(value, row, index) {
+        }
+        function actionFormatter(value, row, index) {
 				
 			project_version=$("#project_version").find("option:selected").text();
 			page_name=value;
 			var href = 'detail_' + project_version + '_' + page_name;
 			
 			return "<a href='" + href + "' >" + value + "</a>";
-		};
-    	</script>
+        }
+        function queryParams(params) {  //配置参数
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //每页的个数
+                offset: params.offset,  //分页时数据偏移量
+                sort: params.sort,  //排序列名
+                order: params.order,//排位命令（desc，asc）
+                version: $("#project_version").val(),
+
+            };
+            return temp;
+        }
+        </script>
     </div>
-    
-	
+
     <h4>所有页面加载数据统计堆叠图</h4>
 	<div id="page_summary_chart">
     	<table id="data_chart" width="100%">
@@ -181,15 +187,15 @@
 				        {
 				            
 				            type : 'category',
-				            data :  {{page_chart_data.page_name|safe}}
+				            data :  {{page_chart_data.page_name|safe};}
 				        }
 				    ],
-				    yAxis : [
+				    [
 				        {
 				            type : 'value'
 				        }
 				    ],
-				    series : [
+				    series; : [
 				        {
 				            name:'dns(ms)',
 				            type:'bar',
@@ -199,62 +205,62 @@
 				        },
 
 				        {
-				            name:'request(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
+				            'request(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
 
-				            data: {{page_chart_data.request|safe}}
+				            {{page_chart_data.request|safe}}
 				        },
 
 				        {
-				            name:'dom_parser(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.dom_parser|safe}}
+				            'dom_parser(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.dom_parser|safe}}
 				        },
 
 				        {
-				            name:'dom_ready(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.dom_ready|safe}}
+				            'dom_ready(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.dom_ready|safe}}
 				        },
 
 				        {
-				            name:'request(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.request|safe}}
+				            'request(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.request|safe}}
 				        },
 
 				      {
-				            name:'load_event(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.load_event|safe}}
+				            'load_event(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.load_event|safe}}
 				        },
 				        {
-				            name:'whitewait(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.whitewait|safe}}
+				            'whitewait(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.whitewait|safe}}
 				        },
 				        {
-				            name:'loadall(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.loadall|safe}}
+				            'loadall(ms)',
+				            type;:'bar',
+				            stack;: 'Time',
+				            itemStyle; : { {{true, position;: 'insideRight'}}},
+				            {{page_chart_data.loadall|safe}}
 				        }
 				    ]
-					};
-			        // 使用刚指定的配置项和数据显示图表。
+                    }
+                    // 使用刚指定的配置项和数据显示图表。
 			        myChart.setOption(option);
 			    </script>
 			</div>
@@ -262,8 +268,8 @@
 		</tr>
     	</table>
 	</div>
-{% block scripts %}
-	<script type="text/javascript">
+	{% block scripts %}
+		<script type="text/javascript">
 		
 		//刷新数据
 		function optionChange(){
@@ -289,9 +295,9 @@
 				    alert("不要搞事情~ 请检查服务是否开启");
 			    },
   			});
-		};
-	</script>
-{%- endblock scripts %}
+        }
+        </script>
+	{%- endblock scripts %}
 
 {% endblock %}
 

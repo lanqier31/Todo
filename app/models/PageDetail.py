@@ -10,7 +10,7 @@ class PageDetail(db.Model):
     resource_type = db.Column(db.String(10))
     resource_size = db.Column(db.INTEGER)
     resource_duration = db.Column(db.INTEGER)
-    create_time = db.Column(db.TIME)
+    create_time = db.Column(db.String(16))
 
     def __init__(self,project,version,page_name,resource_name,resource_type,resource_size,resource_duration,create_time):
         self.project = project
