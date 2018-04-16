@@ -20,10 +20,10 @@ class Role(db.Model,RoleMixin):
     description = db.Column(db.String(255))
     permissions = db.relationship('Permission', secondary=roles_permissions, backref=db.backref('roles', lazy='dynamic'))
 
-    def __init__(self, name, description,permissions):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.permissions = permissions
+
 
     def __repr__(self):
         return '<Role %r>' % self.name
