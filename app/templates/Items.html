@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}项目字段{% endblock %}
+
+{% block content %}
+<style>
+
+</style>
+<div class="Itemhead">
+    <div class="form-group">
+
+                <div class="col-sm-2">
+                    <select class="form-control" name="Province" id="Province">
+                        <option>==一级目录===</option>
+                    </select>
+
+
+                </div>
+
+                <div class="col-sm-2">
+                    <select class="form-control" name="City" id="City">
+                        <option>==二级目录===</option>
+                    </select>
+                </div>
+
+                <div class="col-sm-2">
+                    <select class="form-control" name="Village" id="Village">
+                        <option>==三级目录===</option>
+                    </select>
+                </div>
+            </div>
+</div>
+
+{% endblock %}

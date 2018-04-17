@@ -3,10 +3,6 @@
 from app import db
 from flask_security import RoleMixin,UserMixin
 
-
-
-
-
 #角色权限关联表
 roles_permissions = db.Table('roles_permissions',
                              db.Column('role_id',db.Integer(),db.ForeignKey('role.id')),
@@ -23,7 +19,6 @@ class Role(db.Model,RoleMixin):
     def __init__(self, name, description):
         self.name = name
         self.description = description
-
 
     def __repr__(self):
         return '<Role %r>' % self.name

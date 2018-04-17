@@ -17,6 +17,11 @@ def root():
     return render_template('todo.html')
 
 
+@app.route('/Items',methods=['GET','POST'])
+def Items():
+    return render_template('Items.html')
+
+
 @app.route('/show_entries')
 def show_entries():
     category = Category.query.all()
