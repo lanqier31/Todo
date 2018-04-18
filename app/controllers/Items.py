@@ -1,26 +1,47 @@
 # -*-coding:utf-8-*-
-import pymssql
+import numpy as np
+import config
+from app import app
+from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
 
-# server    数据库服务器名称或IP
-# user      用户名
-# password  密码
-# database  数据库名称
-conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB')
 
+conn = config.conn
 cursor = conn.cursor()
 
 
-# 查询操作
-cursor.execute('SELECT FunValueCn FROM FunModules WHERE Funlayer=0;')
-row = cursor.fetchone()
-while row:
-    print row
-    # print("ID=%d, Name=%s" % (row[0], row[1]))
-    row = cursor.fetchone()
+@app.route('/Items',methods=['GET','POST'])
+def Items():
+    return render_template('Items.html')
 
-# 也可以使用for循环来迭代查询结果
-# for row in cursor:
-#     print("ID=%d, Name=%s" % (row[0], row[1]))
 
-# 关闭连接
-conn.close()
+@app.route('/show_Items',methods=['GET','POST'])
+def show_Items():
+    layer=[]
+
+    # 查询操作
+    layer = queryModule(0)
+    # 关闭连接
+    conn.close()
+    return jsonify( layer )
+
+
+def queryModule(pk):
+    sa=[]
+    conn = config.conn
+    cursor = conn.cursor()
+    # sql = "select pk,FunValueEn,FunValueCn,FunOrder from FunModules where  Funlayer = %d ;"
+    cursor.execute("select pk,FunValueEn,FunValueCn,FunOrder from FunModules where  Funlayer = %d" %(pk))
+    row = cursor.fetchall()
+    list = np.array(row).tolist()
+    for l in list:
+        if queryModule(int(l[0])):
+            sa.append({"n":l[2],"s":queryModule(int(l[0]))})
+        else:
+            sa.append({"n": l[2]})
+    return sa
+
+
+
+
+
+

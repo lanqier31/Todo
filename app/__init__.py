@@ -21,4 +21,4 @@ login_manager.login_view='login'
 oid=OpenID(app,os.path.join(basedir,'tmp'))
 
 from app.models import Category,Todo,WebLoad,PageDetail,TestSuite,Roles,PermType,Permission,User
-from app.controllers import todo,frontPerform,knowledge,setting
+from app.controllers import todo,frontPerform,knowledge,setting,Items

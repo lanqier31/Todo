@@ -1,5 +1,6 @@
 # -#-coding:utf-8 -*-
 import os
+import pymssql
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')    #数据库文件的路径
@@ -76,4 +77,7 @@ project_version_info = {'Clinical':['syf1.1.1', 'syf2.0.0', 'syf3.0.0'], 'DicomS
 # 定义测试机
 hosts = {'localhost': 'http://127.0.0.1/', '164': 'http://192.168.10.164/'}
 
+#定义sqlserver连接
+
+conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB')
 

@@ -2,32 +2,24 @@
 {% block title %}项目字段{% endblock %}
 
 {% block content %}
+<script type="text/javascript" src="../static/js/jquery.cxselect.js"></script>
 <style>
 
 </style>
-<div class="Itemhead">
-    <div class="form-group">
-
-                <div class="col-sm-2">
-                    <select class="form-control" name="Province" id="Province">
-                        <option>==一级目录===</option>
-                    </select>
-
-
-                </div>
-
-                <div class="col-sm-2">
-                    <select class="form-control" name="City" id="City">
-                        <option>==二级目录===</option>
-                    </select>
-                </div>
-
-                <div class="col-sm-2">
-                    <select class="form-control" name="Village" id="Village">
-                        <option>==三级目录===</option>
-                    </select>
-                </div>
-            </div>
+<div id="element_id">
+   <select class="firstMenu form-control"></select>
+   <select class="secondMenu form-control"></select>
+   <select class="thirdMenu form-control"></select>
+   <select class="fourthMenu form-control"></select>
+   <select class="fifthMenu form-control"></select>
+   <select class="sixthMenu form-control"></select>
 </div>
+<script>
+    $('#element_id').cxSelect({
+          url: '/show_Items',
+          selects: ['firstMenu', 'secondMenu', 'thirdMenu','fourthMenu','fifthMenu','sixthMenu'],  // 数组，请注意顺序
+          emptyStyle: 'none'
 
+    });
+</script>
 {% endblock %}
