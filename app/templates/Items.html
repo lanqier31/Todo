@@ -14,12 +14,151 @@
    <select class="fifthMenu form-control"></select>
    <select class="sixthMenu form-control"></select>
 </div>
+<table id="itemsList"></table>
 <script>
-    $('#element_id').cxSelect({
-          url: '/show_Items',
-          selects: ['firstMenu', 'secondMenu', 'thirdMenu','fourthMenu','fifthMenu','sixthMenu'],  // 数组，请注意顺序
-          emptyStyle: 'none'
 
-    });
+      $(document).ready(function () {
+
+         //下拉多选
+//         $('.multiple').selectpicker();
+
+         //多级联动
+          $('#element_id').cxSelect({
+             url: '/show_Items',
+             selects: ['firstMenu', 'secondMenu', 'thirdMenu','fourthMenu','fifthMenu','sixthMenu'],  // 数组，请注意顺序
+             emptyStyle: 'none',
+             jsonValue:'value',   //set option 的value 值
+             required:true,
+             firstValue:'0'
+          });
+          // 初始化table
+         initTable();
+     });
+     function initTable(){
+
+         $('#itemsList').bootstrapTable('destroy');  //先销毁表格
+
+         $('#itemsList').bootstrapTable({
+             url:'/query_Items',
+             method:'get',
+//                contentType : "application/x-www-form-urlencoded",
+             toolbar:'#toolbar',
+             dataType:'json',
+             striped:false,  //是否行间隔色显示
+             cache:false,//是否试用缓存，默认为true
+             pagination:true, //s是否分页
+//             sortable:true,  //是否启用排序
+             sortName  :'FunItemOrder',
+             sortOrder :"asc", // 排序方式
+             pageNumber:1, //初始化加载第一页，默认第一页
+             pageSize:50 , //每页的记录行数
+             pageList:[10,20,50] ,  //可供选择的每页行数
+             queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+             queryParams: queryParams,
+             sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
+             strictSearch:true,
+             clickToSelect:true,  //是否启动点击选中行
+             search:false,
+             height:$(window).height()-62-30,
+             columns:[
+
+                         {
+                             title:"",
+                             field:'state',
+                             checkbox:true,
+                             align:'center',
+                             valign:'middle'
+                         },
+                         {
+                             title:'PK',
+                             field:'Pk',
+                             align:'left',
+                             valign:'middle',
+                             sortable:true,
+                             searchable:true,
+                             class:'text-overflow'
+                         },{
+                             title:'字段名称',
+                             field:'FunItemValueCn',
+                             align:'left',
+                             valign:'middle',
+                             sortable:false,
+                             searchable:false,
+                             class:'text-overflow',
+                             visible:true,
+                             switchable:true
+                         },{
+                             title:'排序',
+                             field:'FunItemOrder',
+                             align:'left',
+                             valign:'middle',
+                             sortable:true,
+                             searchable:false,
+                             class:'text-overflow',
+                             visible:true,
+                             switchable:true
+
+                         },{
+                             title:'页面Inx',
+                             field:'FunModulesFk',
+                             align:'left',
+                             valign:'middle',
+                             sortable:false,
+                             searchable:false,
+                             class:'text-overflow'
+                          },{
+                             title:'dropDownBox',
+                             field:'DropDownbox',
+                             align:'left',
+                             valign:'middle',
+                             sortable:false,
+                             searchable:false,
+                             class:'text-overflow'
+                          },{
+                             title:'派生规则',
+                             field:'DerivedRuleDec',
+                             align:'left',
+                             valign:'middle',
+                              width:500,
+                             sortable:false,
+                             searchable:false,
+                             class:'text-overflow'
+                          }
+                     ],
+             showColumns:false,   // 是否显示列
+             minimumCountColumns:2,
+             showRefresh:false,  // 是否刷新
+             showToggle:false,
+             showExport:false,
+             exportDataType: "selected",   //basic', 'all', 'selected'.
+             exportTypes:['excel'],
+             formatLoadingMessage: function () {
+
+             },
+
+
+         });
+     }
+     function queryParams(params) {  //配置参数
+         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+             limit: params.limit,   //每页的个数
+             offset: params.offset,  //分页时数据偏移量
+             sort: params.sort,  //排序列名
+             order: params.order,//排位命令（desc，asc）
+             menu1: $("#element_id .firstMenu").val(),
+             menu2: $("#element_id .secondMenu").val(),
+             menu3: $("#element_id .thirdMenu").val(),
+             menu4: $("#element_id .fourthMenu").val(),
+             menu5: $("#element_id .fifthMenu").val(),
+             menu6: $("#element_id .sixthMenu").val(),
+             sortOrder: params.order,//排序
+             sortName:params.sort//排序字段
+         };
+         return temp;
+     }
+     $("#element_id select").change(function(){
+//            $('.search').val("");
+            $('#itemsList').bootstrapTable('refresh',{url: '/query_Items'});
+        });
 </script>
 {% endblock %}
