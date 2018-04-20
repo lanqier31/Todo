@@ -93,16 +93,44 @@
                              align:'left',
                              valign:'middle',
                              sortable:true,
+                             width:50,
                              searchable:false,
                              class:'text-overflow',
                              visible:true,
                              switchable:true
 
                          },{
+                             title:'下拉选项',
+                             field:'dropdownMenus',
+                             align:'left',
+                             width:300,
+                             valign:'middle',
+                             sortable:false,
+                             searchable:false,
+                             formatter: function (value, row) {
+                                 if(value.length>0){
+                                     value = value.toString().replace(/,/g, "")
+                                 }
+
+                                 return (value)
+
+                             },
+                             class:'text-overflow'
+                          },{
+                             title:'派生规则',
+                             field:'DerivedRuleDec',
+                             align:'left',
+                             valign:'middle',
+                              width:500,
+                             sortable:false,
+                             searchable:false,
+                             class:'text-overflow'
+                          },{
                              title:'页面Inx',
                              field:'FunModulesFk',
                              align:'left',
                              valign:'middle',
+                             width:50,
                              sortable:false,
                              searchable:false,
                              class:'text-overflow'
@@ -111,15 +139,6 @@
                              field:'DropDownbox',
                              align:'left',
                              valign:'middle',
-                             sortable:false,
-                             searchable:false,
-                             class:'text-overflow'
-                          },{
-                             title:'派生规则',
-                             field:'DerivedRuleDec',
-                             align:'left',
-                             valign:'middle',
-                              width:500,
                              sortable:false,
                              searchable:false,
                              class:'text-overflow'

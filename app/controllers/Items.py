@@ -69,7 +69,7 @@ def query_Items():
         total = len(itemlist)
 
         for i in itemlist:
-            Items.append(i.to_dict())
+            Items.append(i.to_json())
         return jsonify({"total": total, 'rows': Items[int(offset):(int(offset) + int(limit))]})
 
     except IOError:
