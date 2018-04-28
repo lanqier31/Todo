@@ -4,8 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,backref
 from sqlalchemy.orm import scoped_session
+import re
 
-engine = create_engine("mssql+pymssql://mduser:mduser@192.168.10.244/AutoCodeDB", encoding='utf-8', echo=True)
+engine = create_engine("mssql+pymssql://mduser:mduser@192.168.10.244/AutoCodeDB2", encoding='utf-8', echo=True)
 Base = declarative_base()
 metadata = Base.metadata
 DBSession = sessionmaker(bind=engine)
@@ -21,19 +22,20 @@ class FunItemList(Base):   #child
     ItemTitle = Column(Unicode)
     ItemOrder = Column(Integer)
     CreatedTime = Column(DateTime, nullable=False)
+    DropDownboxKey = Column(Unicode)
     # funItem = relationship("FunItem",back_populates="FunItemList")
 
     def __repr__(self):
         return '<FunItemList ItemValueCn:%r ItemTitle:%r >\n' %(self.ItemValueCn, self.ItemTitle)
 
-    def __init__(self,Pk,FunItemsFk,ItemValueEn,ItemValueCn,ItemTitle,ItemOrder,CreatedTime):
-        self.Pk = Pk
+    def __init__(self,FunItemsFk,ItemValueEn,ItemValueCn,ItemTitle,ItemOrder,CreatedTime,DropDownboxKey):
         self.FunItemsFk = FunItemsFk
         self.ItemValueEn = ItemValueEn
         self.ItemValueCn = ItemValueCn
         self.ItemTitle = ItemTitle
         self.ItemOrder = ItemOrder
         self.CreatedTime = CreatedTime
+        self.DropDownboxKey = DropDownboxKey
 
     def to_json(self):
         return {
@@ -43,7 +45,9 @@ class FunItemList(Base):   #child
             'ItemValueCn': self.ItemValueCn,
             'ItemTitle': self.ItemTitle,
             'ItemOrder': self.ItemOrder,
-            'CreatedTime': self.CreatedTime
+            'CreatedTime': self.CreatedTime,
+            'DropDownboxKey':self.DropDownboxKey
+
         }
 
 
@@ -61,6 +65,7 @@ class FunItem(Base):                 #parent
     DefaultVal = Column(Unicode(50))
     FunItemOrder = Column(Integer)
     DropDownbox = Column(Unicode(50))
+    OpenSelectKey = Column(Unicode(50))
     CreatedTime = Column(DateTime, nullable=False)
     DerivedRuleDec = Column(Unicode)
     FunItemOrder2 = Column(Integer, nullable=False)
@@ -68,12 +73,13 @@ class FunItem(Base):                 #parent
     FieldIdentifier = Column(Unicode(50))
     dropdownMenus = relationship('FunItemList',backref="FunItems")
 
+
     def __repr__(self):
         return '<FunItem FunItemValueCn:%r FunItemTitle:%r >\n' %(self.FunItemValueCn, self.FunItemTitle)
 
     def __init__(self, Pk, FunModulesFk, FunItemKey,FunItemValueEn,FunItemValueCn,FunItemTitle,\
                  FunItemHtmlType,FunItemDbType,DefaultVal,FunItemOrder,DropDownbox,CreatedTime,\
-                 DerivedRuleDec,FunItemOrder2,ObjData,FieldIdentifier):
+                 DerivedRuleDec,FunItemOrder2,ObjData,FieldIdentifier,OpenSelectKey):
         self.Pk = Pk
         self.FunModulesFk = FunModulesFk
         self.FunItemKey = FunItemKey
@@ -90,6 +96,7 @@ class FunItem(Base):                 #parent
         self.FunItemOrder2 = FunItemOrder2
         self.ObjData = ObjData
         self.FieldIdentifier = FieldIdentifier
+        self.OpenSelectKey = OpenSelectKey
 
     def to_json(self):
         return {
@@ -109,19 +116,36 @@ class FunItem(Base):                 #parent
             'FunItemOrder2': self.FunItemOrder2,
             'ObjData': self.ObjData,
             'FieldIdentifier': self.FieldIdentifier,
-            'dropdownMenus': self.get_dropdownMenus()
+            'OpenSelectKey':self.OpenSelectKey,
+            'dropdownMenus': self.get_dropdownMenus(),
+            'dropdownKey':self.get_dropdownKeys()
         }
 
+    def get_DerivedRuleDec(self):
+        if self.DerivedRuleDec:
+            pattern = r"(\<.*?\>)"
+            return self.DerivedRuleDec.re(pattern,self.DerivedRuleDec)
     def get_dropdownMenus(self):
         dropdownMenus = []
         if self.dropdownMenus:
             for menu in self.dropdownMenus:
                 menu.to_json()
-                dropdownMenus.append(menu.ItemValueCn+'['+menu.ItemTitle+']'+'<br>')
+                dropdownMenus.append(menu.ItemValueCn + '[' + menu.ItemTitle + ']')
         return dropdownMenus
+
+    def get_dropdownKeys(self):
+        dropdownKeys = []
+        if self.dropdownMenus:
+            for menu in self.dropdownMenus:
+                menu.to_json()
+                if(menu.DropDownboxKey not in dropdownKeys):
+                    dropdownKeys.append(menu.DropDownboxKey)
+        return dropdownKeys
 
     def to_dict(self):
         return dict([(k, getattr(self, k)) for k in self.__dict__.keys() if not k.startswith("_")])
+
+
 
 
 class FunModule(Base):

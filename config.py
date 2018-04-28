@@ -79,5 +79,5 @@ hosts = {'localhost': 'http://127.0.0.1/', '164': 'http://192.168.10.164/'}
 
 #定义sqlserver连接
 
-conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB')
+conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB2')
 

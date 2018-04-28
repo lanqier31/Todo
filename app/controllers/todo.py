@@ -138,6 +138,8 @@ def add_todo(charset='utf-8'):
 @app.route('/edit_todo',methods=['GET','POST'])
 def edit_todo():
     try:
+        # data = request.values
+        # print data
         id = request.form.get("pk","null")
         field=request.form.get("name","null")
         value=request.form.get("value",'null')

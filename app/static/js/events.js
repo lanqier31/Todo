@@ -183,6 +183,58 @@ function doUItest(){
                 },
             });
 }
+inputs = $("table").find("input")
+id=null
+for (var i=0;i<inputs.length;i++){
+    if (inputs[i].id.length>0){
+        id = inputs[i].id
+        if($(id).parent().prev().length>0){
+            document.write($(id).parent().prev()[0].innerHTML + "<br>");
+        }
+        else if($(id).parent().parent().prev().length>0){
+            document.write($(id).parent().parent().prev()[0].innerHTML + "<br>");
+        }
+        else{
+            document.write(id + "<br>");
+        }
+
+    }
+
+    id=null;
+}
+
+
+
+
+
+
+dropdown=null;
+for (var i=0;i<inputs.length;i++)
+{
+
+    if (inputs[i].attributes.length>0){
+        for (var j=0;j<inputs[i].attributes.length;j++){
+            if(inputs[i].attributes[j].name =='dropdownbox'){
+                dropdown = inputs[i].attributes[j].value;
+            }
+
+        }
+    }
+    document.write(dropdown + "<br>");
+    dropdown=null;
+
+}
+
+
+//search openSourceBox
+spans = $('.spanJianTou')
+for (var i=0;i<spans.length;i++){
+
+    document.write(spans[i].attributes[0].value + "<br>");
+
+    }
+
+
 
 
 

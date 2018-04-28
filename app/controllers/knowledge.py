@@ -64,7 +64,7 @@ def delete_article():
 @app.route('/edit_article',methods={'POST'})
 def edit_article():
     try:
-        article_id = request.form.get('id')
+        article_id = request.form.get('pk')
         article = Article.query.get(article_id)
 
 
