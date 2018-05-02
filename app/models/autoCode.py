@@ -16,14 +16,14 @@ class FunItemList(Base):   #child
     __tablename__ = 'FunItemList'
 
     Pk = Column(Integer, primary_key=True)
-    FunItemsFk = Column(String(360, u'Chinese_PRC_CI_AS'), ForeignKey('FunItems.Pk'),nullable=False)
+    FunItemsFk = Column(String(360, u'Chinese_PRC_CI_AS'),nullable=False)
     ItemValueEn = Column(Unicode)
     ItemValueCn = Column(Unicode)
     ItemTitle = Column(Unicode)
     ItemOrder = Column(Integer)
     CreatedTime = Column(DateTime, nullable=False)
-    DropDownboxKey = Column(Unicode)
-    # funItem = relationship("FunItem",back_populates="FunItemList")
+    DropDownboxKey = Column(Unicode,ForeignKey('FunItems.DropDownbox'))
+
 
     def __repr__(self):
         return '<FunItemList ItemValueCn:%r ItemTitle:%r >\n' %(self.ItemValueCn, self.ItemTitle)

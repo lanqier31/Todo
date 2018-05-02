@@ -84,6 +84,7 @@ def edit_Item():
         field = request.form.get("name", "null")
         value = request.form.get("value", 'null')
         dropdownMenus = request.form.get("dropdownMenus","null")
+        dropdownKdy = request.form.get("dropdownKey")
         funItem = session.query(FunItem).filter_by(Pk=Pk).first()
 
         if(field == 'DerivedRuleDec'):

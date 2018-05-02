@@ -157,57 +157,37 @@ var TableInit=function(){
 }
 
 //执行测试用例
-function doUItest(){
-  var version_text = $('#project_version').find("option:selected").text();
-  var testsuite=$('#testsuite').find("option:selected").text();
-  var subsuite=$('#subtestsuite').find("option:selected").text();
-  alert(subsuite )
-  $.ajax({
-                //提交数据的类型 POST GET
-                type:"POST",
-                //提交的网址
-                url:"/uitest_operate",
-                async:false,
-                //提交的数据
-                data:{"select_version":version_text,"testsuite":testsuite,"subsuite": subsuite},
-                //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
-                datatype: "json",
-                //ajax请求成功后的事件
-                success:function(data){     
-                    $('#suite').html($(data).find('#suite').html());                
-                },
-                //调用出错执行的函数
-                error: function(XMLResponse){
-                    //请求出错处理
-                    alert("不存在该测试用例");
-                },
-            });
+function doUItest() {
+    var version_text = $('#project_version').find("option:selected").text();
+    var testsuite = $('#testsuite').find("option:selected").text();
+    var subsuite = $('#subtestsuite').find("option:selected").text();
+    alert(subsuite)
+    $.ajax({
+        //提交数据的类型 POST GET
+        type: "POST",
+        //提交的网址
+        url: "/uitest_operate",
+        async: false,
+        //提交的数据
+        data: {"select_version": version_text, "testsuite": testsuite, "subsuite": subsuite},
+        //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+        datatype: "json",
+        //ajax请求成功后的事件
+        success: function (data) {
+            $('#suite').html($(data).find('#suite').html());
+        },
+        //调用出错执行的函数
+        error: function (XMLResponse) {
+            //请求出错处理
+            alert("不存在该测试用例");
+        },
+    });
+
+
 }
+
+
 inputs = $("table").find("input")
-id=null
-for (var i=0;i<inputs.length;i++){
-    if (inputs[i].id.length>0){
-        id = inputs[i].id
-        if($(id).parent().prev().length>0){
-            document.write($(id).parent().prev()[0].innerHTML + "<br>");
-        }
-        else if($(id).parent().parent().prev().length>0){
-            document.write($(id).parent().parent().prev()[0].innerHTML + "<br>");
-        }
-        else{
-            document.write(id + "<br>");
-        }
-
-    }
-
-    id=null;
-}
-
-
-
-
-
-
 dropdown=null;
 for (var i=0;i<inputs.length;i++)
 {

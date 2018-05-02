@@ -4,7 +4,25 @@
 {% block content %}
 <script type="text/javascript" src="../static/js/jquery.cxselect.js"></script>
 <style>
+   .firstMenu,.secondMenu,.thirdMenu,.fourthMenu,.fifthMenu,.sixthMenu{
+      width:200px;
+   }
+   #element_id{
+      display: inline-block;
+   }
 
+   .btn-group{
+      display: inline-block;
+      float: right;
+      margin-right:3px;
+   }
+   #itemsList{
+      margin-top: 5px;
+   }
+   .dropdown-menu{
+      right:0;
+      left:auto;
+   }
 </style>
 <div id="element_id">
    <select class="firstMenu form-control"></select>
@@ -14,6 +32,91 @@
    <select class="fifthMenu form-control"></select>
    <select class="sixthMenu form-control"></select>
 </div>
+<div class="btn-group">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    操作 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+     <li><a data-toggle="modal" data-target="#addmodel">添加模块</a></li>
+     <li><a href="#">添加字段</a></li>
+     <li role="separator" class="divider"></li>
+     <li><a href="#">删除模块</a></li>
+     <li><a href="#">删除字段</a></li>
+     <li role="separator" class="divider"></li>
+     <li><a href="#">编辑模块</a></li>
+
+  </ul>
+</div>
+        <!-- Modal add model -->
+        <div class="modal fade" id="addmodel" tabindex="-1" role="dialog" aria-labelledby="addblock">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-inline" action="" method='POST'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="addblock">模块添加</h4>
+                    </div>
+                    <div class="modal-body">
+
+                            <div class="form-group">
+                            <label for="FunValueCn">模块名称中文</label>
+                            <input type="text" class="form-control" id="FunValueCn" name="FunValueCn" style="width: 280px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunValueEn">模块名称英文</label>
+                            <input type="text" class="form-control" id="FunValueEn" name="FunValueEn" style="width: 280px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunTitle">模块提示</label>
+                            <input type="text" class="form-control" id="FunTitle" name="FunTitle" style="width: 200px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunLayer">模块层级</label>
+                            <input type="text" id="FunLayer" name="FunLayer" class="form-control" value="" onclick="$('#treeviews').show()" placeholder="模块层级">
+                            <div id="treeviews" style="display: none;">
+                          </div>
+                          <div class="form-group">
+                                <label for="FunOrder">排序</label>
+
+                                <select class="form-control" id="FunOrder" name="FunOrder">
+                                    <option value="exHigh">eH</option>
+                                    <option value="High">H</option>
+                                    <option value="Middle">M</option>
+                                    <option value="Low">L</option>
+                                </select>
+                          </div>
+                          <
+                          <div class="form-group">
+                            <label for="description">描述</label>
+                            <textarea  class="form-control" id="description" name="description" style="height: 130px;width:620px;"></textarea>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="createtime">创建日期</label>
+                            <input type="Date" id="createtime"  name="createtime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="completetime">计划日期</label>
+                            <input type="Date" id="plantime" name="plantime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="completetime">完成日期</label>
+                            <input type="Date" id="completetime" name="completetime" class="form-control" />
+                          </div>
+
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="add_todo">保存</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
 <table id="itemsList"></table>
 <script>
 
@@ -31,6 +134,7 @@
              required:true,
              firstValue:'0'
           });
+
           // 初始化table
          initTable();
      });
@@ -144,7 +248,7 @@
                      field: 'DerivedRuleDec',
                      align: 'left',
                      valign: 'middle',
-                     width: 500,
+                     width: 400,
                      sortable: false,
                      searchable: false,
                      editable: {
@@ -208,7 +312,7 @@
              minimumCountColumns: 2,
              showRefresh: false,  // 是否刷新
              showToggle: false,
-             showExport: false,
+             showExport: true,
              exportDataType: "selected",   //basic', 'all', 'selected'.
              exportTypes: ['excel'],
              onClickRow: function (row) {
@@ -267,10 +371,9 @@
          };
          return temp;
      }
-     $("#element_id select").change(function(){
-            alert(this.value)
-//            $('.search').val("");
-            $('#itemsList').bootstrapTable('refresh',{url: '/query_Items'});
-        });
+
+
+
+
 </script>
 {% endblock %}
