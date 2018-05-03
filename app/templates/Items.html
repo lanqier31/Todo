@@ -316,7 +316,7 @@
              exportDataType: "selected",   //basic', 'all', 'selected'.
              exportTypes: ['excel'],
              onClickRow: function (row) {
-//                 console.info(row)
+                console.info(row)
              },
              formatLoadingMessage: function () {
 
@@ -329,16 +329,23 @@
                      "Pk":row.Pk,
                      "name":field,
                      "value":row[field],
-                     "dropdownMenus":row.dropdownMenus
+                     "dropdownMenus":row.dropdownMenus,
+                     "dropDownKey":row.DropDownbox
             };
                  $.ajax({
                      type: "post",
                      url: "/edit_Item",
                      data: postdata,
 //                     dataType: 'JSON',
-                     success: function (status) {
+                     success: function (status,result) {
                          if (status == "success") {
                              alert('提交数据成功');
+                         }
+                         else if ('KeyError'){
+                             alert('dropDownKey不能为空！');
+                         }
+                         else if('error'){
+                             alert('编辑失败！')
                          }
                      },
                      error: function () {

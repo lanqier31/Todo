@@ -12,7 +12,7 @@ from config import basedir
 
 app = Flask(__name__)
 app.config.from_object('config')
-db = SQLAlchemy(app)                          #创建数据库实例
+db = SQLAlchemy(app,use_native_unicode='utf8')                          #创建数据库实例
 
 login_manager=LoginManager()
 login_manager.session_protection = "basic"

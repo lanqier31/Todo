@@ -4,11 +4,16 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker,relationship,backref
 from sqlalchemy.orm import scoped_session
-import re
+import re,sys
 
-engine = create_engine("mssql+pymssql://mduser:mduser@192.168.10.244/AutoCodeDB2", encoding='utf-8', echo=True)
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
+# 初始化数据库连接:
+engine = create_engine("mssql+pymssql://mduser:mduser@192.168.10.244/AutoCodeDB2", encoding='utf-8', echo=False)   #echo=true 则打印sqlalchemy的日志记录
 Base = declarative_base()
 metadata = Base.metadata
+# 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
 
 

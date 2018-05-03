@@ -4,9 +4,11 @@ import config
 from app import app
 from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
 from app.models.autoCode import FunItemList,FunItem,FunModule,PopUpMenu,DBSession
-import re    #正则表达式
+import re , sys  #正则表达式
 from datetime import date,datetime
 session = DBSession()
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 @app.route('/Items',methods=['GET','POST'])
@@ -86,23 +88,25 @@ def query_Items():
             Items.append(i.to_json())
         return jsonify({"total": total, 'rows': Items[int(offset):(int(offset) + int(limit))]})
 
-    except IOError:
+    except:
+        session.rollback()
         return "error"
 
 
 @app.route('/edit_Item',methods=['GET','POST'])
 def edit_Item():
     try:
+        data = request.data
         Pk = request.form.get("Pk", "null")
         field = request.form.get("name", "null")
         value = request.form.get("value", 'null')
-        dropdownMenus = request.form.get("dropdownMenus","null")
-        dropdownKdy = request.form.get("dropdownKey")
+        dropdownMenus = request.form.getlist('dropdownMenus[]')
+        dropdownKey = request.form.get("dropDownKey", 'null')
         funItem = session.query(FunItem).filter_by(Pk=Pk).first()
 
         if(field == 'DerivedRuleDec'):
             funItem.DerivedRuleDec = value
-        if (field == 'dropdownKey'):
+        if (field == 'DropDownbox'):
             dropmenus=[]
             titles = []
             itemlist=session.query(FunItemList).filter_by(DropDownboxKey=value).all()
@@ -111,9 +115,8 @@ def edit_Item():
                     dropmenus.append(item.ItemValueCn)
                     titles.append(item.ItemTitle)
             else:          #如果该Key之前没绑定过下拉菜单，则默认将现有下拉菜单的内容赋值给该下拉菜单
-                dropdownmeus = dropdownMenus.split('\n')
-                for v in dropdownmeus:
-                    dropmenus.append( v.split('[')[0])
+                for v in dropdownMenus:
+                    dropmenus.append( str(v).split('[')[0])
                     title = re.findall(r"(\[.*?\])", v, re.M)
                     if (len(title) > 0):
                         title = title[0]
@@ -125,35 +128,46 @@ def edit_Item():
                 session.delete(list)
             session.commit()
             for i in range(0,len(dropmenus)):
-                itemlist = FunItemList(FunItemsFk=Pk, ItemValueEn=None, ItemValueCn=dropmenus[i], ItemTitle=titles[i],
+                itemlist = FunItemList(FunItemsFk=Pk, ItemValueEn=None, ItemValueCn=unicode(dropmenus[i]), ItemTitle=unicode(titles[i]),
                                        ItemOrder=i+1, CreatedTime=datetime.now(),DropDownboxKey=value)
                 session.add(itemlist)
                 session.commit()
+            #给funItem这个字段绑定下拉菜单的值
+            funItem.DropDownbox = value
+
         if(field == 'FunItemValueCn'):
             funItem.FunItemValueCn = value
         if(field == 'OpenSelectKey'):
             funItem.OpenSelectKey = value
         if(field == 'dropdownMenus'):
-            itemList = session.query(FunItemList).filter_by(FunItemsFk=Pk).all()
-            for list in itemList:
-                session.delete(list)
-            session.commit()
-            value= value.split('\n')
-            i=1
-            for v in value:
-                dropMenu = v.split('[')[0]
-                title = re.findall(r"(\[.*?\])", v, re.M)
-                if (len(title) > 0):
-                    title = title[0]
-                title = title.replace('[', '').replace(']', '')
-                cur = datetime.now()
-                itemlist= FunItemList(FunItemsFk=Pk,ItemValueEn=None,ItemValueCn=dropMenu,ItemTitle=title,ItemOrder=i,CreatedTime=cur)
-                session.add(itemlist)
+            #当DropdownMenu不为空时，判断DropdownKey不能为空
+            if(value) and not (dropdownKey):
+                return "KeyError"
+            else:
+                #删除现有绑定的下拉菜单
+
+                itemList = session.query(FunItemList).filter_by(DropDownboxKey=dropdownKey).all()
+                for list in itemList:
+                    session.delete(list)
                 session.commit()
-                i=i+1
+                if (value):
+                    value= value.split('\n')
+                    i=1
+                    for v in value:
+                        dropMenu = v.split('[')[0]
+                        title = re.findall(r"(\[.*?\])", v, re.M)
+                        if (len(title) > 0):
+                            title = title[0]
+                        title = title.replace('[', '').replace(']', '')
+                        cur = datetime.now()
+                        itemlist= FunItemList(FunItemsFk=Pk,ItemValueEn=None,ItemValueCn=dropMenu,ItemTitle=title,ItemOrder=i,CreatedTime=cur,DropDownboxKey=dropdownKey)
+                        session.add(itemlist)
+                        session.commit()
+                        i=i+1
 
         session.add(funItem)
         session.commit()
         return 'success'
-    except IOError:
+    except:
+        session.rollback()
         return "error"
