@@ -42,6 +42,19 @@ def queryModule(pk):
     conn.close()
 
 
+def queryModule2(pk):
+    sa=[]
+    modules = session.query(FunModule).filter_by(FunLayer=pk).all()
+
+    for m in modules:
+        if queryModule(int(m.Pk)):
+            sa.append({"n":m.FunValueCn,"value":int(m.Pk),"s":queryModule(int(m.Pk))})
+        else:
+            sa.append({"n": m.FunValueCn,"value":int(m.Pk)})
+
+    return sa
+
+
 @app.route('/query_Items',methods=['GET','POST'])
 def query_Items():
     try:
