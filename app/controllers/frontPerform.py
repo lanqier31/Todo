@@ -5,7 +5,8 @@ from app.models.WebLoad import WebLoad
 from app.models.PageDetail import PageDetail
 import os ,json,sys,time
 from app import app,db
-import requests
+from datetime import date,datetime
+import requests,sqlite3
 import config
 from sqlalchemy import extract
 reload(sys)
@@ -57,9 +58,11 @@ def redo():
     else:
         # 向测试环境发生get请求来验证测试环境是否存在
         env_for_test = request.form.get("selected_version", "null")
-        current_env = config.hosts['164'] + env_for_test
+        if env_for_test == 'syf1.1.1':
+            current_env = config.hosts['243']+'syf'
+        else:
+            current_env = config.hosts['243'] + env_for_test
         env_test_code = requests.get(current_env).status_code
-        print  env_test_code
         if env_test_code == 200:
             # 定义页面名称列表
             all_page_data = {}
@@ -73,11 +76,10 @@ def redo():
             page_index_info = []
             # 将统计数据保存到sqlite
             # 先删除页面资源细分表webDetailLoad所有数据
-            clear = PageDetail.query.filter_by(project='Clinical',version=env_for_test).all()
-            print clear
-            # clear = PageDetail.query.filter_by(project='Clinical',version=env_for_test).all()
-            # db.session.delete(clear)
-            # db.session.commit()
+            clear = WebLoad.query.filter_by(project='Clinical',version=env_for_test).all()
+            for c in clear:
+                db.session.delete(c)
+            db.session.commit()
             # get到clinical登录页(登录页需要单独收集其页面加载性能指标)
             driver = webdriver.Chrome()
             login_url = current_env + '/login/index'
@@ -98,38 +100,40 @@ def redo():
                 # 以页面名：数组形式保存页面信息
                 page_index_resource = {}
                 # 资源名称
-                page_index_resource['name'] = items['name']
-                # 资源类型分类
-                resource_type = str(items['name']).split('.')[-1]
-                if resource_type in ['jpg', 'png', 'gif', 'jpeg']:
-                    page_index_resource['resourceType'] = 'img'
-                elif resource_type == 'js':
-                    page_index_resource['resourceType'] = 'js'
-                elif resource_type == 'css':
-                    page_index_resource['resourceType'] = 'css'
-                else:
-                    if items['initiatorType'] == 'xmlhttprequest':
-                        page_index_resource['resourceType'] = 'xmlhttprequest'
-                    elif items['initiatorType'] == 'script':
+                if "plain" not in items['name']:
+
+                    page_index_resource['name'] = items['name']
+                    # 资源类型分类
+                    resource_type = str(items['name']).split('.')[-1]
+                    if resource_type in ['jpg', 'png', 'gif', 'jpeg','ico']:
+                        page_index_resource['resourceType'] = 'img'
+                    elif resource_type == 'js':
                         page_index_resource['resourceType'] = 'js'
+                    elif resource_type == 'css':
+                        page_index_resource['resourceType'] = 'css'
                     else:
-                        page_index_resource['resourceType'] = 'other'
-                # 资源大小
-                page_index_resource['transferSize'] = items['transferSize']
-                # 资源耗时
-                page_index_resource['duration'] = items['duration']
-                # 将登录页资源信息存入列表
-                page_index_info.append(page_index_resource)
-                # 将登录页资源列表信息存入字典对象 对应key为Index
-                save = PageDetail('Clinical',str(env_for_test),str('Index'),str(page_index_resource['name']),
-                                str(page_index_resource['resourceType']),str(page_index_resource['transferSize']),
-                                str(page_index_resource['duration']),CURRENT_TIMESTAMP)
-                db.session.add(save)
-                db.session.commit()
+                        if items.get('initiatorType') == 'xmlhttprequest':
+                            page_index_resource['resourceType'] = 'xmlhttprequest'
+                        elif items.get('initiatorType')== 'script':
+                            page_index_resource['resourceType'] = 'js'
+                        else:
+                            page_index_resource['resourceType'] = 'other'
+                    # 资源大小
+                    page_index_resource['transferSize'] = items.get('transferSize')
+                    # 资源耗时
+                    page_index_resource['duration'] = items['duration']
+                    # 将登录页资源信息存入列表
+                    page_index_info.append(page_index_resource)
+                    # 将登录页资源列表信息存入字典对象 对应key为Index
+                    save = PageDetail('Clinical',str(env_for_test),str('Index'),str(page_index_resource['name']),
+                                    str(page_index_resource['resourceType']),str(page_index_resource['transferSize']),
+                                    str(page_index_resource['duration']),datetime.now())
+                    db.session.add(save)
+                    db.session.commit()
 
             # 登录系统后 对其他所有页面进行遍历以收集其页面加载性能数据
             driver.find_element_by_id('txtUserName').send_keys('30048')
-            driver.find_element_by_id('txtPassword').send_keys('5436')
+            driver.find_element_by_id('txtPassword').send_keys('8613')
             driver.find_element_by_id('btnConfirm').click()
             time.sleep(3)
 
@@ -161,21 +165,21 @@ def redo():
                     elif resource_type == 'css':
                         current_resources['resourceType'] = 'css'
                     else:
-                        if items['initiatorType'] == 'xmlhttprequest':
+                        if items.get('initiatorType') == 'xmlhttprequest':
                             current_resources['resourceType'] = 'xmlhttprequest'
-                        elif items['initiatorType'] == 'script':
+                        elif items.get('initiatorType') == 'script':
                             current_resources['resourceType'] = 'js'
                         else:
                             current_resources['resourceType'] = 'other'
                     # 资源大小
-                    current_resources['transferSize'] = items['transferSize']
+                    current_resources['transferSize'] = items.get('transferSize')
                     # 资源耗时
                     current_resources['duration'] = items['duration']
                     # 保存资源
 
-                    resource = PageDetail('Clinical',str(env_for_test),str(page),str(current_resources['resourceType']),
+                    resource = PageDetail('Clinical',str(env_for_test),str(page),str(current_page_url),str(current_resources['resourceType']),
                                           str(current_resources['transferSize']),str(current_resources['duration']),
-                                          CURRENT_TIMESTAMP)
+                                          datetime.now())
                     db.session.add(resource)
                     db.session.commit()
             # 退出chrome driver进程
@@ -185,10 +189,10 @@ def redo():
                 page_time = all_page_data[name]
                 if name == 'Index':
                     page_urls[name] = '/login/index'
-                webload = WebLoad('Clinical',str(env_for_test),str(name),str(current_env),str(page_urls['name']),
+                webload = WebLoad('Clinical',str(env_for_test),str(name),str(page_urls[name]),
                                   str(page_time['dns']),str(page_time['request']),str(page_time['dom_parser']),
                                   str(page_time['dom_ready']),str(page_time['load_event']),str(page_time['whitewait']),
-                                  str(page_time['loadall']),str(CURRENT_TIMESTAMP))
+                                  str(page_time['loadall']),datetime.now())
                 db.session.add(webload)
                 db.session.commit()
             return 'success'
@@ -196,18 +200,18 @@ def redo():
             return 'environment is not exist'
 
 
-@app.route('/detail_<project_version>_<page_name>')
+@app.route('/detail_<project_version>/<page_name>')
 def page_detail(project_version, page_name):
     g.db = sqlite3.connect(config.db_dir)
     # 页面资源信息
-    resource_sql = "select resource_name, resource_type, resource_size, resource_duration from PageDetail where version='" + str(
+    resource_sql = "select resource_name, resource_type, resource_size, resource_duration from page_detail where version='" + str(
         project_version) + "' and page_name='" + str(page_name) + "'"
 
-    history_sql = "select version, dns, request, dom_parser, dom_ready, load_event, whitewait, loadall from WebLoad where page_name='" + str(
+    history_sql = "select version, dns, request, dom_parser, dom_ready, load_event, whitewait, loadall from web_load where page_name='" + str(
         page_name) + "' group by version"
-    composition_sql = "select resource_type, count(resource_type) as counts, sum(resource_size) as size_count, sum(resource_duration) as duration_count from PageDetail where version='" + str(
+    composition_sql = "select resource_type, count(resource_type) as counts, sum(resource_size) as size_count, sum(resource_duration) as duration_count from page_detail where version='" + str(
         project_version) + "' and page_name='" + str(page_name) + "' group by resource_type"
-    top_sql = "select resource_name, resource_duration, resource_size from PageDetail where version='" + str(
+    top_sql = "select resource_name, resource_duration, resource_size from page_detail where version='" + str(
         project_version) + "' and page_name='" + str(page_name) + "' order by resource_duration desc limit 3"
     resource_composition = query_db(composition_sql)
     resource_summary = query_db(resource_sql)
@@ -259,13 +263,13 @@ def uitest_operate():
     subsuite = request.form.get("subsuite", "null")
     current_env = config.hosts['164'] + env_for_test
     env_test_code = requests.get(current_env).status_code
-    print env_for_test, testsuite, subsuite, env_test_code
+    # print env_for_test, testsuite, subsuite, env_test_code
     if env_test_code == 200:
         try:
             file_name = config.ui_suites_dir + '\\' + env_for_test + '\\' + str(testsuite) + '\\'
             test_name = str(subsuite) + '.txt'
 
-            print file_name
+            # print file_name
             command_line = "pybot %s" % test_name
             process = subprocess.Popen(command_line, shell=True, cwd=file_name)
             retcode = process.wait()

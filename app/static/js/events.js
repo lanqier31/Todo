@@ -1,37 +1,5 @@
 // 重新执行测试脚本
-function ajaxReRun(){
-  var select = document.getElementById("project_version");
-  var options = select.options;
-  var index = select.selectedIndex;
-  var version_text = options[index].text;
-  $.ajax({
-    //提交数据的类型 POST GET
-    type:"POST",
-    //提交的网址
-    url:"/redo",
-    //提交的数据
-    data:({"selected_version": version_text}),
-    //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
-    datatype: "text",
-	//ajax请求成功后的事件
-    success:function(data){
-        if (data=='environment is not exist'){
-            alert("亲~  这个版本的测试环境去哪儿了？");
-        }
-        else{
-            window.location.href =  window.location.href;
-            alert("所选版本的前端性能测试执行完毕");
-        }
 
-    },
-
-    //调用出错执行的函数
-    error: function(XMLResponse){
-        //请求出错处理
-	    alert("不要搞事情~ 请cc检查服务是否开启");
-    }
-  });
-}
 
 
 //实例化汇总表格
@@ -187,32 +155,9 @@ function doUItest() {
 }
 
 
-inputs = $("table").find("input")
-dropdown=null;
-for (var i=0;i<inputs.length;i++)
-{
-
-    if (inputs[i].attributes.length>0){
-        for (var j=0;j<inputs[i].attributes.length;j++){
-            if(inputs[i].attributes[j].name =='dropdownbox'){
-                dropdown = inputs[i].attributes[j].value;
-            }
-
-        }
-    }
-    document.write(dropdown + "<br>");
-    dropdown=null;
-
-}
 
 
-//search openSourceBox
-spans = $('.spanJianTou')
-for (var i=0;i<spans.length;i++){
 
-    document.write(spans[i].attributes[0].value + "<br>");
-
-    }
 
 
 

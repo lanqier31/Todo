@@ -1,12 +1,12 @@
 #!flask/bin/python
 
-import time
+import sys
+# import xlwt
+file='D:\shuqian1.txt'
+with open(file) as f:
+    line = f.readline()
+    while line:
+        print line
+        line = f.readline()
 
-
-def test():
-
-
-
-if __name__ == '__main__':
-    test()
 

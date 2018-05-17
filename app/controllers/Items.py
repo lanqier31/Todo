@@ -44,7 +44,7 @@ def queryModule(pk):
     conn.close()
 
 
-def queryModule2(pk):
+def queryModule1(pk):
     sa=[]
     modules = session.query(FunModule).filter_by(FunLayer=pk).all()
 
@@ -96,7 +96,6 @@ def query_Items():
 @app.route('/edit_Item',methods=['GET','POST'])
 def edit_Item():
     try:
-        data = request.data
         Pk = request.form.get("Pk", "null")
         field = request.form.get("name", "null")
         value = request.form.get("value", 'null')

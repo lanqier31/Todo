@@ -5,7 +5,7 @@
     <div class="row">
     	
     	<select id="project_version" class="form-control" onchange="optionChange()">
-			{% for option in project_version.Clinical %}
+			{% for option in project_version.Syf %}
     		<option value={{option}}>{{option}}</option>
 			{% endfor %}
     	</select>
@@ -31,15 +31,15 @@
 				sortable:true,  //是否启用排序
 				sortOrder:"page_name asc", // 排序方式
 				pageNumber:1, //初始化加载第一页，默认第一页
-				pageSize:10 , //每页的记录行数
-				pageList:[6,20,50] ,  //可供选择的每页行数
+				pageSize:8 , //每页的记录行数
+				pageList:[8,20,50] ,  //可供选择的每页行数
 				queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
 				sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
 				strictSearch:true,
 				clickToSelect:true,  //是否启动点击选中行
                 queryParams: queryParams,
 				search:false,
-				// height:$(window).height() - 500,
+				height:400,
 				columns:[
 					
 							{	
@@ -135,7 +135,7 @@
 				
 			project_version=$("#project_version").find("option:selected").text();
 			page_name=value;
-			var href = 'detail_' + project_version + '_' + page_name;
+			var href = 'detail_' + project_version + '/' + page_name;
 			
 			return "<a href='" + href + "' >" + value + "</a>";
         }
@@ -159,110 +159,7 @@
     	<tr>
      		<td align="center">
      		<div id="chart" class="text-align：center" style="width: 1200px;height:800px;">
-			 	<script type="text/javascript">
-			        // 基于准备好的dom，初始化echarts实例
-			        var myChart = echarts.init(document.getElementById('chart'));
-			        
-			        // 指定图表的配置项和数据
-			        option = {
-				    tooltip : {
-				        trigger: 'axis',
-				        axisPointer : {type : 'shadow'}
-				    },
-				    legend: {
-				        data:['dns(ms)', 'request(ms)', 'dom_parser(ms)', 'dom_ready(ms)', 'load_event(ms)', 'whitewait(ms)', 'loadall(ms)'],
-				    },
-				    toolbox: {
-				        show : false,
-				        feature : {
-				            mark : {show: true},
-				            dataView : {show: true, readOnly: false},
-				            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-				            restore : {show: true},
-				            saveAsImage : {show: true}
-				        }
-				    },
-				    calculable : true,
-				    xAxis : [
-				        {
-				            
-				            type : 'category',
-				            data :  {{page_chart_data.page_name|safe};}
-				        }
-				    ],
-				    [
-				        {
-				            type : 'value'
-				        }
-				    ],
-				    series; : [
-				        {
-				            name:'dns(ms)',
-				            type:'bar',
-				            stack: 'Time',
-				            itemStyle : { normal: {label : {show: true, position: 'insideRight'}}},
-				            data: {{page_chart_data.dns|safe}}
-				        },
 
-				        {
-				            'request(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-
-				            {{page_chart_data.request|safe}}
-				        },
-
-				        {
-				            'dom_parser(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.dom_parser|safe}}
-				        },
-
-				        {
-				            'dom_ready(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.dom_ready|safe}}
-				        },
-
-				        {
-				            'request(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.request|safe}}
-				        },
-
-				      {
-				            'load_event(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.load_event|safe}}
-				        },
-				        {
-				            'whitewait(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.whitewait|safe}}
-				        },
-				        {
-				            'loadall(ms)',
-				            type;:'bar',
-				            stack;: 'Time',
-				            itemStyle; : { {{true, position;: 'insideRight'}}},
-				            {{page_chart_data.loadall|safe}}
-				        }
-				    ]
-                    }
-                    // 使用刚指定的配置项和数据显示图表。
-			        myChart.setOption(option);
-			    </script>
 			</div>
 			</td>
 		</tr>
@@ -273,29 +170,64 @@
 		
 		//刷新数据
 		function optionChange(){
-  		  	var version_text = $('#project_version').find("option:selected").text();
-			$.ajax({
-			    //提交数据的类型 POST GET
-			    type:"POST",
-			    //提交的网址
-			    url:"/index",
-			    async:false,
-			    //提交的数据
-			    data:({"selected_version": version_text}),
-			    //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
-			    datatype: "json",
-				//ajax请求成功后的事件
-			    success:function(data){    
-					$('#webloadlist').html($(data).find('#webloadlist').html());	      		
-			       	$('#data_chart').html($(data).find('#data_chart').html());
-			    },
-			    //调用出错执行的函数
-			    error: function(XMLResponse){
-			        //请求出错处理
-				    alert("不要搞事情~ 请检查服务是否开启");
-			    },
-  			});
+		    $('#pages_summary').bootstrapTable('refresh');
+//  		  	var version_text = $('#project_version').find("option:selected").text();
+//			$.ajax({
+//			    //提交数据的类型 POST GET
+//			    type:"POST",
+//			    //提交的网址
+//			    url:"/query_webload",
+//			    async:false,
+//			    //提交的数据
+//			    data:({"version": version_text}),
+//			    //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+//			    datatype: "json",
+//				//ajax请求成功后的事件
+//			    success:function(data){
+//					$('#webloadlist').html($(data).find('#webloadlist').html());
+//			       	$('#data_chart').html($(data).find('#data_chart').html());
+//			    },
+//			    //调用出错执行的函数
+//			    error: function(XMLResponse){
+//			        //请求出错处理
+//				    alert("不要搞事情~ 请检查服务是否开启");
+//			    },
+//  			});
         }
+        //重新执行
+        function ajaxReRun(){
+		  var select = document.getElementById("project_version");
+		  var options = select.options;
+		  var index = select.selectedIndex;
+		  var version_text = options[index].text;
+		  $.ajax({
+			//提交数据的类型 POST GET
+			type:"POST",
+			//提交的网址
+			url:"/redo",
+			//提交的数据
+			data:({"selected_version": version_text}),
+			//返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+			datatype: "text",
+			//ajax请求成功后的事件
+			success:function(data){
+				if (data=='environment is not exist'){
+					alert("亲~  这个版本的测试环境去哪儿了？");
+				}
+				else{
+					window.location.href =  window.location.href;
+					alert("所选版本的前端性能测试执行完毕");
+				}
+
+			},
+
+			//调用出错执行的函数
+			error: function(XMLResponse){
+				//请求出错处理
+				alert("不要搞事情~ 请cc检查服务是否开启");
+			}
+		  });
+		}
         </script>
 	{%- endblock scripts %}
 

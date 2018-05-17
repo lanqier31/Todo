@@ -117,7 +117,7 @@ class FunItem(Base):                 #parent
             'FunItemOrder': self.FunItemOrder,
             'DropDownbox': self.DropDownbox,
             'CreatedTime': self.CreatedTime,
-            'DerivedRuleDec': self.DerivedRuleDec,
+            'DerivedRuleDec': self.get_DerivedRuleDec(),
             'FunItemOrder2': self.FunItemOrder2,
             'ObjData': self.ObjData,
             'FieldIdentifier': self.FieldIdentifier,
@@ -128,8 +128,10 @@ class FunItem(Base):                 #parent
 
     def get_DerivedRuleDec(self):
         if self.DerivedRuleDec:
-            pattern = r"(\<.*?\>)"
-            return self.DerivedRuleDec.re(pattern,self.DerivedRuleDec)
+            # pattern = r"(\<.*?\>)"
+            return self.DerivedRuleDec.replace('<br>', '\n')
+        else:
+            return self.DerivedRuleDec
     def get_dropdownMenus(self):
         dropdownMenus = []
         if self.dropdownMenus:

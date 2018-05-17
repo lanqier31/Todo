@@ -9,6 +9,8 @@
                     <option value="all">全部</option>
                     <option value="syf1.1.1">syf1.1.1</option>
                     <option value="syf1.2.0">syf1.2.0</option>
+                    <option value="syf1.3.0">syf1.2.0</option>
+
                 </select>
             </li>
             <li role="presentation" role="button">产品模块
@@ -19,6 +21,8 @@
                     <option value="Evaluation">病理评估</option>
                     <option value="Timepoint">时点测评</option>
                     <option value="Report">报告采集</option>
+                    <option value="Search">数据检索</option>
+                    <option value="Others">其他</option>
                 </select>
 
             </li>
@@ -59,6 +63,7 @@
                     <option value="2">李小满</option>
                     <option value="3">徐郁</option>
                     <option value="4">陈梦梦</option>
+                    <option value="5">尚睿敏</option>
                 </select>
             </li>
             <li role="presentation" class="dropdown">测试
@@ -159,6 +164,7 @@
                                 <option value=2>李小满</option>
                                 <option value=3>徐郁</option>
                                 <option value=4>陈梦梦</option>
+                                <option value=5>尚睿敏</option>
                             </select>
                           </div>
                           <div class="form-group">
@@ -465,7 +471,8 @@
                                     source:[{value:1,text:"张路"},
                                             {value:2,text:"李小满"},
                                             {value:3,text:"徐郁"},
-                                            {value:4,text:"陈梦梦"}],
+                                            {value:4,text:"陈梦梦"},
+                                            {value:5,text:"尚睿敏"}],
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
                                         if(response.status =='error') {

@@ -2,7 +2,7 @@
 import os
 import pymssql
 basedir = os.path.abspath(os.path.dirname(__file__))
-
+db_dir = os.path.join(basedir, 'app.db')
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')    #数据库文件的路径
 #SQLALCHEMY_MIGRATE_REPO 是文件夹，我们将会把 SQLAlchemy-migrate 数据文件存储在这里
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
@@ -24,29 +24,33 @@ ui_suites_dir = os.path.join(basedir, 'Web\ui_suites')
 page_urls = \
     {
         "SelectSystem": "/Login/SelectSystem",
-        "AppointsSummary": "/Main/Order",
-        "AppointList": "/ReferralAppointment/ReferralAppointmentList",
+        "AppointsSummary": "/Main/Order",      #预约图表页
+        "AppointList": "/ReferralAppointment/ReferralAppointmentList",   #预约列表页
         "LostManage": "/lost/lostmanage" ,
         "PatientManage" : "/patient/patientmanage",
-        "SmsIndex": "/SMS/Index",
-        "MainAnalysis": "/main/analysis",
-        "UsersManage": "/systemset/usersetting",
-        "RolesSetting": "/systemset/rolesetting",
-        "DepartmentSetting": "/systemset/departmentsetting",
-        "AdmissionConfig": "/systemset/AdmissionConfig",
-        "UserDateList": "/systemset/UserDateList",
-        "ConfigSetting": "/SystemSet/ConfigSetting",
-        "BasicSetting": "/SystemSet/BasicSetting",
-        "SysLog": "/SysLog/Index",
-        "TumorSummary": "/TumorStudy2/Order",
-        "TumorList": "/TumorStudy2/Index",
-        "TumorAdd": "/PathologicalEvaluation/Edit?type=add&editmark=true",
-        "EvaluationSummary": "/ComplexcheckEvaluation/Order",
-        "EvaluationList": "/ComplexcheckEvaluation/Index",
-        "EvaluationAdd": "/ComplexcheckEvaluation/Edit?type=add&editmark=true",
-        "YearPoint": "/YearpointTest2/Order",
-        "YearPointList": "/YearpointTest2/Index",
-        "YearPointAdd": "/YearpointTest2/Edit?type=add&editmark=true"
+        "MainAnalysis": "/main/analysis",            #预约管理统计分析
+        "reportList":"/SyfHospitalClinicalDataCenter/index",          #报告类别页面
+        "reportManage":"/SyfHospitalClinicalDataCenter/QueryReport?type=add&hospitalNumber=2443605&editmark=true",
+        "ComplexcheckEvaluation":"/ComplexcheckEvaluation/Edit?pk=8007d6d8-c127-4bfc-9d86-fed87f8d19ba",
+        "PathologicalEvaluation":"/PathologicalEvaluation/Edit?type=add&editmark=true&hno=2443605&target=report&d=Fri%20May%2004%202018%2014:03:52%20GMT+0800%20(%D6%D0%B9%FA%B1%EA%D7%BC%CA%B1%BC%E4)&reportdate=2015-10-19",
+        "YearpointTest2":"/YearpointTest2/Edit?type=add&editmark=false&hospitalNumber=2443605&target=report&nq=2&reportdate=2015-10-19"
+        # "UsersManage": "/systemset/usersetting",
+        # "RolesSetting": "/systemset/rolesetting",
+        # "DepartmentSetting": "/systemset/departmentsetting",
+        # "AdmissionConfig": "/systemset/AdmissionConfig",  #预约管理诊日设置
+        # "UserDateList": "/systemset/UserDateList",
+        # "ConfigSetting": "/SystemSet/ConfigSetting",
+        # "BasicSetting": "/SystemSet/BasicSetting",
+        # "SysLog": "/SysLog/Index",
+        # "TumorSummary": "/TumorStudy2/Order",                                       #术后状态页
+        # "TumorList": "/TumorStudy2/Index",                                          #术后列表页
+        # "TumorAdd": "/PathologicalEvaluation/Edit?type=add&editmark=true",
+        # "EvaluationSummary": "/ComplexcheckEvaluation/Order",
+        # "EvaluationList": "/ComplexcheckEvaluation/Index",
+        # "EvaluationAdd": "/ComplexcheckEvaluation/Edit?type=add&editmark=true",
+        # "YearPoint": "/YearpointTest2/Order",
+        # "YearPointList": "/YearpointTest2/Index",
+        # "YearPointAdd": "/YearpointTest2/Edit?type=add&editmark=true"
 
     }
 
@@ -58,24 +62,24 @@ timing_js = "{var performance = window.performance;\
             }\
             var t = performance.timing;\
             var times = {};\
-            times.dns = t.domainLookupEnd - t.domainLookupStart;\
-            times.request = t.responseEnd - t.requestStart;\
-            times.dom_parser = t.domComplete - t.domInteractive;\
-            times.redirect = t.redirectEnd - t.redirectStart;\
-            times.dom_ready = t.domContentLoadedEventEnd - t.navigationStart;\
-            times.load_event = t.loadEventEnd - t.loadEventStart;\
-            times.whitewait = t.domLoading  - t.navigationStart;\
-            times.ttfb = t.responseStart - t.navigationStart;\
-            times.loadall = t.loadEventEnd - t.navigationStart; \
+            times.dns = (t.domainLookupEnd - t.domainLookupStart)/1000;\
+            times.request = (t.responseEnd - t.requestStart)/1000;\
+            times.dom_parser = (t.domComplete - t.domInteractive)/1000;\
+            times.redirect = (t.redirectEnd - t.redirectStart)/1000;\
+            times.dom_ready = (t.domContentLoadedEventEnd - t.navigationStart)/1000;\
+            times.load_event = (t.loadEventEnd - t.loadEventStart)/1000;\
+            times.whitewait = (t.domLoading  - t.navigationStart)/1000;\
+            times.ttfb = (t.responseStart - t.navigationStart)/1000;\
+            times.loadall = (t.loadEventEnd - t.navigationStart)/1000; \
             return times;}"
 # 定义获得页面资源的方法
 get_entries_js = 'return window.performance.getEntries()'
 
 # 定义项目及其版本信息
-project_version_info = {'Clinical':['syf1.1.1', 'syf2.0.0', 'syf3.0.0'], 'DicomStorage': ['2.8.8', '2.8.9', '2.8.10'], 'Training': ['1.6.16', '1.6.17']}
+project_version_info = {'Syf':['syf1.1.1', 'syf1.2.0', 'syf1.3.0'], 'DicomStorage': ['2.8.8', '2.8.9', '2.8.10'], 'Training': ['1.6.16', '1.6.17']}
 
 # 定义测试机
-hosts = {'localhost': 'http://127.0.0.1/', '164': 'http://192.168.10.164/'}
+hosts = {'localhost': 'http://127.0.0.1/', '164': 'http://192.168.10.164/', '243':'http://192.168.10.243/'}
 
 #定义sqlserver连接
 
