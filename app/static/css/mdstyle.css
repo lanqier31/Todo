@@ -209,3 +209,21 @@ table thead{
 #todolist{
 	margin-top: -58px;!important;
 }
+.btn-signin{
+	background-color: #ccc;
+}
+.error{
+	background-color: #ec64715e;
+	padding: 10px 3px;
+	color:#de0000;
+}
+.mes-fixed-bottom{
+	position: fixed;
+	bottom: 0;
+	left:0;
+	right: 0;
+	margin: auto 20px;
+}
+.text-right{
+	margin-top: 10px;
+}
