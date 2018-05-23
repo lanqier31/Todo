@@ -1,6 +1,7 @@
 # -*-coding:utf-8-*-
-from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
-# from app.models.Roles import Role
+from flask_login import login_required, login_user, logout_user, current_user
+from flask import request,render_template,flash,escape,abort,url_for,redirect,session,Flask,g,jsonify
+from app.models.User import User
 from app.models.Category import Category
 from app.models.Todo import Todo
 from app.forms import LoginForm
@@ -179,18 +180,23 @@ def edit_todo():
 
 @app.route('/delete_todo',methods=['GET','POST'])
 def delete_todo():
-    try:
-        ids=map(int,request.form.getlist('ids[]'))
-        ides = request.form.getlist('ids[]')
-        print ides
-        for id in ids:
-            todo=Todo.query.get(id)
-            db.session.delete(todo)
-            db.session.commit()
-        return 'success'
-    except IOError:
-        print IOError
-        return 'error'
+    user = User.query.get(current_user.id)
+    if 6 not in user.permissions():
+        # flash("该用户无此权限", 'danger')
+        return '6'
+    else:
+        try:
+            ids=map(int,request.form.getlist('ids[]'))
+            # ides = request.form.getlist('ids[]')
+
+            for id in ids:
+                todo=Todo.query.get(id)
+                db.session.delete(todo)
+                db.session.commit()
+            return 'success'
+        except IOError:
+            print IOError
+            return 'error'
 
 
 @app.route('/add',methods={'POST'})
@@ -208,42 +214,28 @@ def add_entry():
 
 @app.route('/login',methods=['GET','POST'])
 def login():
-    error = None
-    form=LoginForm()
+
     if request.method=='POST':
-        username = request.form['username']
-        password = request.form['password']
-        user =User.query.filter_by(username= request.form['username']).first()
-        passwd = User.query.filter_by(password=request.form['password']).first()
-
-        if user is None:
-            error = 'Invaild username'
-        elif passwd is None:
-            error = 'Invaild password'
+        form = LoginForm()
+        if not form.validate_on_submit():
+            user = User.query.filter_by(username = form.username.data).first()
+            if user is not None and user.verify_password(form.password.data):
+                login_user(user)
+                test = current_user
+                return redirect(url_for('todo'))
+            else:
+                flash('Username or Password is invalid','danger')
         else:
-            session['login_in'] = True
-            flash('You were logged in')
-            return redirect(url_for('todo'))
-
-    if form.validate_on_submit():
-        user = User.query.filter_by(username = form.username.data).first()
-        if user is not None and user.verify_password(form.password.data):
-            login_user(user)
-            return redirect(url_for('todo'))
-
-    return render_template('login.html',error=error,form=form)
+            flash('Loggin Failed','danger')
+    return render_template('login.html')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('login_in',None)
-    flash('You were logged out')
+    # session.pop('login_in',None)
+    logout_user()
+    flash('You were logged out',"info")
     return redirect(url_for('todo'))
-
-
-
-
-
 
 
 

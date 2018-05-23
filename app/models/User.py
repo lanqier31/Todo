@@ -40,8 +40,33 @@ class User(db.Model,UserMixin):
                 roleids.append(role.id)
         return roleids
 
+    def permissions(self):
+        permissions = []
+        if self.roles:
+            for role in self.roles:
+                if role.get_permissionIds():
+                    permissions.append(role.get_permissionIds())
+        return permissions
+
     def to_dict(self):
         return dict([(k, getattr(self, k)) for k in self.__dict__.keys() if not k.startswith("_")])
+
+    def verify_password(self, password):
+        if self.password == password:
+            return True
+        return False
+
+    # @property
+    # def password_hash(self):
+    #     raise AttributeError('password is not a readable attribute')
+    #
+    # @password_hash.setter
+    # def password_hash(self, password):
+    #     self.password = generate_password_hash(password)
+
+    # def get_id(self):
+    #     return unicode(self.id)
+
 
     @login_manager.user_loader
     def load_user(user_id):

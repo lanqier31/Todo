@@ -15,6 +15,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app,use_native_unicode='utf8')                          #创建数据库实例
 
 login_manager=LoginManager()
+app.config['SECRET_KEY']='234324234'
 login_manager.session_protection = "basic"
 login_manager.init_app(app)
 login_manager.login_view='login'

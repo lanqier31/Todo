@@ -42,6 +42,14 @@ class Role(db.Model,RoleMixin):
                 permnames.append(perm.PermName)
         return permnames
 
+    def get_permissionIds(self):
+        permIds=[]
+        if self.permissions:
+            for perm in self.permissions:
+                perm.to_json()
+                permIds.append(perm.ID)
+        return permIds
+
     def to_dict(self):
         return dict([(k, getattr(self, k)) for k in self.__dict__.keys() if not k.startswith("_")])
 

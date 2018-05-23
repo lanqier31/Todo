@@ -80,9 +80,11 @@
         <div class="buttool">
             <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">
                 <i class="glyphicon glyphicon-plus"></i>添加</button>
+            {%  if current_user.is_authenticated %}
             <button id="remove" class="btn btn-danger">
                 <i class="glyphicon glyphicon-trash"></i> 删除
             </button>
+            {% endif %}
             <input class="form-control  search" type="text" placeholder="Id">
         <!--<button class="btn btn-primary" data-table="todolist" aria-label="export type">导出</button>-->
         </div>
@@ -140,7 +142,6 @@
                           </div>
                           <div class="form-group">
                                 <label for="module">优先级</label>
-
                                 <select class="form-control" id="priority" name="priority">
                                     <option value="exHigh">eH</option>
                                     <option value="High">H</option>
@@ -1018,18 +1019,24 @@
                 alert("请选中要删除的行！");
                 return;
             }
+
             if (confirm("确定删除选中行吗？")) {
                 $.ajax({
                     type: "post",
                     url: "/delete_todo",
                     data:{"ids":ids},
-                        success:function(){
-                            alert("删除成功！");
-                            location.reload();
+                        success:function(data){
+                            if(data == 'success'){
+                                alert("删除成功！");
+                                location.reload();
+                            };
+                            if(data == '6'){
+                                alert("该用户无此权限！")
+                            }
+
                         },
                         error:function(e){
                             alert(e);
-                            console.error(e);
                         }
                     });
             }
