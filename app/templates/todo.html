@@ -78,9 +78,10 @@
         </ul>    
     
         <div class="buttool">
+            {%  if current_user.is_authenticated %}
             <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">
                 <i class="glyphicon glyphicon-plus"></i>添加</button>
-            {%  if current_user.is_authenticated %}
+
             <button id="remove" class="btn btn-danger">
                 <i class="glyphicon glyphicon-trash"></i> 删除
             </button>
@@ -309,6 +310,9 @@
 
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
+                                        if(response == 'nouser'){
+                                            alert("请先登陆！");
+                                        }
                                         if(newValue=='exHigh'){     //控制颜色显示
                                             $(this).css("backgroundColor", "");
                                             $(this).removeClass("PinkBackground");
@@ -402,8 +406,10 @@
 
                                     },
                                     url:'/edit_todo',
-                                    success: function(response, newValue) {
-
+                                    success: function(response) {
+                                        if(response == 'nouser'){
+                                            alert("请先登陆");
+                                        }
                                         if(response.status =='error') {
                                             return response.msg;
                                         }
@@ -998,13 +1004,19 @@
                 //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
 //                datatype: "json",
                 //ajax请求成功后的事件
-                    success:function(){
-
-                    alert("保存成功！");
-                    $('.modal').modal('hide');
-                    location.reload();
-                    // $('#tosolist').html($(data).find('#todolist').html());
-
+                    success:function(data){
+                        if(data == 'nouser'){
+                            alert("请先登陆！")
+                        }
+                        else if(data == '8'){
+                            alert("该用户无此权限")
+                        }
+                        else {
+                            alert("保存成功！");
+                        $('.modal').modal('hide');
+                        location.reload();
+                        // $('#tosolist').html($(data).find('#todolist').html());
+                        };
                     },
                     error: function(e){
                     //请求出错处理

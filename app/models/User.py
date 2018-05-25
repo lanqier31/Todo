@@ -11,12 +11,14 @@ roles_users = db.Table('roles_users',
 class User(db.Model,UserMixin):
     __tablename__ = 'user'
     id=db.Column(db.Integer,primary_key=True)
+    loginname = db.Column(db.String(10))
     username = db.Column(db.String(10))
     password= db.Column(db.String(16))
     active = db.Column(db.Boolean())
     roles = db.relationship('Role',secondary=roles_users,backref=db.backref('users', lazy='dynamic'))
 
-    def __init__(self,username,password,active):
+    def __init__(self,loginname,username,password,active):
+        self.loginname = loginname
         self.username = username
         self.password = password
         self.active = active
@@ -27,6 +29,7 @@ class User(db.Model,UserMixin):
     def to_json(self):
         return {
             'id': self.id,
+            'loginname':self.loginname,
             'username': self.username,
             'password': self.password,
             'roles': self.get_roles()
@@ -45,7 +48,7 @@ class User(db.Model,UserMixin):
         if self.roles:
             for role in self.roles:
                 if role.get_permissionIds():
-                    permissions.append(role.get_permissionIds())
+                    permissions +=role.get_permissionIds()
         return permissions
 
     def to_dict(self):
@@ -53,6 +56,12 @@ class User(db.Model,UserMixin):
 
     def verify_password(self, password):
         if self.password == password:
+            return True
+        return False
+
+    @property
+    def Is_Admin(self):
+        if 'Administrator' in self.roles:
             return True
         return False
 
@@ -67,7 +76,7 @@ class User(db.Model,UserMixin):
     # def get_id(self):
     #     return unicode(self.id)
 
-
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+

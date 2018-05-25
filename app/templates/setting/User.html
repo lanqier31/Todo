@@ -24,24 +24,24 @@
                 </div>
                 <div class="modal-body">
 
-                        <div class="form-group">
+                    <div class="form-group">
                         <label for="username">用户名</label>
-                        <input class="form-control" id="username" name="username">
-
-                        </input>
-                      </div>
-                      <div class="form-group">
+                        <input class="form-control" id="username" name="username"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginname">登录名</label>
+                        <input class="form-control" id="loginname" name="loginname"></input>
+                    </div>
+                    <div class="form-group">
                         <label for="password">密码</label>
-                        <input class="form-control" id="password" name="password">
-
-                        </input>
-                      </div>
-                      <div class="form-group">
+                        <input class="form-control" id="password" name="password"></input>
+                    </div>
+                    <div class="form-group">
                         <label for="confirmpassword">确认密码</label>
                         <input class="form-control" id="confirmpassword" name="confirmpassword">
 
                         </input>
-                      </div>
+                    </div>
 
                      <div class="form-group">
                         <label for="roles">角色</label>
@@ -131,6 +131,16 @@
                                 visible:true,
                                 switchable:true
                             },{
+                                title:'登录名',
+                                field:'loginname',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
                                 title:'是否启用',
                                 field:'active',
                                 align:'left',
@@ -208,13 +218,18 @@
                 alert("用户名不能为空！");
                 return false;
             }
+            if ($("#loginname").val().trim() == "") {
+                $("#loginname").focus();
+                alert("登录名不能为空！");
+                return false;
+            }
             postdata ={
                 "username":$('#username').val(),
+                "loginname":$('#loginname').val(),
                 "password":$('#password').val(),
                 "roles":$('#roles').val(),
                 "active":$('#active').val()
             };
-            alert(postdata.username);
             $.ajax({
                 //提交数据的类型 POST GET
                 type:"POST",
@@ -236,6 +251,39 @@
                     alert(e);
                 },
             });
+        });
+
+        //获取勾选的行的id
+        var getIds= function () {
+                return $.map($("#userlist").bootstrapTable('getSelections'), function (row) {
+                return row.id
+            });
+        };
+
+        //删除user操作
+        $("#remove").click(function () {
+            var ids = getIds();
+            if (ids.length < 1) {
+                alert("请选中要删除的行！");
+                return;
+            }
+
+            if (confirm("确定删除选中行吗？")) {
+                $.ajax({
+                    type: "post",
+                    url: "/delete_user",
+                    data:{"ids":ids},
+                        success:function(data){
+                            if(data == 'success'){
+                                alert("删除成功！");
+                                location.reload();
+                            };
+                        },
+                        error:function(e){
+                            alert(e);
+                        }
+                    });
+            }
         });
 
     </script>

@@ -22,12 +22,16 @@ class Todo(db.Model):
     developer = db.Column(db.String(36))
     tester = db.Column(db.String(36))
     status = db.Column(db.String(10))
+    createUser = db.Column(db.String(10))
     createtime = db.Column(db.String(16))
     plantime = db.Column(db.String(16))
     completetime = db.Column(db.String(16))
     remarks = db.Column(db.String(100))
+    updateTime = db.Column(db.String(16))
+    updateUser = db.Column(db.String(10))
 
-    def __init__(self,project,version,worktype,module,priority,title,description,developer,tester,status,createtime,plantime,completetime,remarks):
+    def __init__(self,project,version,worktype,module,priority,title,description,developer,tester,status,
+                 createUser,createtime,plantime,completetime,remarks,updateTime,updateUser):
         self.project = project
         self.version = version
         self.worktype = worktype
@@ -38,10 +42,13 @@ class Todo(db.Model):
         self.developer = developer
         self.tester = tester
         self.status = status
+        self.createUser = createUser
         self.createtime = createtime
         self.plantime=plantime
         self.completetime = completetime
         self.remarks = remarks
+        self.updateTime = updateTime
+        self.updateUser = updateUser
 
     def __repr__(self):
         return '<Todo %r>' % self.title
@@ -59,10 +66,13 @@ class Todo(db.Model):
             "developer": self.developer,
             "tester": self.tester,
             "status":self.status,
+            "createUser":self.createUser,
             "createtime": self.createtime,
             "plantime": self.plantime,
             "completetime": self.completetime,
-            "remarks": self.remarks
+            "remarks": self.remarks,
+            "updateTime":self.updateTime,
+            "updateUser":self.updateUser
         }
 
     def save(self):

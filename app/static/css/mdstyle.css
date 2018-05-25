@@ -1,7 +1,7 @@
 body{
 			padding: 0;
 			margin:0;
-			font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif ;
+			font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Helvetica Neue","Helvetica","Arial","Hiragino Sans GB","Hiragino Sans GB W3","Microsoft YaHei UI","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif ;
 			height: 100%;
 			width:100%;
 			// background-color: rgba(45,101,203,.89);
@@ -85,7 +85,7 @@ table thead{
 }
 .nav>li> a:hover,
 .nav>li > a:focus{
-	color:#rgb(34, 178, 197);
+	color:#rgb(34, 178, 197;);
 	border-bottom: 3px solid rgb(34, 178, 197);
 	background-color: transparent;
 }

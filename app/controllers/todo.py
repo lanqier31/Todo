@@ -7,7 +7,7 @@ from app.models.Todo import Todo
 from app.forms import LoginForm
 import os ,json,sys
 from app import app,db
-from datetime import date,timedelta
+from datetime import date,timedelta,datetime
 from sqlalchemy import extract
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -16,12 +16,6 @@ sys.setdefaultencoding("utf-8")
 @app.route('/')
 def root():
     return render_template('todo.html')
-
-
-@app.route('/show_entries')
-def show_entries():
-    category = Category.query.all()
-    return render_template('show_entries.html',entries=category)
 
 
 @app.route('/todo',methods=['GET','POST'])
@@ -106,6 +100,13 @@ def query_todo():
 def add_todo(charset='utf-8'):
     # if not session.get('login_in'):
     #     abort(401)
+    if current_user.is_anonymous:
+        return "nouser"
+
+    cuser = User.query.get(current_user.id)
+    if 8 not in cuser.permissions():
+        return '8'
+
     try:
         data = str(request.values)
         # print data
@@ -125,9 +126,10 @@ def add_todo(charset='utf-8'):
         status = request.form.get('status')
         createtime = request.form.get('createtime')
         plantime = request.form.get('plantime')
+        createUser = current_user.username
         completetime = request.form.get('completetime')
         remarks = request.form.get('remarks')
-        todo = Todo(project,version,worktype,module,priority,title,description,developer,tester,status,createtime,plantime,completetime,remarks)
+        todo = Todo(project,version,worktype,module,priority,title,description,developer,tester,status,createUser,createtime,plantime,completetime,remarks,updateTime=None,updateUser=None)
         db.session.add(todo)
         db.session.commit()
         flash('New todo was successfully posted')
@@ -138,6 +140,12 @@ def add_todo(charset='utf-8'):
 
 @app.route('/edit_todo',methods=['GET','POST'])
 def edit_todo():
+    # if current_user.is_anonymous:
+    #     return "nouser"
+    #
+    # cuser = User.query.get(current_user.id)
+    # if 7 not in cuser.permissions():
+    #     return '7'
     try:
         # data = request.values
         # print data
@@ -172,6 +180,8 @@ def edit_todo():
             todo.plantime = value
         elif(field=='completetime'):
             todo.completetime=value
+        todo.updateUser = current_user.username
+        todo.updateTime = datetime.now()
         todo.save()
         return 'success'
     except IOError:
@@ -180,9 +190,9 @@ def edit_todo():
 
 @app.route('/delete_todo',methods=['GET','POST'])
 def delete_todo():
+    tet = current_user
     user = User.query.get(current_user.id)
     if 6 not in user.permissions():
-        # flash("该用户无此权限", 'danger')
         return '6'
     else:
         try:
@@ -218,13 +228,12 @@ def login():
     if request.method=='POST':
         form = LoginForm()
         if not form.validate_on_submit():
-            user = User.query.filter_by(username = form.username.data).first()
+            user = User.query.filter_by(loginname = form.loginname.data).first()
             if user is not None and user.verify_password(form.password.data):
                 login_user(user)
-                test = current_user
                 return redirect(url_for('todo'))
             else:
-                flash('Username or Password is invalid','danger')
+                flash('Loginname or Password is invalid','danger')
         else:
             flash('Loggin Failed','danger')
     return render_template('login.html')

@@ -1,5 +1,6 @@
 # -*-coding:utf-8-*-
 from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
+from flask_login import login_required, login_user, logout_user, current_user
 from app.models.Roles import Role
 from app.models.User import User
 from app.models.PermType import PermType
@@ -14,9 +15,11 @@ sys.setdefaultencoding("utf-8")
 
 
 @app.route('/user')
+@login_required
 def user():
-    roles = Role.query.all()
-    return render_template('setting/user.html', roles=roles)
+    if current_user.Is_Admin:
+        roles = Role.query.all()
+        return render_template('setting/user.html', roles=roles)
 
 
 @app.route('/getRoles')
@@ -54,6 +57,7 @@ def edit_user():
 
 
 @app.route('/role')
+@login_required
 def role():
     permissions = Permission.query.all()
     roles = Role.query.all()
@@ -113,10 +117,11 @@ def query_permission():
 def add_user():
     try:
         username = request.form.get('username')
+        loginname = request.form.get('loginname')
         password = request.form.get('password')
         roles = request.form.getlist('roles[]')
         active = int(request.form.get('active'))
-        user = User(username,password,active)
+        user = User(loginname,username,password,active)
         db.session.add(user)
         for r in roles:
             role = Role.query.get(r)
@@ -126,6 +131,23 @@ def add_user():
         return redirect(url_for('user'))
     except IOError:
         print IOError
+
+
+@app.route('/delete_user',methods=['GET','POST'])
+def delete_user():
+
+    try:
+        ids=map(int,request.form.getlist('ids[]'))
+        # ides = request.form.getlist('ids[]')
+        for id in ids:
+            todo=User.query.get(id)
+            db.session.delete(todo)
+            db.session.commit()
+        return 'success'
+    except IOError:
+        print IOError
+        return 'error'
+
 
 
 @app.route('/add_role',methods=['GET', 'POST'])
@@ -204,6 +226,7 @@ def delete_role():
 
 
 @app.route('/permission')
+@login_required
 def permission():
     permTypes = PermType.query.all()
     parennts = Permission.query.filter_by(PermType_ID=1).all()

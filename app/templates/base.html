@@ -44,8 +44,10 @@
 		<div class="text-right">
 		<ul class="list-inline hidden-xs">
 			<li class="user_info">
-				{% if current_user.is_authenticated %}
-				<label><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</label>
+				{% if current_user.is_authenticated and current_user.Is_Admin %}
+				<label ><a href={{ url_for('user') }}"><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</a></label>
+				{% elif current_user.is_authenticated %}
+				<label ><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</label>
 				<a href="{{ url_for('logout') }}" class="btn btn-signout">登出</a>
 
 				{% else %}
