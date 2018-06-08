@@ -43,13 +43,7 @@ class User(db.Model,UserMixin):
                 roleids.append(role.id)
         return roleids
 
-    def permissions(self):
-        permissions = []
-        if self.roles:
-            for role in self.roles:
-                if role.get_permissionIds():
-                    permissions +=role.get_permissionIds()
-        return permissions
+
 
     def to_dict(self):
         return dict([(k, getattr(self, k)) for k in self.__dict__.keys() if not k.startswith("_")])
@@ -64,6 +58,15 @@ class User(db.Model,UserMixin):
         if 'Administrator' in self.roles:
             return True
         return False
+
+    @property
+    def permissions(self):
+        permissions = []
+        if self.roles:
+            for role in self.roles:
+                if role.get_permissionIds():
+                    permissions +=role.get_permissionIds()
+        return permissions
 
     # @property
     # def password_hash(self):

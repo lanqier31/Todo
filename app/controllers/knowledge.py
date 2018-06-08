@@ -66,8 +66,6 @@ def edit_article():
     try:
         article_id = request.form.get('pk')
         article = Article.query.get(article_id)
-
-
         print article
         return article
     except IOError:

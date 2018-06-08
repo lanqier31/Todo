@@ -102,9 +102,7 @@ def add_todo(charset='utf-8'):
     #     abort(401)
     if current_user.is_anonymous:
         return "nouser"
-
-    cuser = User.query.get(current_user.id)
-    if 8 not in cuser.permissions():
+    if 2 not in current_user.permissions:
         return '8'
 
     try:
@@ -140,12 +138,10 @@ def add_todo(charset='utf-8'):
 
 @app.route('/edit_todo',methods=['GET','POST'])
 def edit_todo():
-    # if current_user.is_anonymous:
-    #     return "nouser"
-    #
-    # cuser = User.query.get(current_user.id)
-    # if 7 not in cuser.permissions():
-    #     return '7'
+    if current_user.is_anonymous:
+        return "nouser"
+    if 3 not in current_user.permissions:
+        return 'notallowed'
     try:
         # data = request.values
         # print data
@@ -155,8 +151,13 @@ def edit_todo():
         todo = Todo.query.get(id)
         if(field=='status'):
             todo.status=value
+            if value == 'Closed':
+                if 10 not in current_user.permissions:
+                    return 'notallowed'
+            if value == 'Completed':
+                if 9 not in current_user.permissions:
+                    return 'notallowed'
         elif(field=='developer'):
-
             developer = map(int, request.form.getlist('value[]'))
             developer = str(developer)
             todo.developer=developer
@@ -192,8 +193,8 @@ def edit_todo():
 def delete_todo():
     tet = current_user
     user = User.query.get(current_user.id)
-    if 6 not in user.permissions():
-        return '6'
+    if 4 not in user.permissions():
+        return '4'
     else:
         try:
             ids=map(int,request.form.getlist('ids[]'))

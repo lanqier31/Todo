@@ -229,6 +229,39 @@
             });
         });
 
+        //删除permission操作
+        $("#remove").click(function () {
+            var ids = getIds();
+            if (ids.length < 1) {
+                alert("请选中要删除的行！");
+                return;
+            }
+
+            if (confirm("确定删除选中行吗？")) {
+                $.ajax({
+                    type: "post",
+                    url: "/delete_permission",
+                    data:{"ids":ids},
+                        success:function(data){
+                            if(data == 'success'){
+                                alert("删除成功！");
+                                location.reload();
+                            };
+                        },
+                        error:function(e){
+                            alert(e);
+                        }
+                    });
+            }
+        });
+
+            //获取勾选的行的id
+        var getIds= function () {
+                return $.map($("#permissionlist").bootstrapTable('getSelections'), function (row) {
+                return row.id
+            });
+        };
+
     </script>
 
 {% endblock %}

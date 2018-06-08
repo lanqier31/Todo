@@ -35,7 +35,7 @@
 			<li><a href="{{ url_for('frontPerform') }}">前端性能测试</a> </li>
 			<li><a href="ui_auto">UI自动化测试</a></li>
 			<li><a href="case_detail">接口自动化测试</a> </li>
-			<li><a href="">性能测试</a> </li>
+			<li><a href="">性能监控</a> </li>
 			<li><a href="per_auto">全局变量</a></li>
 
 			<li><a href="{{ url_for('knowledge') }}">技术荟萃</a></li>
@@ -45,7 +45,8 @@
 		<ul class="list-inline hidden-xs">
 			<li class="user_info">
 				{% if current_user.is_authenticated and current_user.Is_Admin %}
-				<label ><a href={{ url_for('user') }}"><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</a></label>
+				<label ><a href="{{ url_for('user') }}"><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</a></label>
+				<a href="{{ url_for('logout') }}" class="btn btn-signout">登出</a>
 				{% elif current_user.is_authenticated %}
 				<label ><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</label>
 				<a href="{{ url_for('logout') }}" class="btn btn-signout">登出</a>

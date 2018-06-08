@@ -14,13 +14,13 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 
-@app.route('/user')
+@app.route('/user',methods=['GET', 'POST'])
 @login_required
 def user():
     if current_user.Is_Admin:
         roles = Role.query.all()
         return render_template('setting/user.html', roles=roles)
-
+    return render_template('setting/user.html', roles=roles)
 
 @app.route('/getRoles')
 def getRoles():
@@ -140,8 +140,8 @@ def delete_user():
         ids=map(int,request.form.getlist('ids[]'))
         # ides = request.form.getlist('ids[]')
         for id in ids:
-            todo=User.query.get(id)
-            db.session.delete(todo)
+            u=User.query.get(id)
+            db.session.delete(u)
             db.session.commit()
         return 'success'
     except IOError:
@@ -164,6 +164,21 @@ def add_role():
     except IOError:
         print IOError
 
+
+@app.route('/delete_role',methods=['GET','POST'])
+def delete_role():
+
+    try:
+        ids=map(int,request.form.getlist('ids[]'))
+        # ides = request.form.getlist('ids[]')
+        for id in ids:
+            role=Role.query.get(id)
+            db.session.delete(role)
+            db.session.commit()
+        return 'success'
+    except IOError:
+        print IOError
+        return 'error'
 
 @app.route('/show_Fun', methods=['POST'])
 def show_Fun():
@@ -217,12 +232,12 @@ def grant_Fun():
     return jsonify({'success': True})
 
 
-@app.route('/delete_role', methods=['POST'])
-def delete_role():
-    role = Role.query.get(request.form.get('id'))
-    if role:
-        db.session.delete(role)
-    return jsonify({'success': True})
+# @app.route('/delete_role', methods=['POST'])
+# def delete_role():
+#     role = Role.query.get(request.form.get('id'))
+#     if role:
+#         db.session.delete(role)
+#     return jsonify({'success': True})
 
 
 @app.route('/permission')
@@ -252,7 +267,20 @@ def add_permission():
         print IOError
 
 
+@app.route('/delete_permission',methods=['GET','POST'])
+def delete_permission():
 
+    try:
+        ids=map(int,request.form.getlist('ids[]'))
+        # ides = request.form.getlist('ids[]')
+        for id in ids:
+            perm=Permission.query.get(id)
+            db.session.delete(perm)
+            db.session.commit()
+        return 'success'
+    except IOError:
+        print IOError
+        return 'error'
 
 
 
