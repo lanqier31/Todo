@@ -151,13 +151,14 @@ def edit_todo():
         todo = Todo.query.get(id)
         if(field=='status'):
             todo.status=value
-            if value == 'Closed':
+            if value=='Closed':
                 if 10 not in current_user.permissions:
                     return 'notallowed'
-            if value == 'Completed':
+            if value=='Completed':
                 if 9 not in current_user.permissions:
                     return 'notallowed'
         elif(field=='developer'):
+
             developer = map(int, request.form.getlist('value[]'))
             developer = str(developer)
             todo.developer=developer

@@ -569,7 +569,7 @@
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='notallowed'){
+                                        if(response=='7'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(newValue=='Unresolved'){     //控制颜色显示
@@ -621,7 +621,7 @@
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='7'){
+                                        if(response=='notallowed'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(response.status =='error') {
@@ -709,7 +709,8 @@
                                         }
                                     }
                                 },
-                                align:'center'
+                                align:'center',
+                                visible: false
                             }
                         ],
                 showColumns:true,   // 是否显示列
