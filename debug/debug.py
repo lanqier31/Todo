@@ -1,12 +1,11 @@
 #!flask/bin/python
+# -*-coding:utf-8 -*-
 
 import sys
-# import xlwt
-file='D:\shuqian1.txt'
-with open(file) as f:
-    line = f.readline()
-    while line:
-        print line
-        line = f.readline()
+import requests
+
+
+
+
 
 

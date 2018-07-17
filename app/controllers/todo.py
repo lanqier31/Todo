@@ -4,6 +4,7 @@ from flask import request,render_template,flash,escape,abort,url_for,redirect,se
 from app.models.User import User
 from app.models.Category import Category
 from app.models.Todo import Todo
+from app.models.Audit import Audit
 from app.forms import LoginForm
 import os ,json,sys
 from app import app,db
@@ -144,9 +145,10 @@ def edit_todo():
         return 'notallowed'
     try:
         # data = request.values
-        # print data
         id = request.form.get("pk","null")
         field=request.form.get("name","null")
+
+        oldValue = request.form.get("oldValue","null")
         value=request.form.get("value",'null')
         todo = Todo.query.get(id)
         if(field=='status'):
@@ -158,14 +160,15 @@ def edit_todo():
                 if 9 not in current_user.permissions:
                     return 'notallowed'
         elif(field=='developer'):
-
+            oldValue = str(map(int, request.form.getlist('oldValue[]')))
             developer = map(int, request.form.getlist('value[]'))
-            developer = str(developer)
-            todo.developer=developer
+            value = str(developer)
+            todo.developer=value
         elif(field=='tester'):
+            oldValue = str(map(int, request.form.getlist('oldValue[]')))
             tester=map(int,request.form.getlist('value[]'))
-            tester=str(tester)
-            todo.tester=tester
+            value=str(tester)
+            todo.tester=value
         elif(field=='remarks'):
             todo.remarks=value
         elif (field == 'description'):
@@ -185,9 +188,11 @@ def edit_todo():
         todo.updateUser = current_user.username
         todo.updateTime = datetime.now()
         todo.save()
-        return 'success'
+        audit = Audit(id, field, oldValue, value, current_user.username, datetime.now(), 'edit')
+        audit.save()
+        return value
     except IOError:
-        return "error"
+        return 'error'
 
 
 @app.route('/delete_todo',methods=['GET','POST'])

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}任务跟进{% endblock %}
 {% block content %}
+<script type="text/javascript" src="../static/js/bootstrap-editable.js"></script>
 <div class="todohead">
     <div class="row" id="bugfilter">
         <ul class="nav nav-pills">
@@ -42,7 +43,7 @@
                     <option value="Completed">已完成</option>
                     <option value="Delayed">已延迟</option>
                     <option value="Closed">已关闭</option>
-                    <option value="Rejected">已拒绝</option>
+                    <option value="Rejected">已作废</option>
                 </select>
             </li>
             <li role="presentation" class="dropdown">创建日期
@@ -185,7 +186,7 @@
                                 <option value="Completed">已完成</option>
                                 <option value="Delayed">已延迟</option>
                                 <option value="Closed">已关闭</option>
-                                <option value="Rejected">已拒绝</option>
+                                <option value="Rejected">已作废</option>
 
                             </select>
                           </div>
@@ -279,7 +280,8 @@
                                 sortable:true,
                                 searchable:true,
                                 class:'text-overflow'                           
-                            },{
+                            },
+                            {
                                 title:'Version',
                                 field:'version',
                                 align:'left',
@@ -289,7 +291,8 @@
                                 class:'text-overflow',
                                 visible:false,
                                 switchable:true
-                            },{
+                            },
+                            {
                                 title:'PRI',
                                 field:'priority',
                                 width:45,
@@ -306,48 +309,49 @@
                                     source:[{value:"exHigh",title:"extrmemlyHigh",text:"eH"},
                                         {value:"High",title:"High",text:"H"},
                                         {value:"Middle",title:"Middle",text:"M"},
-                                        {value:"Low",title:"Low",text:"L"}],
+                                        {value:"Low",title:"Low",text:"L"}]
 
-                                    url:'/edit_todo',
-                                    success: function(response, newValue) {
-                                        if(response=='nouser'){
-                                            return "请先登录！";
-                                        }
-                                        if(response=='7'){
-                                            return "对不起，您无此操作权限！";
-                                        }
-                                        if(newValue=='exHigh'){     //控制颜色显示
-                                            $(this).css("backgroundColor", "");
-                                            $(this).removeClass("PinkBackground");
-                                            $(this).removeClass("blueBackground");
-                                            $(this).addClass("redBackground");
-                                        }
-                                        else if(newValue=='High'){
-                                            $(this).css("backgroundColor", "");
-                                            $(this).removeClass("redBackground");
-                                            $(this).removeClass("blueBackground");
-                                            $(this).addClass("PinkBackground");
-
-                                        }
-                                        else if (newValue=='Middle'){
-                                            $(this).css("backgroundColor", "");
-                                            $(this).removeClass("redBackground");
-                                            $(this).removeClass("PinkBackground");
-                                            $(this).addClass("blueBackground");
-                                        }
-                                        else {
-                                            $(this).css("backgroundColor", "");
-                                            $(this).removeClass("redBackground");
-                                            $(this).removeClass("PinkBackground");
-                                            $(this).removeClass("blueBackground");
-                                        }
-                                        if(response.status =='error') {
-                                            return response.msg;
-                                        }
-                                    }
+//                                    url:'/edit_todo',
+//                                    success: function(response, newValue) {
+//                                        if(response=='nouser'){
+//                                            return "请先登录！";
+//                                        }
+//                                        if(response=='7'){
+//                                            return "对不起，您无此操作权限！";
+//                                        }
+//                                        if(newValue=='exHigh'){     //控制颜色显示
+//                                            $(this).css("backgroundColor", "");
+//                                            $(this).removeClass("PinkBackground");
+//                                            $(this).removeClass("blueBackground");
+//                                            $(this).addClass("redBackground");
+//                                        }
+//                                        else if(newValue=='High'){
+//                                            $(this).css("backgroundColor", "");
+//                                            $(this).removeClass("redBackground");
+//                                            $(this).removeClass("blueBackground");
+//                                            $(this).addClass("PinkBackground");
+//
+//                                        }
+//                                        else if (newValue=='Middle'){
+//                                            $(this).css("backgroundColor", "");
+//                                            $(this).removeClass("redBackground");
+//                                            $(this).removeClass("PinkBackground");
+//                                            $(this).addClass("blueBackground");
+//                                        }
+//                                        else {
+//                                            $(this).css("backgroundColor", "");
+//                                            $(this).removeClass("redBackground");
+//                                            $(this).removeClass("PinkBackground");
+//                                            $(this).removeClass("blueBackground");
+//                                        }
+//                                        if(response.status =='error') {
+//                                            return response.msg;
+//                                        }
+//                                    }
                                 },
                                 switchable:true
-                            },{
+                            },
+                            {
                                 title:'WorkType',
                                 field:'worktype',
                                 align:'left',
@@ -419,7 +423,7 @@
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='7'){
+                                        if(response=='notallowed'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(response.status =='error') {
@@ -483,7 +487,7 @@
                                             return response.msg;
                                         }
                                     }
-                                }   
+                                }
                             },{
                                 title:'开发',
                                 field:'developer',
@@ -537,7 +541,7 @@
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='7'){
+                                        if(response=='notallowed'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(response.status =='error') {
@@ -561,15 +565,16 @@
                                             {value: 'Unresolved', text: '未解决'},
                                             {value: 'Completed', text: '已完成'},
                                             {value: 'Delayed', text: '已延迟'},
-                                            {value: 'Rejected', text: '已拒绝'},
+                                            {value: 'Rejected', text: '已作废'},
                                             {value: 'Closed', text: '已关闭'}],
                                     url:'/edit_todo',
                                     pk:6,
+
                                     success: function(response, newValue) {
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='7'){
+                                        if(response=='notallowed'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(newValue=='Unresolved'){     //控制颜色显示
@@ -603,6 +608,7 @@
                                     }
                                 },
                                 sortable:false
+
                             },{
                                 title:'备注',
                                 field:'remarks',
@@ -616,7 +622,6 @@
                                     emptytext: "--",
                                     mode: "popup",
                                     url:'/edit_todo',
-                                    pk:6,
                                     success: function(response, newValue) {
                                         if(response=='nouser'){
                                             return "请先登录！";
@@ -636,25 +641,6 @@
                                 sortable:false,
                                 align:'center',
                                 searchable:false,
-                                editable: {
-                                    type: 'text',
-                                    title: '创建日期',
-                                    emptytext: "--",
-                                    mode: "popup",
-                                    url:'/edit_todo',
-                                    pk:6,
-                                    success: function(response, newValue) {
-                                        if(response=='nouser'){
-                                            return "请先登录！";
-                                        }
-                                        if(response=='7'){
-                                            return "对不起，您无此操作权限！";
-                                        }
-                                        if(response.status =='error') {
-                                            return response.msg;
-                                        }
-                                    }
-                                },
                                 align:'center'
                             },{
                                 title:"计划日期",
@@ -670,15 +656,18 @@
                                     mode: "popup",
                                     url:'/edit_todo',
                                     pk:6,
-                                    success: function(response, newValue) {
+                                    success: function(response,data,status) {
                                         if(response=='nouser'){
                                             return "请先登录！";
                                         }
-                                        if(response=='7'){
+                                        if(response=='notallowed'){
                                             return "对不起，您无此操作权限！";
                                         }
                                         if(response.status =='error') {
                                             return response.msg;
+                                        }
+                                        if(response.status=='success'){
+                                            save_audit(id,field, row, oldValue, $el,newValue);
                                         }
                                     }
                                 },
@@ -722,8 +711,77 @@
                 exportTypes:['excel'],
                 formatLoadingMessage: function () {
 
-                },
-
+                }
+                //行内编辑  zuofei
+//                onEditableSave: function (field, row, oldValue,$el) {
+//                    $.ajax({
+//                        type: "post",
+//                        url: "/edit_todo",
+//                        data: {
+//                            "pk":row.id,
+//                            "name":field,
+//                            "oldValue":oldValue,
+//                            "newValue":row[field]
+//                        },
+//                        success: function(data, status) {
+//                            if(status=='success'){
+//                                if (data == "nouser") {
+//
+////                                    return "请先登陆";
+//
+//                                   $el.editable('validate',"请先登陆");
+//                            }
+//                            if(data=='notallowed') {
+//
+//                                return "对不起，您无此操作权限！";
+//                                $el.editable('validate',"对不起，您无此操作权限！");
+//                            }
+//                            if(data=='exHigh' || data == 'Unresolved'|| data=='bug'){     //控制颜色显示
+//                                $el.css("backgroundColor", "");
+//                                $el.removeClass("PinkBackground");
+//                                $el.removeClass("blueBackground");
+//                                $el.removeClass("greyBackground");
+//                                $el.addClass("redBackground");
+//                            }
+//                            else if(data=='High'){
+//                                $el.css("backgroundColor", "");
+//                                $el.removeClass("redBackground");
+//                                $el.removeClass("blueBackground");
+//                                $el.addClass("PinkBackground");
+//
+//                            }
+//                            else if (data=='Middle' || data=='Completed'){
+//                                $el.css("backgroundColor", "");
+//                                $el.removeClass("redBackground");
+//                                $el.removeClass("PinkBackground");
+//                                $el.addClass("blueBackground");
+//                            }
+//                            else if(data=='Rejected'){
+//                                $el.css("backgroundColor", "");
+//                                $el.removeClass("redBackground");
+//                                $el.removeClass("blueBackground");
+//                                $el.addClass("greyBackground");
+//                            }
+//
+//                            else {
+//                                $el.css("backgroundColor", "");
+//                                $el.removeClass("redBackground");
+//                                $el.removeClass("greyBackground");
+//                                $el.removeClass("PinkBackground");
+//                                $el.removeClass("blueBackground");
+//                            }
+//                        }
+//                            },
+//
+//                        error: function () {
+//                            return'编辑失败';
+//                        },
+//                        complete: function () {
+//
+//                        }
+//
+//                    });
+//            }
 
             });
         }
@@ -744,10 +802,12 @@
             };
             return temp;
         }
+        //额外增加一行
         function onExpandRow(index, row, $detail) {
             InitSubTable(index, row, $detail);
         }
 
+        //子任务
         InitSubTable = function (index,row,$detail) {
             var parentid = row.id;
             var cur_table = $detail.html('<table></table>').find('table');
@@ -862,12 +922,12 @@
                             emptytext: "--",
                             mode: "popup",
                             source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
-                            url:'/edit_todo',
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                   return response.msg;
-                                }
-                            }
+//                            url:'/edit_todo',
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                   return response.msg;
+//                                }
+//                            }
                         },
                         sortable:true
                     },{
@@ -885,7 +945,7 @@
                                     {value: 'Unresolved', text: '未解决'},
                                     {value: 'Completed', text: '已完成'},
                                     {value: 'Delayed', text: '已延迟'},
-                                    {value: 'Rejected', text: '已拒绝'},
+                                    {value: 'Rejected', text: '已作废'},
                                     {value: 'Closed', text: '已关闭'}],
                             url:'/edit_todo',
                             pk:6,
