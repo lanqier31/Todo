@@ -17,11 +17,12 @@ class User(db.Model,UserMixin):
     active = db.Column(db.Boolean())
     roles = db.relationship('Role',secondary=roles_users,backref=db.backref('users', lazy='dynamic'))
 
-    def __init__(self,loginname,username,password,active):
+    def __init__(self,loginname,username,password,active,roles):
         self.loginname = loginname
         self.username = username
         self.password = password
         self.active = active
+        self.roles = roles
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -29,10 +30,7 @@ class User(db.Model,UserMixin):
     def to_json(self):
         return {
             'id': self.id,
-            'loginname':self.loginname,
             'username': self.username,
-            'password': self.password,
-            'roles': self.get_roles()
         }
 
     def get_roles(self):

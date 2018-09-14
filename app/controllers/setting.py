@@ -81,6 +81,58 @@ def query_user():
         return "error"
 
 
+@app.route('/query_developers',methods = ['GET','POST'])
+def query_developers():
+    try:
+        develops =[]
+        role =Role.query.get(2)    #查询开发的角色
+        users = User.query.filter(User.roles.contains(role)).all()
+        for user in users:
+            develops.append(user.to_json())
+        return develops
+    except IOError:
+        return "error"
+
+
+@app.route('/developers',methods = ['GET','POST'])
+def developers():
+    try:
+        develops =[]
+        role =Role.query.get(2)    #查询开发的角色
+        users = User.query.filter(User.roles.contains(role)).all()
+        for user in users:
+            develops.append(user.to_json())
+        return jsonify(develops)
+    except IOError:
+        return "error"
+
+
+@app.route('/testers',methods = ['GET','POST'])
+def testers():
+    try:
+        tests =[]
+        role =Role.query.get(3)    #查询开发的角色
+        users = User.query.filter(User.roles.contains(role)).all()
+        for user in users:
+            tests.append(user.to_json())
+        return jsonify(tests)
+    except IOError:
+        return "error"
+
+
+@app.route('/query_testers',methods = ['GET','POST'])
+def query_testers():
+    try:
+        testers =[]
+        role = Role.query.get(3)  # 查询开发的角色
+        users = User.query.filter(User.roles.contains(role)).all()
+        for user in users:
+            testers.append(user.to_json())
+        return testers
+    except IOError:
+        return "error"
+
+
 @app.route('/query_role', methods=['GET', 'POST'])
 def query_role():
     try:
@@ -222,12 +274,11 @@ def grant_Fun():
         role.permissions.remove(per)       #delete all permissions in role
         db.session.commit()
         role = Role.query.filter_by(id=role_id).first()
-    print role.permissions   # IT should be [] ，however it has error
+    # print role.permissions   # IT should be [] ，however it has error
     for id in permissions_ids:
         perm=Permission.query.filter_by(ID=id).first()
         if not perm in role.permissions:
             role.permissions .append(perm)
-
     db.session.commit()
     return jsonify({'success': True})
 

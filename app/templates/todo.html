@@ -10,7 +10,7 @@
                     <option value="all">全部</option>
                     <option value="syf1.1.1">syf1.1.1</option>
                     <option value="syf1.2.0">syf1.2.0</option>
-                    <option value="syf1.3.0">syf1.2.0</option>
+                    <option value="syf1.3.0">syf1.3.0</option>
 
                 </select>
             </li>
@@ -60,19 +60,20 @@
             <li role="presentation" class="dropdown">开发
                 <select id="developer_filter" class="bugfilter" >
                     <option value="all">全部</option>
-                    <option value="1">张路</option>
-                    <option value="2">李小满</option>
-                    <option value="3">徐郁</option>
-                    <option value="4">陈梦梦</option>
-                    <option value="5">尚睿敏</option>
+                    {% for option in developers %}
+                        <option value={{option.id}}>{{option.username}}</option>
+                    {% endfor %}
                 </select>
             </li>
             <li role="presentation" class="dropdown">测试
                 <select id="tester_filter" class="bugfilter" >
                     <option value="all">全部</option>
-                    <option value="1">高文琪</option>
-                    <option value="2">俞利芳</option>
-                    <option value="3">王健</option>
+                    {% for option in testers %}
+                        <option value={{option.id}}>{{option.username}}</option>
+                    {% endfor %}
+                    <!--<option value="1">高文琪</option>-->
+                    <!--<option value="2">俞利芳</option>-->
+                    <!--<option value="3">王健</option>-->
                 </select>
             </li>
 
@@ -115,7 +116,7 @@
                             <label for="worktype">项目版本</label>
                             <select class="form-control" id="version" name="version">
                                <option value="syf1.1.1">syf1.1.1</option>
-                               <option value="syf1.2.0">syf1.2.0</option>
+                               <option value="syf1.2.0" active>syf1.2.0</option>
                                <option value="syf1.3.0">syf1.3.0</option>
                                <option value="syf1.4.0">syf1.4.0</option>
 
@@ -163,19 +164,28 @@
                             <label for="developer">开发人员</label>
 
                             <select  class="form-control multiple" id="developer" name="developer[]" multiple="true">
-                                <option value=1>张路</option>
-                                <option value=2>李小满</option>
-                                <option value=3>徐郁</option>
-                                <option value=4>陈梦梦</option>
-                                <option value=5>尚睿敏</option>
+                                <option value="all">全部</option>
+                                {% for option in developers %}
+                                    <option value={{option.id}}>{{option.username}}</option>
+                                {% endfor %}
+                                <!--<option value=1>张路</option>-->
+                                <!--<option value=2>李小满</option>-->
+                                <!--<option value=3>徐郁</option>-->
+                                <!--<option value=4>陈梦梦</option>-->
+                                <!--<option value=5>尚睿敏</option>-->
+                                <!--<option value=6>毛灵丹</option>-->
                             </select>
                           </div>
                           <div class="form-group">
                             <label for="tester">测试人员</label>
                             <select  class="form-control multiple" id="tester" name="tester[]" multiple="multiple">
-                                <option value=1>高文琪</option>
-                                <option value=2>俞利芳</option>
-                                <option value=3>王健</option>
+                                <option value="all">全部</option>
+                                {% for option in testers %}
+                                    <option value={{option.id}}>{{option.username}}</option>
+                                {% endfor %}
+                                <!--<option value=1>高文琪</option>-->
+                                <!--<option value=2>俞利芳</option>-->
+                                <!--<option value=3>王健</option>-->
 
                             </select>
                           </div>
@@ -229,6 +239,7 @@
     <!--<table id="detail-tabs" class="table table-hover table-sm"></table>-->
     <script type="text/javascript">
         $(document).ready(function () {
+
             // 初始化table
             initTable();
             //下拉多选
@@ -236,6 +247,8 @@
         });
 
         function initTable(){
+            var devs  = {{developers|tojson|safe}};
+            var test = {{testers|tojson|safe }};
 
             $('#todolist').bootstrapTable('destroy');  //先销毁表格
 
@@ -309,45 +322,44 @@
                                     source:[{value:"exHigh",title:"extrmemlyHigh",text:"eH"},
                                         {value:"High",title:"High",text:"H"},
                                         {value:"Middle",title:"Middle",text:"M"},
-                                        {value:"Low",title:"Low",text:"L"}]
+                                        {value:"Low",title:"Low",text:"L"}],
+                                    url:'/edit_todo',
+                                    success: function(response, newValue) {
+                                        if(response=='nouser'){
+                                            return "请先登录！";
+                                        }
+                                        if(response=='7'){
+                                            return "对不起，您无此操作权限！";
+                                        }
+                                        if(newValue=='exHigh'){     //控制颜色显示
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("PinkBackground");
+                                            $(this).removeClass("blueBackground");
+                                            $(this).addClass("redBackground");
+                                        }
+                                        else if(newValue=='High'){
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("redBackground");
+                                            $(this).removeClass("blueBackground");
+                                            $(this).addClass("PinkBackground");
 
-//                                    url:'/edit_todo',
-//                                    success: function(response, newValue) {
-//                                        if(response=='nouser'){
-//                                            return "请先登录！";
-//                                        }
-//                                        if(response=='7'){
-//                                            return "对不起，您无此操作权限！";
-//                                        }
-//                                        if(newValue=='exHigh'){     //控制颜色显示
-//                                            $(this).css("backgroundColor", "");
-//                                            $(this).removeClass("PinkBackground");
-//                                            $(this).removeClass("blueBackground");
-//                                            $(this).addClass("redBackground");
-//                                        }
-//                                        else if(newValue=='High'){
-//                                            $(this).css("backgroundColor", "");
-//                                            $(this).removeClass("redBackground");
-//                                            $(this).removeClass("blueBackground");
-//                                            $(this).addClass("PinkBackground");
-//
-//                                        }
-//                                        else if (newValue=='Middle'){
-//                                            $(this).css("backgroundColor", "");
-//                                            $(this).removeClass("redBackground");
-//                                            $(this).removeClass("PinkBackground");
-//                                            $(this).addClass("blueBackground");
-//                                        }
-//                                        else {
-//                                            $(this).css("backgroundColor", "");
-//                                            $(this).removeClass("redBackground");
-//                                            $(this).removeClass("PinkBackground");
-//                                            $(this).removeClass("blueBackground");
-//                                        }
-//                                        if(response.status =='error') {
-//                                            return response.msg;
-//                                        }
-//                                    }
+                                        }
+                                        else if (newValue=='Middle'){
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("redBackground");
+                                            $(this).removeClass("PinkBackground");
+                                            $(this).addClass("blueBackground");
+                                        }
+                                        else {
+                                            $(this).css("backgroundColor", "");
+                                            $(this).removeClass("redBackground");
+                                            $(this).removeClass("PinkBackground");
+                                            $(this).removeClass("blueBackground");
+                                        }
+                                        if(response.status =='error') {
+                                            return response.msg;
+                                        }
+                                    }
                                 },
                                 switchable:true
                             },
@@ -392,9 +404,6 @@
                                         }
                                     }
                                 }
-
-
-
                             },{
                                 title:'Module',
                                 field:'module',
@@ -503,11 +512,19 @@
                                     title: '开发人员',
                                     mode: "inline",
                                     emptytext: "--",
-                                    source:[{value:1,text:"张路"},
-                                            {value:2,text:"李小满"},
-                                            {value:3,text:"徐郁"},
-                                            {value:4,text:"陈梦梦"},
-                                            {value:5,text:"尚睿敏"}],
+//                                    source:[{value:1,text:"张路"},
+//                                            {value:2,text:"李小满"},
+//                                            {value:3,text:"徐郁"},
+//                                            {value:4,text:"陈梦梦"},
+//                                            {value:5,text:"尚睿敏"}],
+                                    source : function() {//动态获取数据
+                                            var result = [];
+
+                                          $.each(devs, function(key, value) {
+                                                result.push({value : value.id,text : value.username});
+                                            });
+                                            return result;},
+
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
                                         if(response=='nouser'){
@@ -535,7 +552,13 @@
                                     title: '测试人员',
                                     emptytext: "--",
                                     mode: "popup",
-                                    source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+//                                    source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+                                    source : function() {//动态获取数据
+                                        var result = [];
+                                        $.each(test, function(key, value) {
+                                            result.push({value : value.id,text : value.username});
+                                        });
+                                        return result;},
                                     url:'/edit_todo',
                                     success: function(response, newValue) {
                                         if(response=='nouser'){
@@ -806,6 +829,7 @@
         function onExpandRow(index, row, $detail) {
             InitSubTable(index, row, $detail);
         }
+
 
         //子任务
         InitSubTable = function (index,row,$detail) {

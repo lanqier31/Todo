@@ -28,6 +28,7 @@
 
 		.menu_article{
 			list-style:none;
+			padding-left: 0px;
 		}
 		section{
 			margin-bottom: 8px;
@@ -91,15 +92,12 @@
 		}
 	</style>
 
-
-
-
 	<!-- Modal new-->
 	<div class="modal fade" id="addarticle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <form class="form-inline" action="" method='POST'>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form class="form-inline" action="" method='POST'>
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">文章添加</h4>
@@ -107,13 +105,13 @@
 					<div class="modal-body">
 
 					  	<div class="form-group">
-                            <label for="category">类目</label>
+                            <label for="category" style="width:32px;">类目</label>
 							<input type="text" class="form-control" id="category" name="category" style="width: 310px;" />
 
 					  	</div>
 						<div class="form-group">
                             <label for="title">标题</label>
-                            <input type="text" class="form-control" id="title" name="title" style="width: 500px;" />
+                            <input type="text" class="form-control" id="title" name="title" style="width: 580px;" />
 					  	</div>
 					  	<div class="form-group">
 						  	<div id="summernote"></div>
@@ -143,9 +141,9 @@
                         <button type="button" class="btn btn-primary" id="save_article">保存</button>
                     </div>
 					</form>
-				</div>
 			</div>
 		</div>
+	</div>
 
 	<!-- Modal edit-->
 	<div class="modal fade" id="editarticle" tabindex="-1" role="dialog" aria-labelledby="editAtricle">
@@ -200,10 +198,6 @@
 			</div>
 		</div>
 
-
-
-
-
 	<div class="row" data-spy="scroll" data-target="#myScrollspy"  data-offset="60" >
 		<div class="col-md-2">
 			<div class="buttool">
@@ -226,7 +220,7 @@
 			</div>
 
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-9">
 			<div class="articlebody" data-spy="scroll" data-target="#articlelist">
 				{% for article in articles %}
 				<section >
@@ -274,7 +268,7 @@
             // 语言
             lang:'zh-CN',
             // 高度与焦点
-            height:600,
+            height:450,
             width:1000,
             // 对话框显示在body而非summernote
             dialogsInBody: true,

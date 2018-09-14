@@ -5,23 +5,28 @@ from app.models.User import User
 from app.models.Category import Category
 from app.models.Todo import Todo
 from app.models.Audit import Audit
+from app.controllers import setting
 from app.forms import LoginForm
 import os ,json,sys
 from app import app,db
 from datetime import date,timedelta,datetime
 from sqlalchemy import extract
 reload(sys)
-sys.setdefaultencoding("utf-8")
+sys.setdefaultencoding('utf8')
 
 
 @app.route('/')
 def root():
-    return render_template('todo.html')
+    developers = setting.query_developers()
+    testers = setting.query_testers()
+    return render_template('todo.html',developers = developers,testers = testers)
 
 
 @app.route('/todo',methods=['GET','POST'])
 def todo():
-    return render_template('todo.html')
+    developers = setting.query_developers()
+    testers = setting.query_testers()
+    return render_template('todo.html',developers = developers,testers = testers)
 
 
 @app.route('/query_todo',methods=['GET','POST'])
