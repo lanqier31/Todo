@@ -1,5 +1,5 @@
 # -*-coding:utf-8-*-
-import numpy as np
+# import numpy as np
 import config
 from app import app
 from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify

@@ -204,7 +204,7 @@ def edit_todo():
 def delete_todo():
     tet = current_user
     user = User.query.get(current_user.id)
-    if 4 not in user.permissions():
+    if 4 not in user.permissions:
         return '4'
     else:
         try:
