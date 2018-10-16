@@ -9,15 +9,23 @@
         font-weight: 400;
         display: block;
         line-height: 1.9em;
-        color: grey;
+        color: #fbfbfb;
         text-shadow: 0 1px 0 rgba(255,255,255,.15);
         border: 1px solid rgba(0,0,0,.1);
         border-bottom: 0;
+        border-radius: 2px;
+        background-color:rgb(34, 178, 197);
+    }
+
+    .subnav:nth-child(even) {
+        background: #fbfbfb;
+        border-top: 1px solid #efefef;
+        border-bottom: 1px solid #efefef;
     }
     .subnav{
         cursor: pointer;
-        margin: 8px 2px;
-        padding: 4px;
+        margin: 0px 2px;
+        padding: 8px;
         font-size: 14px;
         overflow: hidden;
     }
@@ -87,23 +95,23 @@
                     <div class="panel">
                     <a class="item" href="{{ url_for('test') }}">
                         <h4>【测试】</h4>
-                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/logo_test.png"/>
+                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/easytest.ico"/>
+                        <strong>测试基础概念</strong>
+                    </a>
+                    <a class="item" href="#">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/python.ico"/>
+                        <strong>Python自动化测试</strong>
+                    </a>
+                    <a class="item" href="#">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="60" src="../static/images/logo_test.png"/>
                         <strong>专注于测试</strong>
                     </a>
                     <a class="item" href="#">
                         <h4>【测试】</h4>
-                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/logo_test.png"/>
-                        <strong>专注于测试</strong>
-                    </a>
-                    <a class="item" href="#">
-                        <h4>【测试】</h4>
-                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/logo_test.png"/>
-                        <strong>专注于测试</strong>
-                    </a>
-                    <a class="item" href="#">
-                        <h4>【测试】</h4>
-                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/logo_test.png"/>
-                        <strong>专注于测试</strong>
+                        <img class="codeicon codeicon-36" height="36" width="60" src="../static/images/loadrunner.jpg"/>
+                        <strong>性能测试概览</strong>
                     </a>
                     </div>
 

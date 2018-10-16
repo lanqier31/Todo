@@ -9,7 +9,7 @@
                 <select id="version_filter"  class="bugfilter" >
                     <option value="all">全部</option>
                     <option value="syf1.1.1">syf1.1.1</option>
-                    <option value="syf1.2.0">syf1.2.0</option>
+                    <option value="syf1.2.0" selected>syf1.2.0</option>
                     <option value="syf1.3.0">syf1.3.0</option>
 
                 </select>
@@ -71,9 +71,6 @@
                     {% for option in testers %}
                         <option value={{option.id}}>{{option.username}}</option>
                     {% endfor %}
-                    <!--<option value="1">高文琪</option>-->
-                    <!--<option value="2">俞利芳</option>-->
-                    <!--<option value="3">王健</option>-->
                 </select>
             </li>
 
@@ -116,7 +113,7 @@
                             <label for="worktype">项目版本</label>
                             <select class="form-control" id="version" name="version">
                                <option value="syf1.1.1">syf1.1.1</option>
-                               <option value="syf1.2.0" active>syf1.2.0</option>
+                               <option value="syf1.2.0" selected>syf1.2.0</option>
                                <option value="syf1.3.0">syf1.3.0</option>
                                <option value="syf1.4.0">syf1.4.0</option>
 
@@ -168,12 +165,7 @@
                                 {% for option in developers %}
                                     <option value={{option.id}}>{{option.username}}</option>
                                 {% endfor %}
-                                <!--<option value=1>张路</option>-->
-                                <!--<option value=2>李小满</option>-->
-                                <!--<option value=3>徐郁</option>-->
-                                <!--<option value=4>陈梦梦</option>-->
-                                <!--<option value=5>尚睿敏</option>-->
-                                <!--<option value=6>毛灵丹</option>-->
+
                             </select>
                           </div>
                           <div class="form-group">
@@ -183,10 +175,6 @@
                                 {% for option in testers %}
                                     <option value={{option.id}}>{{option.username}}</option>
                                 {% endfor %}
-                                <!--<option value=1>高文琪</option>-->
-                                <!--<option value=2>俞利芳</option>-->
-                                <!--<option value=3>王健</option>-->
-
                             </select>
                           </div>
                           <div class="form-group">
@@ -512,11 +500,6 @@
                                     title: '开发人员',
                                     mode: "inline",
                                     emptytext: "--",
-//                                    source:[{value:1,text:"张路"},
-//                                            {value:2,text:"李小满"},
-//                                            {value:3,text:"徐郁"},
-//                                            {value:4,text:"陈梦梦"},
-//                                            {value:5,text:"尚睿敏"}],
                                     source : function() {//动态获取数据
                                             var result = [];
 

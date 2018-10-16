@@ -1,6 +1,6 @@
 # -*-coding:utf-8-*-
 from flask import request,render_template,flash,abort,url_for,redirect,session,Flask,g,jsonify
-# from app.models.Roles import Role,User
+from app.models.User import User
 from app.models.Category import Category,Article
 from app.models.Todo import Todo
 import os ,json,sys
@@ -20,12 +20,14 @@ def knowledge():
 
 @app.route('/test')
 def test():
+    treeData = menuTree()
     articles = Article.query.all()
+    users = User.query.all()
     for article in articles:
         htmlparser = HTMLParser.HTMLParser()
         article.body = htmlparser.unescape(article.body)
     categories= Category.query.all()
-    return render_template('knowledge/test.html',categories=categories,articles=articles)
+    return render_template('knowledge/test.html',treeData=treeData,articles=articles,users = users)
 
 
 @app.route('/addarticle',methods={'POST'})
@@ -33,14 +35,17 @@ def addarticle():
     try:
         data = str(request.values)
         # print data
-        category = request.form.get('category')
+        parent_title = request.form.get('parent_title')
+        level = request.form.get('level')
         title = request.form.get('title',"null")
         body = request.form.get('body')
         author = request.form.get('author')
         createtime = request.form.get('createtime')
 
-        article = Article(category,title,body,author,createtime)
+        article = Article(title,body,author,createtime,level,parent_title)
+        category = Category(name =title,level =level)
         db.session.add(article)
+        db.session.add(category)
         db.session.commit()
         flash('New article was successfully posted')
         return redirect(url_for('test'))
@@ -71,4 +76,22 @@ def edit_article():
     except IOError:
         return 'error'
 
+@app.route('/menuTree', methods=['GET', 'POST'])
+def menuTree():
+    data = []
+    chs= []
+    parents= Article.query.all()   #查询所有的菜单项
+    #列出每个菜单项对应的子功能
+    for p in parents:
+        da = {"text": p.title,"id":p.id,"nodeId":p.id}
+        children = p.get_child(p.id)
+
+        if children:
+            for child in children:
+                chs.append({"text": child['cname'],"id":child['cid'],"nodeId":child['cid']})
+                da['nodes']=chs
+            chs = []
+        data.append(da)
+        # print data
+    return jsonify(data)
 
