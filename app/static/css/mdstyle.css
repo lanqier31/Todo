@@ -85,7 +85,7 @@ table thead{
 }
 .nav>li> a:hover,
 .nav>li > a:focus{
-	color:#rgb(34, 178, 197;);
+	color:rgb(34, 178, 197);
 	border-bottom: 3px solid rgb(34, 178, 197);
 	background-color: transparent;
 }

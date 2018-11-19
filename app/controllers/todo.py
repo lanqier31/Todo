@@ -22,6 +22,12 @@ def root():
     return render_template('todo.html',developers = developers,testers = testers)
 
 
+@app.route('/dashboard')
+def dashboard():
+
+    return render_template('dashboard.html')
+
+
 @app.route('/todo',methods=['GET','POST'])
 def todo():
     developers = setting.query_developers()

@@ -80,15 +80,15 @@ def edit_article():
 def menuTree():
     data = []
     chs= []
-    parents= Article.query.all()   #查询所有的菜单项
+    parents= Article.query.filter_by(level=1).all()   #查询所有的菜单项
     #列出每个菜单项对应的子功能
     for p in parents:
-        da = {"text": p.title,"id":p.id,"nodeId":p.id}
-        children = p.get_child(p.id)
+        da = {"text": p.title,"id": p.id,"href": '#'+str(p.id)}
+        children = p.get_child(p.title)
 
         if children:
             for child in children:
-                chs.append({"text": child['cname'],"id":child['cid'],"nodeId":child['cid']})
+                chs.append({"text": child['cname'],"id":child['cid'],"href": '#'+str(child['cid'])})
                 da['nodes']=chs
             chs = []
         data.append(da)

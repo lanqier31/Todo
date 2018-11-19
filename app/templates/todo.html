@@ -2,7 +2,123 @@
 {% block title %}任务跟进{% endblock %}
 {% block content %}
 <script type="text/javascript" src="../static/js/bootstrap-editable.js"></script>
-<div class="todohead">
+<style>
+    body{
+
+        overflow-y: hidden;
+    }
+    .main-header .navbar{
+        background-color:rgb(34, 178, 197);!important;
+    }
+    .main-header .logo{
+        background-color:rgb(34, 178, 197);!important;
+    }
+    table thead{
+	    background-color:#fff;
+        margin-bottom: 3px;
+
+    }
+    table tr{
+        margin: 5px;
+    }
+    .todo-search{
+        position: absolute;
+        top:15px;
+        left: 300px;
+    }
+
+    .todohead{
+        padding: 15px;
+        margin-top: 10px;
+        margin-right: auto;
+        margin-left: auto;
+        padding-left: 30px;
+        padding-right: 15px;
+    }
+    #bugfilter .nav>li>a{
+	padding: 6px 15px;
+	border-radius: 1px;
+	border-bottom: 0px;
+}
+.bugfilter{
+	border: none;
+	padding: 6px;
+	font-size: middle;
+	background-color:rgb(34, 178, 197);
+	color:#FFFFFF;
+	border-radius:3px;
+}
+    #bugfilter ul li{
+        background-color: rgb(34, 178, 197);
+        border-radius: 3px;
+    }
+    .modal-dialog {
+    width: 800px;
+    margin: 80px auto;
+    }
+    .form-inline .form-control {
+    width: 160px;
+    }
+    .form-inline .form-group{
+        margin-bottom: 5px;
+    }
+    .form-inline label{
+        width: 62px;
+        text-align: right;
+    }
+    .editable-checklist label{
+        text-align:left;
+    }
+
+.redBackground{
+	background-color: #de0000;
+	color: #fff;
+}
+.PinkBackground{
+	background-color: #f66c60;
+	color: #fff;
+}
+.editable-input .input-large {
+	width:480px;
+}
+.greyBackground{
+	background-color: #888888;
+	color: #2d2d2d;
+}
+.blueBackground{
+	background-color:#5cb85c;
+	color: #fff;
+}
+
+</style>
+<section class="content-header">
+    <h1>
+        未解决Todo
+        <small></small>
+    </h1>
+    <div  class="todo-search" style="width:300px;">
+        <div class="input-group">
+          <input type="text" class="form-control search" placeholder="Search...">
+          <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+          </span>
+        </div>
+    </div>
+  <ol class="breadcrumb">
+
+    <li><button class="btn btn-success" data-toggle="modal" data-target="#addtodo">
+        <i class="glyphicon glyphicon-plus"></i>添加</button></li>
+    <li><button id="remove" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>删除
+    </button></li>
+      <li><button id="export" class="btn btn-info">
+        <i class="glyphicon glyphicon-trash"></i>导出
+    </button></li>
+  </ol>
+</section>
+<!--bugfilter-->
+<section class="todohead">
     <div class="row" id="bugfilter">
         <ul class="nav nav-pills">
             <li role="presentation" role="button">项目版本
@@ -75,20 +191,7 @@
             </li>
 
         </ul>    
-    
-        <div class="buttool">
-            {%  if current_user.is_authenticated %}
-            <button class="btn btn-success" data-toggle="modal" data-target="#addtodo">
-                <i class="glyphicon glyphicon-plus"></i>添加</button>
 
-            <button id="remove" class="btn btn-danger">
-                <i class="glyphicon glyphicon-trash"></i> 删除
-            </button>
-            {% endif %}
-            <input class="form-control  search" type="text" placeholder="Id">
-        <!--<button class="btn btn-primary" data-table="todolist" aria-label="export type">导出</button>-->
-        </div>
-    
         <!-- Modal -->
         <div class="modal fade" id="addtodo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
@@ -100,7 +203,6 @@
                         <h4 class="modal-title" id="myModalLabel">任务添加</h4>
                     </div>
                     <div class="modal-body">
-
                             <div class="form-group">
                             <label for="project">项目名称</label>
                             <select class="form-control" id="project" name="project">
@@ -220,11 +322,10 @@
 
         </div>
     </div>
-</div>
+</section>
 
 <div>
     <table id="todolist" class="table table-hover table-sm top_fix_table "></table>
-    <!--<table id="detail-tabs" class="table table-hover table-sm"></table>-->
     <script type="text/javascript">
         $(document).ready(function () {
 
@@ -256,8 +357,8 @@
                 pageList:[10,20,50] ,  //可供选择的每页行数
                 queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
-                detailView: true,//父子表
-                onExpandRow:onExpandRow,
+//                detailView: true,//父子表
+//                onExpandRow:onExpandRow, //额外增加一行
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
                 strictSearch:false,
                 clickToSelect:true,  //是否启动点击选中行
@@ -708,11 +809,11 @@
                                 visible: false
                             }
                         ],
-                showColumns:true,   // 是否显示列
+//                showColumns:true,   // 是否显示列
                 minimumCountColumns:2,
                 showRefresh:false,  // 是否刷新
                 showToggle:false,
-                showExport:true,
+//                showExport:true,
                 exportDataType: "selected",   //basic', 'all', 'selected'.
                 exportTypes:['excel'],
                 formatLoadingMessage: function () {
@@ -809,272 +910,272 @@
             return temp;
         }
         //额外增加一行
-        function onExpandRow(index, row, $detail) {
-            InitSubTable(index, row, $detail);
-        }
+//        function onExpandRow(index, row, $detail) {
+//            InitSubTable(index, row, $detail);
+//        }
 
 
         //子任务
-        InitSubTable = function (index,row,$detail) {
-            var parentid = row.id;
-            var cur_table = $detail.html('<table></table>').find('table');
-
-                $(cur_table).bootstrapTable({
-                    url:'',
-                    pagination:false,
-                    sidePagination:"server",
-                    dataType:"json",
-                    detailView:true,
-                    editable:true,
-                    uniqueId:parentid,
-                    columnus:[{
-                        formatter:function(value,row,index){
-                            return index+1
-                        }
-                    }, {
-                            title:'操作',
-                            formatter:function (value, row, index){
-                            return [
-                                    "<a class=\"like\" href='javascript:addRow(" + index + ", " + JSON.stringify(row) + ")' title=\"新增行\">",
-                                    '<i class="glyphicon glyphicon-plus"></i>',
-                                    '</a>  ',
-                                    '<a class="remove" href="javascript:removeRow(\'' + row.dbColName + '\')" title="删除行">',
-                                    '<i class="glyphicon glyphicon-remove"></i>',
-                                    '</a>'
-                                ].join('');
-                        }
-
-                    }, {
-                            title:'标题',
-                            field:'subtitle',
-                            width:160,
-                            align:'left',
-                            valign:'middle',
-                            sortable:false,
-                            searchable:false,
-                            editable: {
-                                type: 'text',
-                                title: '标题',
-                                mode: "popup",
-                                emptytext: "--",
-                                validate: function (v) {
-                                    if (!v) return '标题不能为空';
-                                },
-                                url:'/edit_todo',
-                                success: function(response, newValue) {
-                                    if(response.status =='error') {
-                                        return response.msg;
-                                    }
-                                }
-                            }
-
-                        },{
-                        title:'描述',
-                        field:'description',
-                        align:'left',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        width:400,
-                        editable: {
-                            type: 'textarea',
-                            title: '描述',
-                            mode: "popup",
-                            emptytext: "--",
-                            url:'/edit_todo',
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:'开发',
-                        field:'developer',
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable:{
-                            type: 'checklist',
-                            pk:'1',
-                            separator:",",
-                            value:"' + row[that.options.idField] + '",
-                            title: '开发人员',
-                            mode: "inline",
-                            emptytext: "--",
-                            source:[{value:1,text:"张路"},
-                                    {value:2,text:"李小满"},
-                                    {value:3,text:"徐郁"},
-                                    {value:4,text:"陈梦梦"}],
-                            url:'/edit_todo',
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:'测试',
-                        field:'tester',
-                        align:'center',
-                        valign:'middle',
-                        switchable:false,
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'checklist',
-                            separator:",",
-                            title: '测试人员',
-                            emptytext: "--",
-                            mode: "popup",
-                            source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+//        InitSubTable = function (index,row,$detail) {
+//            var parentid = row.id;
+//            var cur_table = $detail.html('<table></table>').find('table');
+//
+//                $(cur_table).bootstrapTable({
+//                    url:'',
+//                    pagination:false,
+//                    sidePagination:"server",
+//                    dataType:"json",
+//                    detailView:true,
+//                    editable:true,
+//                    uniqueId:parentid,
+//                    columnus:[{
+//                        formatter:function(value,row,index){
+//                            return index+1
+//                        }
+//                    }, {
+//                            title:'操作',
+//                            formatter:function (value, row, index){
+//                            return [
+//                                    "<a class=\"like\" href='javascript:addRow(" + index + ", " + JSON.stringify(row) + ")' title=\"新增行\">",
+//                                    '<i class="glyphicon glyphicon-plus"></i>',
+//                                    '</a>  ',
+//                                    '<a class="remove" href="javascript:removeRow(\'' + row.dbColName + '\')" title="删除行">',
+//                                    '<i class="glyphicon glyphicon-remove"></i>',
+//                                    '</a>'
+//                                ].join('');
+//                        }
+//
+//                    }, {
+//                            title:'标题',
+//                            field:'subtitle',
+//                            width:160,
+//                            align:'left',
+//                            valign:'middle',
+//                            sortable:false,
+//                            searchable:false,
+//                            editable: {
+//                                type: 'text',
+//                                title: '标题',
+//                                mode: "popup",
+//                                emptytext: "--",
+//                                validate: function (v) {
+//                                    if (!v) return '标题不能为空';
+//                                },
+//                                url:'/edit_todo',
+//                                success: function(response, newValue) {
+//                                    if(response.status =='error') {
+//                                        return response.msg;
+//                                    }
+//                                }
+//                            }
+//
+//                        },{
+//                        title:'描述',
+//                        field:'description',
+//                        align:'left',
+//                        valign:'middle',
+//                        sortable:false,
+//                        searchable:false,
+//                        width:400,
+//                        editable: {
+//                            type: 'textarea',
+//                            title: '描述',
+//                            mode: "popup",
+//                            emptytext: "--",
 //                            url:'/edit_todo',
 //                            success: function(response, newValue) {
 //                                if(response.status =='error') {
-//                                   return response.msg;
+//                                    return response.msg;
 //                                }
 //                            }
-                        },
-                        sortable:true
-                    },{
-                        title:'Status',
-                        field:'status',
-                        align:'center',
-                        valign:'middle',
-                        searchable:false,
-                        editable: {
-                            type: 'select',
-                            title: '状态',
-                            emptytext: "--",
-                            mode: "popup",
-                            source:[
-                                    {value: 'Unresolved', text: '未解决'},
-                                    {value: 'Completed', text: '已完成'},
-                                    {value: 'Delayed', text: '已延迟'},
-                                    {value: 'Rejected', text: '已作废'},
-                                    {value: 'Closed', text: '已关闭'}],
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(newValue=='Unresolved'){     //控制颜色显示
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).removeClass("blueBackground");
-                                    $(this).addClass("redBackground");
-                                }
-                                else if(newValue=='Rejected'){
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("blueBackground");
-                                    $(this).addClass("greyBackground");
-
-                                }
-                                else if (newValue=='Completed'){
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).addClass("blueBackground");
-                                }
-                                else {
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).removeClass("blueBackground");
-                                }
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        sortable:false
-                    },{
-                        title:'备注',
-                        field:'remarks',
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'textarea',
-                            title: '描述',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:"创建日期",
-                        field:"createtime",
-                        valign:'middle',
-                        sortable:false,
-                        align:'center',
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '创建日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    },{
-                        title:"计划日期",
-                        field:"plantime",
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '计划日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    },{
-                        title:"完成日期",
-                        field:"completetime",
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '完成日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    }]
-                })
-
-        };
+//                        }
+//                    },{
+//                        title:'开发',
+//                        field:'developer',
+//                        align:'center',
+//                        valign:'middle',
+//                        sortable:false,
+//                        searchable:false,
+//                        editable:{
+//                            type: 'checklist',
+//                            pk:'1',
+//                            separator:",",
+//                            value:"' + row[that.options.idField] + '",
+//                            title: '开发人员',
+//                            mode: "inline",
+//                            emptytext: "--",
+//                            source:[{value:1,text:"张路"},
+//                                    {value:2,text:"李小满"},
+//                                    {value:3,text:"徐郁"},
+//                                    {value:4,text:"陈梦梦"}],
+//                            url:'/edit_todo',
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        }
+//                    },{
+//                        title:'测试',
+//                        field:'tester',
+//                        align:'center',
+//                        valign:'middle',
+//                        switchable:false,
+//                        sortable:false,
+//                        searchable:false,
+//                        editable: {
+//                            type: 'checklist',
+//                            separator:",",
+//                            title: '测试人员',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
+////                            url:'/edit_todo',
+////                            success: function(response, newValue) {
+////                                if(response.status =='error') {
+////                                   return response.msg;
+////                                }
+////                            }
+//                        },
+//                        sortable:true
+//                    },{
+//                        title:'Status',
+//                        field:'status',
+//                        align:'center',
+//                        valign:'middle',
+//                        searchable:false,
+//                        editable: {
+//                            type: 'select',
+//                            title: '状态',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            source:[
+//                                    {value: 'Unresolved', text: '未解决'},
+//                                    {value: 'Completed', text: '已完成'},
+//                                    {value: 'Delayed', text: '已延迟'},
+//                                    {value: 'Rejected', text: '已作废'},
+//                                    {value: 'Closed', text: '已关闭'}],
+//                            url:'/edit_todo',
+//                            pk:6,
+//                            success: function(response, newValue) {
+//                                if(newValue=='Unresolved'){     //控制颜色显示
+//                                    $(this).css("backgroundColor", "");
+//                                    $(this).removeClass("greyBackground");
+//                                    $(this).removeClass("blueBackground");
+//                                    $(this).addClass("redBackground");
+//                                }
+//                                else if(newValue=='Rejected'){
+//                                    $(this).css("backgroundColor", "");
+//                                    $(this).removeClass("redBackground");
+//                                    $(this).removeClass("blueBackground");
+//                                    $(this).addClass("greyBackground");
+//
+//                                }
+//                                else if (newValue=='Completed'){
+//                                    $(this).css("backgroundColor", "");
+//                                    $(this).removeClass("redBackground");
+//                                    $(this).removeClass("greyBackground");
+//                                    $(this).addClass("blueBackground");
+//                                }
+//                                else {
+//                                    $(this).css("backgroundColor", "");
+//                                    $(this).removeClass("redBackground");
+//                                    $(this).removeClass("greyBackground");
+//                                    $(this).removeClass("blueBackground");
+//                                }
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        },
+//                        sortable:false
+//                    },{
+//                        title:'备注',
+//                        field:'remarks',
+//                        align:'center',
+//                        valign:'middle',
+//                        sortable:false,
+//                        searchable:false,
+//                        editable: {
+//                            type: 'textarea',
+//                            title: '描述',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            url:'/edit_todo',
+//                            pk:6,
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        }
+//                    },{
+//                        title:"创建日期",
+//                        field:"createtime",
+//                        valign:'middle',
+//                        sortable:false,
+//                        align:'center',
+//                        searchable:false,
+//                        editable: {
+//                            type: 'text',
+//                            title: '创建日期',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            url:'/edit_todo',
+//                            pk:6,
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        },
+//                        align:'center'
+//                    },{
+//                        title:"计划日期",
+//                        field:"plantime",
+//                        align:'center',
+//                        valign:'middle',
+//                        sortable:false,
+//                        searchable:false,
+//                        editable: {
+//                            type: 'text',
+//                            title: '计划日期',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            url:'/edit_todo',
+//                            pk:6,
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        },
+//                        align:'center'
+//                    },{
+//                        title:"完成日期",
+//                        field:"completetime",
+//                        align:'center',
+//                        valign:'middle',
+//                        sortable:false,
+//                        searchable:false,
+//                        editable: {
+//                            type: 'text',
+//                            title: '完成日期',
+//                            emptytext: "--",
+//                            mode: "popup",
+//                            url:'/edit_todo',
+//                            pk:6,
+//                            success: function(response, newValue) {
+//                                if(response.status =='error') {
+//                                    return response.msg;
+//                                }
+//                            }
+//                        },
+//                        align:'center'
+//                    }]
+//                })
+//
+//        };
         function getIdSelections() {
             return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
             return row.id

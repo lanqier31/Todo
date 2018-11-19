@@ -1,16 +1,40 @@
 {% extends "base.html" %}
 {% block title %}登录系统{% endblock %}
 {% block content %}
-  <h2>Login</h2>
-  <!--{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}-->
-  <form action="{{ url_for('login') }}" method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=loginname>
-      <dt>Password:
-      <dd><input type=password name=password>
-      <dd><input type=submit value=Login>
-    </dl>
-  </form>
+<style>
+  .panel{
+    margin:0 auto;
+    width:400px;
+  }
+</style>
+  <div class="panel panel-success login">
+    <div class="panel-heading">
+      <h1 class="panel-title text-center">Log In</h1>
+    </div>
+    <div class="panel-body">
+        <form action="{{ url_for('login') }}" method=post>
+          <dl>
+            <br>
+            <dt>Username:
+            <dd><input type=text class="form-control" name=loginname>
+            <br>
+            <dt>Password:
+            <dd><input type=password  class="form-control" name=password>
+            <br>
+            <dd><input type=submit class="btn btn-primary btn-lg btn-block"  value=Login>
+          </dl>
+        </form>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}

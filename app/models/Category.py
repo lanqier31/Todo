@@ -42,7 +42,7 @@ class Article(db.Model):
         childs=[]
         cd={}
         for p in children:
-            cd['cname']= p.tiitle
+            cd['cname']= p.title
             cd['cid'] = p.id
             childs.append(cd)
             cd={}
