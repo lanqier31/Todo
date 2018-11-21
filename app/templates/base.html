@@ -91,7 +91,7 @@
     })
 	</script>
 
-	  <aside class="main-sidebar sidebar-collapse">
+	  <aside class="main-sidebar">
 		<!-- sidebar: style can be found in sidebar.less -->
 		<section class="sidebar">
 		  <ul class="sidebar-menu" data-widget="tree">
@@ -110,10 +110,10 @@
 				</span>
 			  </a>
 			  <ul class="treeview-menu">
-				<li><a href="{{ url_for('todo') }}"><i class="fa fa-circle-o"></i>未解决Bug</a></li>
-				<li><a href="{{ url_for('todo') }}"><i class="fa fa-circle-o"></i> 已完成Bug</a></li>
-				<li><a href="{{ url_for('todo') }}"><i class="fa fa-circle-o"></i> 已关闭Bug</a></li>
-				<li><a href="{{ url_for('todo') }}"><i class="fa fa-circle-o"></i> 我的Todo</a></li>
+				<li><a href="{{ url_for('todo',status='Unresolved') }}"><i class="fa fa-circle-o"></i>未解决Bug</a></li>
+				<li><a href="{{ url_for('todo',status='Completed') }}"><i class="fa fa-circle-o"></i> 已完成Bug</a></li>
+				<li><a href="{{ url_for('todo',status='Closed') }}"><i class="fa fa-circle-o"></i> 已关闭Bug</a></li>
+				<li><a href="{{ url_for('todo',status='myTodo')}}"><i class="fa fa-circle-o"></i> 我的Todo</a></li>
 			  </ul>
 			</li>
 			<li>

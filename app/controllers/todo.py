@@ -30,9 +30,21 @@ def dashboard():
 
 @app.route('/todo',methods=['GET','POST'])
 def todo():
+    deveer='all'
+    teser = 'all'
+    status ='all'
+    if request.args.get('status') in ['Unresolved','Completed','Closed']:
+        status = request.args.get('status')
+    if request.args.get('status') == 'myTodo' and current_user.is_anonymous < 1:
+
+        if 2 in current_user.get_roles:
+            deveer = current_user.id
+        elif 3 in current_user.get_roles:
+            teser = current_user.id
+
     developers = setting.query_developers()
     testers = setting.query_testers()
-    return render_template('todo.html',developers = developers,testers = testers)
+    return render_template('todo.html',developers = developers,testers = testers,bug_status=status,bug_dever = deveer,bug_teser = teser)
 
 
 @app.route('/query_todo',methods=['GET','POST'])

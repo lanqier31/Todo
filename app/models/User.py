@@ -33,6 +33,7 @@ class User(db.Model,UserMixin):
             'username': self.username,
         }
 
+    @property
     def get_roles(self):
         roleids = []
         if self.roles:
