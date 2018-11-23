@@ -10,6 +10,7 @@
     <li class="active">Dashboard</li>
   </ol>
 </section>
+
 <section class="content">
   <!-- Small boxes (Stat box) -->
   <div class="row">
@@ -17,7 +18,7 @@
       <!-- small box -->
       <div class="small-box bg-aqua">
         <div class="inner">
-          <h3>150</h3>
+          <h3>{{statics.sum|safe}}</h3>
 
           <p>总待办事项数</p>
         </div>
@@ -32,7 +33,7 @@
       <!-- small box -->
       <div class="small-box bg-green">
         <div class="inner">
-          <h3>53<sup style="font-size: 20px">%</sup></h3>
+          <h3>{{statics.unresolves|safe}}</h3>
 
           <p>未解决事项个数</p>
         </div>
@@ -47,7 +48,7 @@
       <!-- small box -->
       <div class="small-box bg-yellow">
         <div class="inner">
-          <h3>44</h3>
+          <h3>{{statics.completes|safe}}</h3>
 
           <p>已完成事项个数</p>
         </div>
@@ -62,7 +63,7 @@
       <!-- small box -->
       <div class="small-box bg-blue">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{statics.closeds|safe}}</h3>
 
           <p>已关闭事项个数</p>
         </div>
@@ -77,7 +78,7 @@
       <!-- small box -->
       <div class="small-box bg-red">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{statics.requests|safe}}</h3>
 
           <p>总需求个数</p>
         </div>
@@ -92,7 +93,7 @@
       <!-- small box -->
       <div class="small-box bg-red">
         <div class="inner">
-          <h3>65</h3>
+          <h3>{{statics.bugs|safe}}</h3>
 
           <p>总Bug个数</p>
         </div>
@@ -113,6 +114,8 @@
   </div>
 </div>
   <script type="text/javascript">
+
+      statics = {{statics|safe}};
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('todo_graph'));
 
