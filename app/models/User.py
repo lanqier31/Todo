@@ -2,11 +2,14 @@
 from app import db
 from flask_security import UserMixin
 from app import login_manager
+import json
+from flask import jsonify
 
 #角色用户关联表
 roles_users = db.Table('roles_users',
                        db.Column('user_id',db.Integer(),db.ForeignKey('user.id')),
                        db.Column('role_id',db.Integer(),db.ForeignKey('role.id')))
+
 
 class User(db.Model,UserMixin):
     __tablename__ = 'user'
@@ -31,7 +34,18 @@ class User(db.Model,UserMixin):
         return {
             'id': self.id,
             'username': self.username,
+            'loginname':self.loginname,
+            'active':self.active,
+            'roles':self.get_roles,
         }
+
+    def get_roles(self):
+        rolenames=[]
+        if self.roles:
+            for re in self.roles:
+                re.to_json()
+                rolenames.append(re.name)
+        return rolenames
 
     @property
     def get_roles(self):
@@ -41,8 +55,6 @@ class User(db.Model,UserMixin):
                 role.to_json()
                 roleids.append(role.id)
         return roleids
-
-
 
     def to_dict(self):
         return dict([(k, getattr(self, k)) for k in self.__dict__.keys() if not k.startswith("_")])

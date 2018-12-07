@@ -115,12 +115,11 @@
 </div>
   <script type="text/javascript">
 
-      statics = {{statics|safe}};
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('todo_graph'));
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('todo_graph'));
 
-        // 指定图表的配置项和数据
-        option = {
+    // 指定图表的配置项和数据
+    option = {
     title: {
         text: 'todo个数统计'
     },

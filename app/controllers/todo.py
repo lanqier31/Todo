@@ -25,9 +25,9 @@ def root():
 
 @app.route('/todo',methods=['GET','POST'])
 def todo():
-    deveer='all'
+    deveer = 'all'
     teser = 'all'
-    status ='all'
+    status = 'all'
     if request.args.get('status') in ['Unresolved','Completed','Closed']:
         status = request.args.get('status')
     if request.args.get('status') == 'myTodo' and current_user.is_anonymous < 1:

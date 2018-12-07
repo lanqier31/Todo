@@ -2,14 +2,32 @@
 {% block title %}角色管理{% endblock %}
 {% block main %}
 
-    <div class="buttool2">
-        <button class="btn btn-default" data-toggle="modal" data-target="#addpermission">
-            <i class="glyphicon glyphicon-plus"></i>添加</button>
-        <button id="remove" class="btn btn-info">
-            <i class="glyphicon glyphicon-trash"></i> 删除
-        </button>
-    </div>
+<section class="content-header">
+    <h1>
+        权限管理
+        <small></small>
+    </h1>
 
+  <ol class="breadcrumb">
+
+    <li><button class="btn btn-success" data-toggle="modal" data-target="#addpermission">
+        <i class="glyphicon glyphicon-plus"></i>添加</button></li>
+    <li><button id="remove" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>删除
+    </button></li>
+
+  </ol>
+</section>
+    <!--<div class="buttool2">-->
+        <!--<button class="btn btn-default" data-toggle="modal" data-target="#addpermission">-->
+            <!--<i class="glyphicon glyphicon-plus"></i>添加</button>-->
+        <!--<button id="remove" class="btn btn-info">-->
+            <!--<i class="glyphicon glyphicon-trash"></i> 删除-->
+        <!--</button>-->
+    <!--</div>-->
+<section class="content">
+    <table id="permissionlist"></table>
+</section>
     <!-- Modal -->
     <div class="modal fade" id="addpermission" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
@@ -64,7 +82,7 @@
 
     </div>
 
-    <table id="permissionlist"></table>
+
 
     <script>
         $(document).ready(function () {

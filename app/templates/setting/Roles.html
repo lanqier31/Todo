@@ -1,6 +1,7 @@
 {% extends "setting/leftSidebar.html" %}
 {% block title %}角色管理{% endblock %}
 {% block main %}
+
     <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-treeview.css">
     <script type="text/javascript" src="../static/js/bootstrap-treeview.js"></script>
     <script type="text/javascript">
@@ -71,18 +72,39 @@
     }
 
 </script>
-    <div class="buttool2">
-        <button class="btn btn-default" data-toggle="modal" data-target="#addrole">
-            <i class="glyphicon glyphicon-plus"></i>添加
-        </button>
-        <button class="btn btn-success" data-toggle="modal"  onclick="showFun()" id="toAuth">
-            <i class="glyphicon glyphicon-plus"></i>授权
-        </button>
-        <button id="remove" class="btn btn-info">
-            <i class="glyphicon glyphicon-trash"></i> 删除
-        </button>
-    </div>
 
+<style>
+    table thead{
+	    background-color:#fff;
+        margin-bottom: 3px;
+
+    }
+    table tr{
+        margin: 5px;
+    }
+</style>
+
+<section class="content-header">
+    <h1>
+        权限管理
+        <small></small>
+    </h1>
+
+  <ol class="breadcrumb">
+
+    <li><button class="btn btn-success" data-toggle="modal" data-target="#addrole">
+        <i class="glyphicon glyphicon-plus"></i>添加</button></li>
+    <li><button id="remove" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>删除
+    </button></li>
+      <li><button class="btn btn-success" data-toggle="modal"  onclick="showFun()" id="toAuth">
+        <i class="glyphicon glyphicon-plus"></i>授权
+    </button></li>
+  </ol>
+</section>
+<section class="content">
+    <table id="rolelist"></table>
+</section>
     <!-- Modal addrole-->
     <div class="modal fade" id="addrole" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
@@ -139,7 +161,7 @@
 
     </div>
 
-    <table id="rolelist"></table>
+
     <script>
         $(document).ready(function () {
             // 初始化table
