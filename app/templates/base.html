@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>{% block title %} {% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-editable.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-select.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/mdstyle.css">
+	<script src="../static/js/jquery-3.2.1.min.js"></script>
+	 <!--<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>-->
+	<script type="text/javascript" src="../static/js/echarts-all.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-table.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-editable.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-table-editable.js"></script>
+	<script type="text/javascript" src="../static/js/tableExport.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-table-export.js"></script>
+	<script type="text/javascript" src="../static/js/events.js"></script>
+	<script type="text/javascript" src="../static/js/bootstrap-select.js"></script>
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	<nav class="navbar navbar-fixed-top " role="navigation">
+		<div class="navbar-header">
+			<img class="img-responsive" src="../static/images/md3.png" >
+			<!--<a class="dropdown-toggle" id="project"  href="#">MD测试实战</a>-->
+		</div>
+
+     	<ul class="nav navbar-nav ">
+			<li><a href="{{ url_for('todo') }}">任务跟进</a></li>
+			<li><a href="{{ url_for('Items') }}">项目字段</a></li>
+			<li><a href="{{ url_for('frontPerform') }}">前端性能测试</a> </li>
+			<li><a href="ui_auto">UI自动化测试</a></li>
+			<li><a href="case_detail">接口自动化测试</a> </li>
+			<li><a href="">性能监控</a> </li>
+			<li><a href="per_auto">全局变量</a></li>
+
+			<li><a href="{{ url_for('knowledge') }}">知识工程</a></li>
+      	</ul>
+
+		<div class="text-right">
+		<ul class="list-inline hidden-xs">
+			<li class="user_info">
+				{% if current_user.is_authenticated and current_user.Is_Admin %}
+				<label ><a href="{{ url_for('user') }}"><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</a></label>
+				<a href="{{ url_for('logout') }}" class="btn btn-signout">登出</a>
+				{% elif current_user.is_authenticated %}
+				<label ><i class="glyphicon glyphicon-user"></i>{{ current_user.username }}</label>
+				<a href="{{ url_for('logout') }}" class="btn btn-signout">登出</a>
+
+				{% else %}
+				<a href="/login" class="btn btn-signin" style="margin-bottom:2px;">立即登录</a>
+				{% endif %}
+			</li>
+		</ul>
+	</div>
+	</nav>
+
+
+	<script>
+
+		$(function () {
+        $(".navbar-nav").find("li").each(function () {
+            var a = $(this).find("a:first")[0];
+            if ($(a).attr("href") === location.pathname) {
+                $(this).addClass("active");
+            } else {
+                $(this).removeClass("active");
+            }
+        });
+    })
+	</script>
+
+
+	<div id="content" class="container-fluid">
+		{% block content %}{% endblock %}
+		<div class="mes-fixed-bottom">
+			{% for category,message in get_flashed_messages(with_categories=true) %}
+			<div class='alert alert-{{category}}'>
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				{{ message }}
+			</div>
+			{% endfor %}
+		</div>
+
+</body>
+</html>

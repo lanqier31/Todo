@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% block title %}项目字段{% endblock %}
+
+{% block content %}
+<script type="text/javascript" src="../static/js/jquery.cxselect.js"></script>
+<style>
+   .firstMenu,.secondMenu,.thirdMenu,.fourthMenu,.fifthMenu,.sixthMenu{
+      width:200px;
+   }
+   #element_id{
+      display: inline-block;
+   }
+
+   .btn-group{
+      display: inline-block;
+      float: right;
+      margin-right:3px;
+   }
+   #itemsList{
+      margin-top: 5px;
+   }
+   .dropdown-menu{
+      right:0;
+      left:auto;
+   }
+</style>
+<div id="element_id">
+   <select class="firstMenu form-control"></select>
+   <select class="secondMenu form-control"></select>
+   <select class="thirdMenu form-control"></select>
+   <select class="fourthMenu form-control"></select>
+   <select class="fifthMenu form-control"></select>
+   <select class="sixthMenu form-control"></select>
+</div>
+<div class="btn-group">
+  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    操作 <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+     <li><a data-toggle="modal" data-target="#addmodel">添加模块</a></li>
+     <li><a href="#">添加字段</a></li>
+     <li role="separator" class="divider"></li>
+     <li><a href="#">删除模块</a></li>
+     <li><a href="#">删除字段</a></li>
+     <li role="separator" class="divider"></li>
+     <li><a href="#">编辑模块</a></li>
+
+  </ul>
+</div>
+        <!-- Modal add model -->
+        <div class="modal fade" id="addmodel" tabindex="-1" role="dialog" aria-labelledby="addblock">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form class="form-inline" action="" method='POST'>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="addblock">模块添加</h4>
+                    </div>
+                    <div class="modal-body">
+
+                            <div class="form-group">
+                            <label for="FunValueCn">模块名称中文</label>
+                            <input type="text" class="form-control" id="FunValueCn" name="FunValueCn" style="width: 280px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunValueEn">模块名称英文</label>
+                            <input type="text" class="form-control" id="FunValueEn" name="FunValueEn" style="width: 280px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunTitle">模块提示</label>
+                            <input type="text" class="form-control" id="FunTitle" name="FunTitle" style="width: 200px;" />
+                          </div>
+                          <div class="form-group">
+                            <label for="FunLayer">模块层级</label>
+                            <input type="text" id="FunLayer" name="FunLayer" class="form-control" value="" onclick="$('#treeviews').show()" placeholder="模块层级">
+                            <div id="treeviews" style="display: none;">
+                          </div>
+                          <div class="form-group">
+                                <label for="FunOrder">排序</label>
+
+                                <select class="form-control" id="FunOrder" name="FunOrder">
+                                    <option value="exHigh">eH</option>
+                                    <option value="High">H</option>
+                                    <option value="Middle">M</option>
+                                    <option value="Low">L</option>
+                                </select>
+                          </div>
+                          <
+                          <div class="form-group">
+                            <label for="description">描述</label>
+                            <textarea  class="form-control" id="description" name="description" style="height: 130px;width:620px;"></textarea>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="createtime">创建日期</label>
+                            <input type="Date" id="createtime"  name="createtime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="completetime">计划日期</label>
+                            <input type="Date" id="plantime" name="plantime" class="form-control" />
+                          </div>
+                          <div class="form-group">
+                            <label for="completetime">完成日期</label>
+                            <input type="Date" id="completetime" name="completetime" class="form-control" />
+                          </div>
+
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="add_todo">保存</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+<table id="itemsList"></table>
+<script>
+
+      $(document).ready(function () {
+
+         //下拉多选
+//         $('.multiple').selectpicker();
+
+         //多级联动
+          $('#element_id').cxSelect({
+             url: '/show_Items',
+             selects: ['firstMenu', 'secondMenu', 'thirdMenu','fourthMenu','fifthMenu','sixthMenu'],  // 数组，请注意顺序
+             emptyStyle: 'none',
+             jsonValue:'value',   //set option 的value 值
+             required:true,
+             firstValue:'0'
+          });
+
+          // 初始化table
+         initTable();
+     });
+     function initTable(){
+
+         $('#itemsList').bootstrapTable('destroy');  //先销毁表格
+
+         $('#itemsList').bootstrapTable({
+             url: '/query_Items',
+             method: 'get',
+//                contentType : "application/x-www-form-urlencoded",
+             toolbar: '#toolbar',
+             dataType: 'json',
+             striped: false,  //是否行间隔色显示
+             cache: false,//是否试用缓存，默认为true
+             pagination: true, //s是否分页
+//             sortable:true,  //是否启用排序
+             sortName: 'FunItemOrder',
+             sortOrder: "asc", // 排序方式
+             pageNumber: 1, //初始化加载第一页，默认第一页
+             pageSize: 50, //每页的记录行数
+             pageList: [10, 20, 50],  //可供选择的每页行数
+             queryParamsType: 'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+             queryParams: queryParams,
+             sidePagination: "server",// 分页方式，client为客户端分页，server为服务端分页
+             strictSearch: true,
+             clickToSelect: true,  //是否启动点击选中行
+             search: false,
+             height: $(window).height() - 62 - 35,
+             columns: [
+
+                 {
+                     title: "",
+                     field: 'state',
+                     checkbox: true,
+                     align: 'center',
+                     valign: 'middle'
+                 },
+                 {
+                     title: 'PK',
+                     field: 'Pk',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: true,
+                     searchable: true,
+                     class: 'text-overflow'
+                 },{
+                     title: '数据库值',
+                     field: 'FunItemKey',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: true,
+                     searchable: true,
+                     class: 'text-overflow'
+                 },  {
+                     title: '字段名称',
+                     field: 'FunItemValueCn',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: false,
+                     searchable: false,
+                     editable:{
+                         type: 'text',
+                         separator: ",",
+                         title: '字段名称',
+                         emptytext: "--",
+                         mode: "popup",
+                     },
+                     class: 'text-overflow',
+                     visible: true,
+                     switchable: true
+                 }, {
+                     title: '排序',
+                     field: 'FunItemOrder',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: true,
+                     width: 50,
+                     searchable: false,
+                     class: 'text-overflow',
+                     visible: true,
+                     switchable: true
+
+                 }, {
+                     title: '下拉选项',
+                     field: 'dropdownMenus',
+                     align: 'left',
+                     width: 300,
+                     valign: 'middle',
+                     sortable: false,
+                     searchable: false,
+                     editable:{
+                         type: 'textarea',
+                         separator: ",",
+                         title: '下拉选项',
+                         emptytext: "--",
+                         mode: "popup",
+                         width: 300
+                     },
+                     formatter: function (value, row) {
+                         if (value.length > 0) {
+                             value = value.toString().replace(/,/g, "\n")
+
+                         }
+                         return(value)
+
+                     },
+                     class: 'text-overflow'
+                 }, {
+                     title: '派生规则',
+                     field: 'DerivedRuleDec',
+                     align: 'left',
+                     valign: 'middle',
+                     width: 400,
+                     sortable: false,
+                     searchable: false,
+                     editable: {
+                         type: 'textarea',
+                         separator: ",",
+                         title: '派生规则',
+                         emptytext: "--",
+                         mode: "popup",
+                         width: 500
+                     },
+//                     formatter:function(value,row,index){
+//                        if(value == null || value == ''){
+//                        return "-";
+//                        }
+//                        return value;
+//                        },
+                     class: 'text-overflow'
+                 }, {
+                     title: '页面Inx',
+                     field: 'FunModulesFk',
+                     align: 'left',
+                     valign: 'middle',
+                     width: 50,
+                     sortable: false,
+                     searchable: false,
+                     class: 'text-overflow'
+                 }, {
+                     title: 'dropDownKey',
+                     field: 'DropDownbox',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: false,
+                     searchable: false,
+                     editable:{
+                         type: 'text',
+                         separator: ",",
+                         title: 'dropdownKey',
+                         emptytext: "--",
+                         mode: "popup",
+                     },
+                     class: 'text-overflow'
+                 },{
+                     title: '弹出式Key',
+                     field: 'OpenSelectKey',
+                     align: 'left',
+                     valign: 'middle',
+                     sortable: false,
+                     searchable: false,
+                     editable:{
+                         type: 'text',
+                         separator: ",",
+                         title: '弹出式Key',
+                         emptytext: "--",
+                         mode: "popup",
+                     },
+                     class: 'text-overflow'
+                 }
+
+             ],
+             showColumns: false,   // 是否显示列
+             minimumCountColumns: 2,
+             showRefresh: false,  // 是否刷新
+             showToggle: false,
+             showExport: true,
+             exportDataType: "selected",   //basic', 'all', 'selected'.
+             exportTypes: ['excel'],
+             onClickRow: function (row) {
+                console.info(row)
+             },
+             formatLoadingMessage: function () {
+
+             },
+             //保存的使用
+             onEditableSave: function (field, row, oldValue,$el) {
+                 //可进行异步操作
+//
+                 postdata ={
+                     "Pk":row.Pk,
+                     "name":field,
+                     "value":row[field],
+                     "dropdownMenus":row.dropdownMenus,
+                     "dropDownKey":row.DropDownbox
+            };
+                 $.ajax({
+                     type: "post",
+                     url: "/edit_Item",
+                     data: postdata,
+//                     dataType: 'JSON',
+                     success: function (status,result) {
+                         if (status == "success") {
+                             alert('提交数据成功');
+                         }
+                         else if ('KeyError'){
+                             alert('dropDownKey不能为空！');
+                         }
+                         else if('error'){
+                             alert('编辑失败！')
+                         }
+                     },
+                     error: function () {
+                         alert('编辑失败');
+                     },
+                     complete: function () {
+
+                     }
+
+                 });
+             }
+
+         });
+
+     }
+     function queryParams(params) {  //配置参数
+         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+             limit: params.limit,   //每页的个数
+             offset: params.offset,  //分页时数据偏移量
+             sort: params.sort,  //排序列名
+             order: params.order,//排位命令（desc，asc）
+             menu1: $("#element_id .firstMenu").val(),
+             menu2: $("#element_id .secondMenu").val(),
+             menu3: $("#element_id .thirdMenu").val(),
+             menu4: $("#element_id .fourthMenu").val(),
+             menu5: $("#element_id .fifthMenu").val(),
+             menu6: $("#element_id .sixthMenu").val(),
+             sortOrder: params.order,//排序
+             sortName:params.sort//排序字段
+         };
+         return temp;
+     }
+
+
+
+
+</script>
+{% endblock %}
