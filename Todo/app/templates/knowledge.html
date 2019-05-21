@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}知识荟萃{% endblock %}
+
+{% block content %}
+<style>
+    .tab{
+        opacity: .7;
+        padding: 4px;
+        font-weight: 400;
+        display: block;
+        line-height: 1.9em;
+        color: #fbfbfb;
+        text-shadow: 0 1px 0 rgba(255,255,255,.15);
+        border: 1px solid rgba(0,0,0,.1);
+        border-bottom: 0;
+        border-radius: 2px;
+        background-color:rgb(34, 178, 197);
+    }
+
+    .subnav:nth-child(even) {
+        background: #fbfbfb;
+        border-top: 1px solid #efefef;
+        border-bottom: 1px solid #efefef;
+    }
+    .subnav{
+        cursor: pointer;
+        margin: 0px 2px;
+        padding: 8px;
+        font-size: 14px;
+        overflow: hidden;
+    }
+    .sidebar-box{
+        box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    }
+
+    .content > h2{
+        display: block;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 12px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid #eaeaea
+    }
+    .panel {
+        display: flex;
+        flex-direction: row;
+        flex-wrap:wrap;
+        justify-content: flex-start;
+    }
+    .panel > a.item{
+        width: 28%;
+        margin: 0 8px 10px 0;
+        text-align: left;
+        height: 80px;
+        color: #bbb;
+        background-color: #f6f6f6;
+        border-radius: 5px;
+        padding: 6px 16px;
+    }
+    .panel > a >h4
+    {
+        color: #64854c;
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        line-height: 1.1;
+        text-align: left;
+    }
+    .contentmain{
+        margin-right: 0;
+        padding: 12px 20px;
+        border: 1px solid #eaeaea;
+        background-color: #fff;
+        border-radius: 4px;
+    }
+</style>
+    <div class="container ">
+        <div class="row">
+            <div class="col-md-2" >
+                <div class="tab"><i class="glyphicon glyphicon-menu-hamburger"></i> 全部教程
+                </div>
+                <div class="sidebar-box ">
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> 测试</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> HTML / CSS</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> JavaScript</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> 数据库</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> ASP.NET</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> Web Service</div>
+                    <div class="subnav"><i class="glyphicon glyphicon-modal-window"></i> 工具下载</div>
+                </div>
+            </div>
+            <div class="col-md-10 contentmain" >
+                <div class="test content">
+                    <h2><i class="glyphicon glyphicon-equalizer"></i>测试</h2>
+                    <div class="panel">
+                    <a class="item" href="{{ url_for('test') }}">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/easytest.ico"/>
+                        <strong>测试基础概念</strong>
+                    </a>
+                    <a class="item" href="#">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="36" src="../static/images/python.ico"/>
+                        <strong>Python自动化测试</strong>
+                    </a>
+                    <a class="item" href="#">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="60" src="../static/images/logo_test.png"/>
+                        <strong>专注于测试</strong>
+                    </a>
+                    <a class="item" href="#">
+                        <h4>【测试】</h4>
+                        <img class="codeicon codeicon-36" height="36" width="60" src="../static/images/loadrunner.jpg"/>
+                        <strong>性能测试概览</strong>
+                    </a>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

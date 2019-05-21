@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    .canvesPic{
+        background-color: #F0f0f0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 610px;
+    }
+    .canves-title{
+        background-color: #00bcd4;
+        display: flex;
+        justify-content: space-evenly;
+        height:30px;
+    }
+    .canves-content{
+        background-color: #b9bf15;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        /*height: 600px;*/
+    }
+    .top,.footer{
+        display: flex;
+        flex-direction:row;
+        justify-content: space-between;
+        height:;
+    }
+    .middle{
+        display: flex;
+        background-color: #32c867;
+        /*height:400px;*/
+        flex-direction:row;
+        justify-content: center;
+        align-items: center;
+    }
+    .rightTop,.leftTop,.rightFoot,.leftFoot{
+        flex:0 0 240px;
+        background-color: #8e44ad;
+        padding-right: 30px;
+        padding-left: 30px;
+
+    }
+
+    .middleTop{
+        flex: 1 1 auto;
+        background-color: #8BC34A;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .middleFoot{
+        flex: 1 1 auto;
+        background-color: #8BC34A;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    .box{
+        background-color: #b9bf15;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height:300px;
+    }
+</style>
+<body>
+    <div class="canvesPic">
+        <div class="canves-title">
+            <div class="userInfo">当前病历：<i></i>
+            </div>
+            <div class="notice">测评提示：
+                <i></i>
+            </div>
+
+        </div>
+        <div class="canves-content">
+            <div class="top">
+                <div class="rightTop">
+                    <div>
+                        <label>首次手术时间：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>近次手术时间：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>累计手术次数：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>131I清甲时间：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>时点测评经历：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>现在访年期：</label>
+                        <span></span>
+                    </div>
+
+                </div>
+                <div class="middleTop">
+                    <div id="divTools" class="btn-group yaosuBtn">
+                        <a key="ComplexcheckEvaluation" href="#" class="btn btn-primary btn-small" style="padding: 2px 4px;">术前检查决策</a>
+                        <a key="PathologicalEvaluation" href="#" class="btn btn-info btn-small" style="padding: 2px 4px;">术后病情分析</a>
+                        <a key="YearpointTest" href="#" class="btn btn-success btn-small" style="padding: 2px 4px;">复查与时点测评</a>
+                        <a key="btnI" href="#" class="btn btn-warning btn-small" style="padding: 2px 6px;">I</a>
+                        <a key="Edit" href="#" class="btn btn-danger btn-small" style="padding: 2px 6px;">E</a>
+                        <a key="btnS" href="#" class="btn btn-inverse btn-small" style="padding: 2px 6px;">S</a>
+                        <a key="btnM" href="#" class="btn btn-primary btn-small" style="padding: 2px 6px;">M</a>
+                        <a key="btnB-Z" href="#" class="btn btn-success btn-small" style="padding: 7px 4px;display:none;">
+                            <div style="display:none" class="divBofang"></div>
+                            <div class="divZanting"></div>
+                        </a>
+                        <a key="btnHos" href="#" class="btn btn-info btn-small" style="padding: 2px 6px;">Hos</a>
+                    </div>
+                    <div class="tythrioImg">
+                        <img width="90" height="90" src="../../static\images/全叶切除.png">
+                    </div>
+                </div>
+                <div class="leftTop">
+                    <div>
+                        <label>范围化手术名：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>风险代码：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>风险等级：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>手术覆盖程度：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>须管控解破体域：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>拟查控颈部区属：</label>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="middle">
+                <div class="fociImg">
+                    <img width="360" height="360" src="../../static\images/Foci.png">
+                </div>
+                <div class="LnImg">
+                    <img  width="360" height="360" src="../../static\images/Ln.png">
+                </div>
+            </div>
+            <div class="footer">
+                <div class="rightFoot">
+                    <div>
+                        <label>预定诊治目标：sdgsdgsdgae 的看时光机时代接轨上看噶就是看得见过上看噶就是可根据时大控股就</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>病变可控性：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>理论随访时长：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>结论随访时长：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>非手术治疗经历：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>特殊情况记录：</label>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="middleFoot"></div>
+                <div class="leftFoot">
+                    <div>
+                        <label>预定诊治目标：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>病变可控性：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>理论随访时长：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>结论随访时长：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>非手术治疗经历：</label>
+                        <span></span>
+                    </div>
+                    <div>
+                        <label>特殊情况记录：</label>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

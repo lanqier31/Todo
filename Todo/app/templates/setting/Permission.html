@@ -1,0 +1,267 @@
+{% extends "setting/leftSidebar.html" %}
+{% block title %}角色管理{% endblock %}
+{% block main %}
+
+    <div class="buttool2">
+        <button class="btn btn-default" data-toggle="modal" data-target="#addpermission">
+            <i class="glyphicon glyphicon-plus"></i>添加</button>
+        <button id="remove" class="btn btn-info">
+            <i class="glyphicon glyphicon-trash"></i> 删除
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addpermission" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form class="form-inline" action="" method='POST'>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">权限添加</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="permissioname">权限名</label>
+                        <input class="form-control" id="permissioname" name="permissioname">
+                    </div>
+                    <div class="form-group">
+                        <label for="url">路径url</label>
+                        <input class="form-control" id="url" name="url">
+                    </div>
+                    <div class="form-group">
+                        <label for="permType">权限类型</label>
+                        <select  class="form-control" id="permType" name="permType" >
+                            {% for permtype in permTypes %}
+                                <option value={{permtype.ID}}>{{permtype.TypeName}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="parent">父权限</label>
+                       <select  class="form-control" id="parent" name="parent" >
+                            <option></option>
+                            {% for parent in parents %}
+                                <option value={{parent.ID}}>{{parent.PermName}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">描述</label>
+                        <input type="text" class="form-control" id="description" name="description" style="width: 620px;" />
+                        </input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="add_permission">保存</button>
+                </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <table id="permissionlist"></table>
+
+    <script>
+        $(document).ready(function () {
+            // 初始化table
+            initTable();
+            //下拉多选
+            $('.multiple').selectpicker();
+        });
+        function initTable(){
+
+            $('#permissionlist').bootstrapTable('destroy');  //先销毁表格
+
+            $('#permissionlist').bootstrapTable({
+                url:'/query_permission',
+                method:'get',
+//                contentType : "application/x-www-form-urlencoded",
+                toolbar:'#toolbar',
+                dataType:'json',
+                striped:false,  //是否行间隔色显示
+                cache:false,//是否试用缓存，默认为true
+                pagination:true, //s是否分页
+                sortable:true,  //是否启用排序
+                sortOrder:"ID asc", // 排序方式
+                pageNumber:1, //初始化加载第一页，默认第一页
+                pageSize:50 , //每页的记录行数
+                pageList:[10,20,50] ,  //可供选择的每页行数
+                queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+                queryParams: queryParams,
+                sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
+                strictSearch:true,
+                clickToSelect:true,  //是否启动点击选中行
+                search:false,
+                height:$(window).height()-62-30,
+                columns:[
+
+                            {
+                                title:"",
+                                field:'state',
+                                checkbox:true,
+                                align:'center',
+                                valign:'middle'
+                            },
+                            {
+                                title:'ID',
+                                field:'id',
+                                align:'left',
+                                valign:'middle',
+                                width:50,
+                                sortable:true,
+                                searchable:true,
+                                class:'text-overflow'
+                            },{
+                                title:'权限名称',
+                                field:'permName',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'权限路径',
+                                field:'url',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'权限类型',
+                                field:'PermType.typename',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'父级权限',
+                                field:'pid',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'描述',
+                                field:'description',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow'
+                             }
+                        ],
+                showColumns:false,   // 是否显示列
+                minimumCountColumns:2,
+                showRefresh:false,  // 是否刷新
+                showToggle:false,
+                showExport:false,
+                exportDataType: "selected",   //basic', 'all', 'selected'.
+                exportTypes:['excel'],
+                formatLoadingMessage: function () {
+
+                },
+
+
+            });
+        }
+        function queryParams(params) {  //配置参数
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //每页的个数
+                offset: params.offset,  //分页时数据偏移量
+                sort: params.sort,  //排序列名
+                order: params.order,//排位命令（desc，asc）
+//                username: $("#version_filter").val(),
+            };
+            return temp;
+        }
+        //添加permission操作
+        $("#add_permission").click(function () {
+            if ($("#permissioname").val().trim() == "") {
+                $("#permissioname").focus();
+                alert("请输入必填项！");
+                return false;
+            }
+            postdata ={
+                "permissioname":$('#permissioname').val(),
+                "url":$('#url').val(),
+                "permType":$("#permType").val(),
+                "parent":$('#parent').val(),
+                "description":$('#description').val()
+            };
+            $.ajax({
+                //提交数据的类型 POST GET
+                type:"POST",
+                //提交的网址
+                url:"/add_permission",
+                //提交的数据
+                data:postdata,
+                //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+//                datatype: "json",
+                //ajax请求成功后的事件
+                    success:function(){
+
+                    alert("保存成功！");
+                    $('.modal').modal('hide');
+                    location.reload();
+                    // $('#tosolist').html($(data).find('#todolist').html());
+
+                    },
+                    error: function(e){
+                    //请求出错处理
+                    alert(e);
+                },
+            });
+        });
+
+        //删除permission操作
+        $("#remove").click(function () {
+            var ids = getIds();
+            if (ids.length < 1) {
+                alert("请选中要删除的行！");
+                return;
+            }
+
+            if (confirm("确定删除选中行吗？")) {
+                $.ajax({
+                    type: "post",
+                    url: "/delete_permission",
+                    data:{"ids":ids},
+                        success:function(data){
+                            if(data == 'success'){
+                                alert("删除成功！");
+                                location.reload();
+                            };
+                        },
+                        error:function(e){
+                            alert(e);
+                        }
+                    });
+            }
+        });
+
+            //获取勾选的行的id
+        var getIds= function () {
+                return $.map($("#permissionlist").bootstrapTable('getSelections'), function (row) {
+                return row.id
+            });
+        };
+
+    </script>
+
+{% endblock %}
