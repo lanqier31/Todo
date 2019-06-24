@@ -1,7 +1,18 @@
 {% extends "base.html" %}
 {% block title %}任务跟进{% endblock %}
 {% block content %}
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
 <script type="text/javascript" src="../static/js/bootstrap-editable.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+
+<style>
+    .editvalue:hover{
+        text-decoration: none;
+    }
+    .note-editor{
+        display: inline-block;
+    }
+</style>
 <div class="todohead">
     <div class="row" id="bugfilter">
         <ul class="nav nav-pills">
@@ -89,7 +100,7 @@
         <!--<button class="btn btn-primary" data-table="todolist" aria-label="export type">导出</button>-->
         </div>
     
-        <!-- Modal -->
+        <!-- ADD Modal -->
         <div class="modal fade" id="addtodo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 
             <div class="modal-dialog" role="document">
@@ -154,8 +165,9 @@
                             <input type="text" class="form-control" id="title" name="title" style="width: 620px;" />
                           </div>
                           <div class="form-group">
-                            <label for="description">描述</label>
-                            <textarea  class="form-control" id="description" name="description" style="height: 130px;width:620px;"></textarea>
+                                <label for="description">描述</label>
+                                <textarea  class="summernote" name="description" id="description" style="display: inline-block"></textarea >
+                                <!--<textarea  class="form-control" id="description" name="description" style="height: 130px;width:620px;"></textarea>-->
                           </div>
                           <div class="form-group">
                             <label for="developer">开发人员</label>
@@ -219,15 +231,35 @@
             </div>
 
         </div>
+        <!-- end add Modal-->
+        <!-- begin eidt desc -->
+        <div class="modal fade" id="edit_desc" tabindex="-1" role="dialog" aria-labelledby="editDesc">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" >编辑描述</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="eidtId">
+                     <div  class="summernote" name="description" id="editDesc"></div >
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="edit_todo">保存</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <!--end edit desc -->
     </div>
 </div>
 
-<div>
     <table id="todolist" class="table table-hover table-sm top_fix_table "></table>
-    <!--<table id="detail-tabs" class="table table-hover table-sm"></table>-->
     <script type="text/javascript">
         $(document).ready(function () {
-
             // 初始化table
             initTable();
             //下拉多选
@@ -256,8 +288,6 @@
                 pageList:[10,20,50] ,  //可供选择的每页行数
                 queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
                 queryParams: queryParams,
-                detailView: true,//父子表
-                onExpandRow:onExpandRow,
                 sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
                 strictSearch:false,
                 clickToSelect:true,  //是否启动点击选中行
@@ -392,7 +422,8 @@
                                         }
                                     }
                                 }
-                            },{
+                            },
+                            {
                                 title:'Module',
                                 field:'module',
                                 align:'center',
@@ -429,7 +460,8 @@
                                     }
                                 },
                                 switchable:true
-                            },{
+                            },
+                            {
                                 title:'标题',
                                 field:'title',
                                 width:160,
@@ -459,7 +491,8 @@
                                     }
                                 }
 
-                            },{
+                            },
+                            {
                                 title:'描述',
                                 field:'description',
                                 align:'left',
@@ -467,25 +500,38 @@
                                 sortable:false,
                                 searchable:false,
                                 width:400,
-                                editable: {
-                                    type: 'textarea',
-                                    title: '描述',
-                                    mode: "popup",
-                                    emptytext: "--",
-                                    url:'/edit_todo',
-                                    success: function(response, newValue) {
-                                        if(response=='nouser'){
-                                            return "请先登录！";
-                                        }
-                                        if(response=='7'){
-                                            return "对不起，您无此操作权限！";
-                                        }
-                                        if(response.status =='error') {
-                                            return response.msg;
-                                        }
-                                    }
+                                // editable: {
+                                //     type: 'textarea',
+                                //     title: '描述',
+                                //     mode: "popup",
+                                //     inputclass:"summernote",
+                                //     emptytext: "--",
+                                //     url:'/edit_todo',
+                                //     success: function(response, newValue) {
+                                //         if(response=='nouser'){
+                                //             return "请先登录！";
+                                //         }
+                                //         if(response=='7'){
+                                //             return "对不起，您无此操作权限！";
+                                //         }
+                                //         if(response.status =='error') {
+                                //             return response.msg;
+                                //         }
+                                //         // else {
+                                //         //     return '<div>'+ newValue + '</div>'
+                                //         // }
+                                //     },
+                                //     noeditFormatter: function () {
+                                //             return false;
+                                //     }
+                                //
+                                // },
+                                formatter:function(value,row,index){
+                                    str ='<a class="editvalue" data-id="' + row.id + '" data-target="#edit_desc" data-toggle="modal" ><div>'+ value + '</div></a>'
+                                    return str;
                                 }
-                            },{
+                            },
+                            {
                                 title:'开发',
                                 field:'developer',
                                 align:'center',
@@ -521,7 +567,8 @@
                                         }
                                     }
                                 }
-                            },{
+                            },
+                            {
                                 title:'测试',
                                 field:'tester',
                                 align:'center',
@@ -555,7 +602,8 @@
                                     }
                                 },
                                 sortable:true
-                            },{
+                            },
+                            {
                                 title:'Status',
                                 field:'status',
                                 align:'center',
@@ -614,7 +662,8 @@
                                 },
                                 sortable:false
 
-                            },{
+                            },
+                            {
                                 title:'备注',
                                 field:'remarks',
                                 align:'center',
@@ -639,7 +688,8 @@
                                         }
                                     }
                                 }
-                            },{
+                            },
+                            {
                                 title:"创建日期",
                                 field:"createtime",
                                 valign:'middle',
@@ -647,7 +697,8 @@
                                 align:'center',
                                 searchable:false,
                                 align:'center'
-                            },{
+                            },
+                            {
                                 title:"计划日期",
                                 field:"plantime",
                                 align:'center',
@@ -677,7 +728,8 @@
                                     }
                                 },
                                 align:'center'
-                            },{
+                            },
+                            {
                                 title:"完成日期",
                                 field:"completetime",
                                 align:'center',
@@ -716,80 +768,11 @@
                 exportTypes:['excel'],
                 formatLoadingMessage: function () {
 
-                }
-                //行内编辑  zuofei
-//                onEditableSave: function (field, row, oldValue,$el) {
-//                    $.ajax({
-//                        type: "post",
-//                        url: "/edit_todo",
-//                        data: {
-//                            "pk":row.id,
-//                            "name":field,
-//                            "oldValue":oldValue,
-//                            "newValue":row[field]
-//                        },
-//                        success: function(data, status) {
-//                            if(status=='success'){
-//                                if (data == "nouser") {
-//
-////                                    return "请先登陆";
-//
-//                                   $el.editable('validate',"请先登陆");
-//                            }
-//                            if(data=='notallowed') {
-//
-//                                return "对不起，您无此操作权限！";
-//                                $el.editable('validate',"对不起，您无此操作权限！");
-//                            }
-//                            if(data=='exHigh' || data == 'Unresolved'|| data=='bug'){     //控制颜色显示
-//                                $el.css("backgroundColor", "");
-//                                $el.removeClass("PinkBackground");
-//                                $el.removeClass("blueBackground");
-//                                $el.removeClass("greyBackground");
-//                                $el.addClass("redBackground");
-//                            }
-//                            else if(data=='High'){
-//                                $el.css("backgroundColor", "");
-//                                $el.removeClass("redBackground");
-//                                $el.removeClass("blueBackground");
-//                                $el.addClass("PinkBackground");
-//
-//                            }
-//                            else if (data=='Middle' || data=='Completed'){
-//                                $el.css("backgroundColor", "");
-//                                $el.removeClass("redBackground");
-//                                $el.removeClass("PinkBackground");
-//                                $el.addClass("blueBackground");
-//                            }
-//                            else if(data=='Rejected'){
-//                                $el.css("backgroundColor", "");
-//                                $el.removeClass("redBackground");
-//                                $el.removeClass("blueBackground");
-//                                $el.addClass("greyBackground");
-//                            }
-//
-//                            else {
-//                                $el.css("backgroundColor", "");
-//                                $el.removeClass("redBackground");
-//                                $el.removeClass("greyBackground");
-//                                $el.removeClass("PinkBackground");
-//                                $el.removeClass("blueBackground");
-//                            }
-//                        }
-//                            },
-//
-//                        error: function () {
-//                            return'编辑失败';
-//                        },
-//                        complete: function () {
-//
-//                        }
-//
-//                    });
-//            }
+                },
+
 
             });
-        }
+        };
         function queryParams(params) {  //配置参数
             var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
                 limit: params.limit,   //每页的个数
@@ -806,279 +789,23 @@
                 searchText:$('.search').val().trim(),
             };
             return temp;
-        }
-        //额外增加一行
-        function onExpandRow(index, row, $detail) {
-            InitSubTable(index, row, $detail);
-        }
-
-
-        //子任务
-        InitSubTable = function (index,row,$detail) {
-            var parentid = row.id;
-            var cur_table = $detail.html('<table></table>').find('table');
-
-                $(cur_table).bootstrapTable({
-                    url:'',
-                    pagination:false,
-                    sidePagination:"server",
-                    dataType:"json",
-                    detailView:true,
-                    editable:true,
-                    uniqueId:parentid,
-                    columnus:[{
-                        formatter:function(value,row,index){
-                            return index+1
-                        }
-                    }, {
-                            title:'操作',
-                            formatter:function (value, row, index){
-                            return [
-                                    "<a class=\"like\" href='javascript:addRow(" + index + ", " + JSON.stringify(row) + ")' title=\"新增行\">",
-                                    '<i class="glyphicon glyphicon-plus"></i>',
-                                    '</a>  ',
-                                    '<a class="remove" href="javascript:removeRow(\'' + row.dbColName + '\')" title="删除行">',
-                                    '<i class="glyphicon glyphicon-remove"></i>',
-                                    '</a>'
-                                ].join('');
-                        }
-
-                    }, {
-                            title:'标题',
-                            field:'subtitle',
-                            width:160,
-                            align:'left',
-                            valign:'middle',
-                            sortable:false,
-                            searchable:false,
-                            editable: {
-                                type: 'text',
-                                title: '标题',
-                                mode: "popup",
-                                emptytext: "--",
-                                validate: function (v) {
-                                    if (!v) return '标题不能为空';
-                                },
-                                url:'/edit_todo',
-                                success: function(response, newValue) {
-                                    if(response.status =='error') {
-                                        return response.msg;
-                                    }
-                                }
-                            }
-
-                        },{
-                        title:'描述',
-                        field:'description',
-                        align:'left',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        width:400,
-                        editable: {
-                            type: 'textarea',
-                            title: '描述',
-                            mode: "popup",
-                            emptytext: "--",
-                            url:'/edit_todo',
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:'开发',
-                        field:'developer',
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable:{
-                            type: 'checklist',
-                            pk:'1',
-                            separator:",",
-                            value:"' + row[that.options.idField] + '",
-                            title: '开发人员',
-                            mode: "inline",
-                            emptytext: "--",
-                            source:[{value:1,text:"张路"},
-                                    {value:2,text:"李小满"},
-                                    {value:3,text:"徐郁"},
-                                    {value:4,text:"陈梦梦"}],
-                            url:'/edit_todo',
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:'测试',
-                        field:'tester',
-                        align:'center',
-                        valign:'middle',
-                        switchable:false,
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'checklist',
-                            separator:",",
-                            title: '测试人员',
-                            emptytext: "--",
-                            mode: "popup",
-                            source:[{value:1,text:"高文琪"},{value:2,text:"俞利芳"},{value:3,text:"王健"}],
-//                            url:'/edit_todo',
-//                            success: function(response, newValue) {
-//                                if(response.status =='error') {
-//                                   return response.msg;
-//                                }
-//                            }
-                        },
-                        sortable:true
-                    },{
-                        title:'Status',
-                        field:'status',
-                        align:'center',
-                        valign:'middle',
-                        searchable:false,
-                        editable: {
-                            type: 'select',
-                            title: '状态',
-                            emptytext: "--",
-                            mode: "popup",
-                            source:[
-                                    {value: 'Unresolved', text: '未解决'},
-                                    {value: 'Completed', text: '已完成'},
-                                    {value: 'Delayed', text: '已延迟'},
-                                    {value: 'Rejected', text: '已作废'},
-                                    {value: 'Closed', text: '已关闭'}],
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(newValue=='Unresolved'){     //控制颜色显示
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).removeClass("blueBackground");
-                                    $(this).addClass("redBackground");
-                                }
-                                else if(newValue=='Rejected'){
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("blueBackground");
-                                    $(this).addClass("greyBackground");
-
-                                }
-                                else if (newValue=='Completed'){
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).addClass("blueBackground");
-                                }
-                                else {
-                                    $(this).css("backgroundColor", "");
-                                    $(this).removeClass("redBackground");
-                                    $(this).removeClass("greyBackground");
-                                    $(this).removeClass("blueBackground");
-                                }
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        sortable:false
-                    },{
-                        title:'备注',
-                        field:'remarks',
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'textarea',
-                            title: '描述',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        }
-                    },{
-                        title:"创建日期",
-                        field:"createtime",
-                        valign:'middle',
-                        sortable:false,
-                        align:'center',
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '创建日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    },{
-                        title:"计划日期",
-                        field:"plantime",
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '计划日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    },{
-                        title:"完成日期",
-                        field:"completetime",
-                        align:'center',
-                        valign:'middle',
-                        sortable:false,
-                        searchable:false,
-                        editable: {
-                            type: 'text',
-                            title: '完成日期',
-                            emptytext: "--",
-                            mode: "popup",
-                            url:'/edit_todo',
-                            pk:6,
-                            success: function(response, newValue) {
-                                if(response.status =='error') {
-                                    return response.msg;
-                                }
-                            }
-                        },
-                        align:'center'
-                    }]
-                })
-
         };
+
         function getIdSelections() {
             return $.map($("#todolist").bootstrapTable('getSelections'), function (row) {
             return row.id
         });
-        }
+        };
+        //编辑描述时展开model的内容自动显示
+        $('#edit_desc').on('show.bs.modal', function (event) {
+              var btnThis = $(event.relatedTarget); //触发事件的按钮
+              var modal = $(this);  //当前模态框
+              var content = btnThis.find('div').html();
+              var modalId = btnThis.data('id');
+              modal.find('input').val(modalId);
+              modal.find('.modal-body #editDesc').summernote('code', content);
+        });
+
         $(".bugfilter").change(function(){
             $('.search').val("");
             $('#todolist').bootstrapTable('refresh',{url: '/query_todo'});
@@ -1095,7 +822,6 @@
 
         });
 
-
         // 监听模态框事件
         $(function () { $('#addtodo').on('shown.bs.modal', function () {
             var d = new Date().Format("yyyy-MM-dd");  //获取当前日期并格式化
@@ -1103,6 +829,35 @@
           })
 
         });
+        //富文本方法
+        $('.summernote').each(function() {
+            var $this = $(this);
+            var placeholder = $this.attr("placeholder") || '';
+            var url = $this.attr("action") || '';
+            $this.summernote({
+                lang : 'zh-CN',
+                placeholder : placeholder,
+                width:620,
+                minHeight : 200,
+                dialogsFade : true,// Add fade effect on dialogs
+                dialogsInBody : true,// Dialogs can be placed in body, not in
+                // summernote.
+                disableDragAndDrop : false,// default false You can disable drag
+                // and drop
+                toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']]
+              ]
+            });
+        });
+        // $("#editDesc").summernote({
+        //     width:760
+        // });
 
         //添加todo操作
         $("#add_todo").click(function () {
@@ -1118,7 +873,8 @@
                 "module":$('#module').val(),
                 "priority":$('#priority').val(),
                 "title":$('#title').val(),
-                "description":$('#description').val(),
+                // "description":$('#description').val(),
+                "description":$('#description').summernote('code'),
                 "developer":$('#developer').val(),
                 "tester":$('#tester').val(),
                 "status":$('#status').val(),
@@ -1164,7 +920,6 @@
                 alert("请选中要删除的行！");
                 return;
             }
-
             if (confirm("确定删除选中行吗？")) {
                 $.ajax({
                     type: "post",
@@ -1186,17 +941,38 @@
                     });
             }
         });
-
-        function addRow(insertIndex, rowObj){
-            var insertRow = rowObj;
-            $.each(insertRow, function(name, value){
-                insertRow[name] = '';
+        //edit desc操作
+        $("#edit_todo").click(function () {
+            $.ajax({
+                //提交数据的类型 POST GET
+                type:"POST",
+                //提交的网址
+                url:"/edit_desc",
+                //提交的数据
+                data:{"description":$('#editDesc').summernote('code'),"id":$('#eidtId').val()},
+                //返回数据的格式 "xml", "html", "script", "json", "jsonp", "text"
+//                datatype: "json",
+                //ajax请求成功后的事件
+                    success:function(data){
+                        if(data == 'nouser'){
+                            alert("请先登陆！")
+                        }
+                        else if(data == '8'){
+                            alert("该用户无此权限")
+                        }
+                        else {
+                            alert("保存成功！");
+                        $('.modal').modal('hide');
+                        location.reload();
+                        // $('#tosolist').html($(data).find('#todolist').html());
+                        };
+                    },
+                    error: function(e){
+                    //请求出错处理
+                    alert(e);
+                },
             });
-
-            var params = {index:insertIndex + 1, row:insertRow};
-            $cur_table.bootstrapTable('insertRow', params);
-        }
-
+        });
 
     // 对Date的扩展，将 Date 转化为指定格式的String
     // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
@@ -1219,6 +995,9 @@
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     }
+
+
+
     </script>
 </div>
 

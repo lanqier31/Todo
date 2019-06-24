@@ -142,6 +142,31 @@ def add_todo(charset='utf-8'):
         print IOError
 
 
+@app.route('/edit_desc',methods=['GET','POST'])
+def edit_desc():
+    if current_user.is_anonymous:
+        return "nouser"
+    if 3 not in current_user.permissions:
+        return 'notallowed'
+    try:
+        # data = request.values
+        id = request.form.get("id","null")
+        value=request.form.get("description",'null')
+        todo = Todo.query.get(id)
+        if todo:
+            todo.description=value
+            field = 'description'
+            oldValue = ''
+        todo.updateUser = current_user.username
+        todo.updateTime = datetime.now()
+        todo.save()
+        audit = Audit(id, field, oldValue, value, current_user.username, datetime.now(), 'edit')
+        audit.save()
+        return value
+    except IOError:
+        return 'error'
+
+
 @app.route('/edit_todo',methods=['GET','POST'])
 def edit_todo():
     if current_user.is_anonymous:

@@ -9,15 +9,6 @@ SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
 SQLALCHEMY_COMMIT_ON_TEARDOWN = True   #该配置为True,则每次请求结束都会自动commit数据库的变动
 CSRF_ENBLE = True                     #激活站点请求伪造保护
 SECRET_KEY = 'YOU-Will-never-guess'   #仅仅当CSRF激活是才需要，用于建立加密令牌，验证表单
-OPENID_PROVIDERS=[
-    {'name': 'Google', 'url': 'https://www.google.com/accounts/o8/id'},
-    {'name': 'Yahoo', 'url': 'https://me.yahoo.com'},
-    {'name': 'AOL', 'url': 'http://openid.aol.com/<username>'},
-    {'name': 'Flickr', 'url': 'http://www.flickr.com/<username>'},
-    {'name': 'MyOpenID', 'url': 'https://www.myopenid.com'}
-]
-
-
 
 # 定义UI自动化上传文件存放路径
 ui_suites_dir = os.path.join(basedir, 'Web\ui_suites')
@@ -84,5 +75,5 @@ hosts = {'localhost': 'http://127.0.0.1/', '164': 'http://192.168.10.164/', '243
 
 #定义sqlserver连接
 
-conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB2')
+# conn = pymssql.connect('192.168.10.244', 'mduser', 'mduser', 'AutoCodeDB2')
 

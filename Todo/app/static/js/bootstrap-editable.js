@@ -32,7 +32,7 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
             //set initial value
             //todo: may be add check: typeof str === 'string' ? 
             this.value = this.input.str2value(this.options.value); 
-            
+            // this.value = this.input.value2html(this.options.value,this);
             //prerender: get input.$input
             this.input.prerender();
         },
@@ -854,6 +854,11 @@ Editableform is linked with one of input types, e.g. 'text', 'select' etc.
                type = 'textarea';
            }
 
+           //change div to textarea for jquery UI and plain versions
+           if(type === 'div' && !$.fn.editabletypes[type]) {
+               type = 'div';
+           }
+
            //create input of specified type. Input will be used for converting value, not in form
            if(typeof $.fn.editabletypes[type] === 'function') {
                TypeConstructor = $.fn.editabletypes[type];
@@ -1542,6 +1547,10 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             if(this.input.type === 'textarea') {
                 this.$element.addClass('editable-pre-wrapped');
             }
+            //自定义
+            if(this.input.type === 'div') {
+                this.$element.addClass('summernote');
+            }
               //attach handler activating editable. In disabled mode it just prevent default action (useful for links)
             if(this.options.toggle !== 'manual') {
                 this.$element.addClass('editable-click');
@@ -1803,6 +1812,7 @@ Makes editable any HTML element on the page. Applied as jQuery method.
             //init editableContainer: popover, tooltip, inline, etc..
             if(!this.container) {
                 var containerOptions = $.extend({}, this.options, {
+                    html:this.innerHTML,
                     value: this.value,
                     input: this.input //pass input to form (as it is already created)
                 });
@@ -2540,7 +2550,7 @@ To create your own input you can inherit from this class.
         @since 1.5.0
         @default true
         **/         
-        escape: true,
+        escape: false,
                 
         //scope for external methods (e.g. source defined as function)
         //for internal use only
@@ -3136,6 +3146,105 @@ $(function(){
     $.fn.editabletypes.textarea = Textarea;
 
 }(window.jQuery));
+
+
+/*自定义div*/
+
+(function ($) {
+    "use strict";
+
+    var Div = function (options) {
+        this.init('div', options, Div.defaults);
+    };
+
+    $.fn.editableutils.inherit(Div, $.fn.editabletypes.abstractinput);
+
+    $.extend(Div.prototype, {
+        render: function () {
+            this.setClass();
+            this.setAttr('placeholder');
+            this.setAttr('rows');
+
+            //ctrl + enter
+            this.$input.keydown(function (e) {
+                if (e.ctrlKey && e.which === 13) {
+                    $(this).closest('form').submit();
+                }
+            });
+        },
+
+       //using `white-space: pre-wrap` solves \n  <--> BR conversion very elegant!
+
+       value2html: function(value, element) {
+            var html = '', lines;
+            if(value) {
+                lines = value.split("\n");
+                for (var i = 0; i < lines.length; i++) {
+                    lines[i] = $('<div>').text(lines[i]).html();
+                }
+                html = lines.join('<br>');
+            }
+            $(element).html(html);
+        },
+
+        html2value: function(html) {
+            if(!html) {
+                return '';
+            }
+
+            var regex = new RegExp(String.fromCharCode(10), 'g');
+            var lines = html.split(/<br\s*\/?>/i);
+            for (var i = 0; i < lines.length; i++) {
+                var text = $('<div>').html(lines[i]).text();
+
+                // Remove newline characters (\n) to avoid them being converted by value2html() method
+                // thus adding extra <br> tags
+                text = text.replace(regex, '');
+
+                lines[i] = text;
+            }
+            return lines.join("\n");
+        },
+
+        activate: function() {
+            $.fn.editabletypes.text.prototype.activate.call(this);
+        }
+    });
+
+    Div.defaults = $.extend({}, $.fn.editabletypes.abstractinput.defaults, {
+        /**
+        @property tpl
+        @default <div></div>
+        **/
+        tpl:'<div></div>',
+        /**
+        @property inputclass
+        @default input-large
+        **/
+        inputclass: 'summernote',
+        /**
+        Placeholder attribute of input. Shown when input is empty.
+
+        @property placeholder
+        @type string
+        @default null
+        **/
+        placeholder: null,
+        /**
+        Number of rows in div
+
+        @property rows
+        @type integer
+        @default 7
+        **/
+        rows: 7
+    });
+
+    $.fn.editabletypes.div = Div;
+
+}(window.jQuery));
+
+
 
 /**
 Select (dropdown)

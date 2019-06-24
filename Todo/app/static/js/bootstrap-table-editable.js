@@ -50,12 +50,14 @@
             var _formatter = column.formatter;
             column.formatter = function (value, row, index) {
                 var result = _formatter ? _formatter(value, row, index) : value;
-                return ['<a href="javascript:void(0)"',
+                var res = ['<a href="javascript:void(0)"',
                     ' data-name="' + column.field + '"',
                     ' data-pk="' + row['id'] + '"',
                     ' data-value="' + result + '"',
                     '>' + '</a>'
                 ].join('');
+                return res;
+                // return '<a href ="javascript:void(0)" >'+result+'</a>'
             };
         });
     };
