@@ -285,9 +285,9 @@ def service_auto():
     return render_template('service_auto.html')
 
 
-@app.route('/case_detail')
-def case_detail():
-    return render_template('case_detail.html')
+# @app.route('/interfaceTest',methods=['GET', 'POST'])
+# def interfaceTest():
+#     return render_template('InterfaceTest/case_detail.html')
 
 
 @app.route('/cap_auto')

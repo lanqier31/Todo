@@ -1,0 +1,248 @@
+{% extends "InterfaceTest/Leftsidebar.html" %}
+{% block title %}接口信息{% endblock %}
+{% block main %}
+<style>
+    .select-nav{
+        padding-bottom: 3px;
+        border-bottom: #0088cc 2px solid;
+    }
+    .selectItem{
+        padding: 6px 5px;
+        margin-right: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+</style>
+<script type="text/javascript" src="../static/js/mt-tabpage.js"></script>
+    <div CLASS="select-nav">
+        <ul class="nav nav-pills">
+            <li role="presentation" >项目版本
+                <select id="version"  class="selectItem" >
+                    <option value="syf1.1.1">syf1.1.1</option>
+                    <option value="syf1.2.0" selected>syf1.2.0</option>
+                    <option value="syf1.3.0">syf1.3.0</option>
+                    <option value="cdr1.0.0">cdr1.0.0</option>
+                </select>
+            </li>
+            <li role="presentation" >测试环境
+                <select id="test_environment"  class="selectItem" >
+                    <option value="syf1.1.1">243</option>
+                    <option value="syf1.2.0" selected>120</option>
+                    <option value="syf1.3.0">syf1.3.0</option>
+                    <option value="cdr1.0.0">cdr1.0.0</option>
+                </select>
+            </li>
+            <li role="presentation" >测试结果
+                <select id="testResult"  class="selectItem" >
+                    <option value="syf1.1.1">SUCCESS</option>
+                    <option value="syf1.2.0" selected>FAILED</option>
+                </select>
+            </li>
+    </ul>
+    </div>
+    <div class="mt-tabpage" js-tab="2">
+    <div class="mt-tabpage-title">
+        <a href="javascript:;" class="mt-tabpage-item mt-tabpage-item-cur">接口管理</a>
+        <a href="javascript:;" class="mt-tabpage-item">接口详情</a>
+        <a href="javascript:;" class="mt-tabpage-item">会议</a>
+    </div>
+    <div class="mt-tabpage-count">
+        <ul class="mt-tabpage-cont__wrap">
+            <li class="mt-tabpage-item">
+                <div class="buttonItems">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#addintertest">
+                        <i class="glyphicon glyphicon-plus"></i>添加接口</button>
+                    <button id="remove" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i> 删除接口
+                    </button>
+                    <input class="form-control  search" type="text" placeholder="Id">
+                </div>
+                <div class="table-responsive">
+                    <table id = "caselist" class="table"></table>
+                </div>
+            </li>
+            <li class="mt-tabpage-item">Cont2</li>
+            <li class="mt-tabpage-item">Cont3</li>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // 初始化table
+        initTable();
+        });
+    $(function () {
+
+        $('[js-tab=2]').tab({
+            mouse: 'click',   //切换方式：over，click
+            autoPlay: false,  //播放方式：false，true
+            curDisplay: 1,     //当前第一个打开
+            changeMethod: 'horizontal'  //切换选项：默认default，horizontal，vertical，opacity这4种方式
+        });
+
+    });
+    function initTable(){
+
+            $('#caselist').bootstrapTable('destroy');  //先销毁表格
+
+            $('#caselist').bootstrapTable({
+                url:'/query_interfaceTest',
+                method:'get',
+//                contentType : "application/x-www-form-urlencoded",
+                toolbar:'#toolbar',
+                dataType:'json',
+                striped:false,  //是否行间隔色显示
+                cache:false,//是否试用缓存，默认为true
+                pagination:true, //s是否分页
+                sortable:true,  //是否启用排序
+                sortOrder:"apiID asc", // 排序方式
+                pageNumber:1, //初始化加载第一页，默认第一页
+                pageSize:50 , //每页的记录行数
+                pageList:[10,20,50] ,  //可供选择的每页行数
+                queryParamsType:'limit', //默认为limit， 在默认情况下，传给服务器的参数为；offset，limit， 设置为''则传给服务器的参数为pageSize，pageNumber
+                queryParams: queryParams,
+                sidePagination:"server",// 分页方式，client为客户端分页，server为服务端分页
+                strictSearch:true,
+                clickToSelect:true,  //是否启动点击选中行
+                search:false,
+                height:$(window).height()-62-30,
+                columns:[
+
+                            {
+                                title:"",
+                                field:'state',
+                                checkbox:true,
+                                align:'center',
+                                valign:'middle'
+                            },
+                            {
+                                title:'ID',
+                                field:'apiID',
+                                align:'left',
+                                valign:'middle',
+                                width:50,
+                                sortable:true,
+                                searchable:true,
+                                class:'text-overflow'
+                            },{
+                                title:'接口名称',
+                                field:'apiTitle',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'请求URL',
+                                field:'urlPath',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },{
+                                title:'请求方式',
+                                field:'method',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                switchable:true
+                            },{
+                                title:'请求参数',
+                                field:'params',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow'
+                             },
+                            {
+                                title:'报文',
+                                field:'headers',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },
+                            {
+                                title:'测试结果',
+                                field:'testresult',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true
+                            },
+                            {
+                                title:'操作',
+                                field:'operate',
+                                align:'left',
+                                valign:'middle',
+                                sortable:false,
+                                searchable:false,
+                                class:'text-overflow',
+                                visible:true,
+                                switchable:true,
+                                events:operateEvents,
+                                formatter:operateFormatter
+                            }
+
+                        ],
+                showColumns:false,   // 是否显示列
+                minimumCountColumns:2,
+                showRefresh:false,  // 是否刷新
+                showToggle:false,
+                showExport:false,
+                exportDataType: "selected",   //basic', 'all', 'selected'.
+                exportTypes:['excel'],
+                formatLoadingMessage: function () {
+
+                },
+
+
+            });
+        }
+        function queryParams(params) {  //配置参数
+            var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit,   //每页的个数
+                offset: params.offset,  //分页时数据偏移量
+                sort: params.sort,  //排序列名
+                order: params.order,//排位命令（desc，asc）
+//                username: $("#version_filter").val(),
+            };
+            return temp;
+        }
+
+        function operateFormatter(value,row,index) {
+            return [
+            '<button type="button" class="caseRun btn btn-primary  btn-sm" style="margin-right:15px;">运行</button>',
+
+            '<button type="button" class="caseEdit btn btn-primary  btn-sm" style="margin-right:15px;">详情</button>'
+            ].join('');
+        }
+        window.operateEvents = {
+            'click .caseRun': function (e, value, row, index) {
+                alert(row.apiID);
+         },
+            'click .caseEdit': function (e, value, row, index) {
+                $("#editModal").modal('show');
+
+            }
+    };
+</script>
+
+
+{% endblock %}

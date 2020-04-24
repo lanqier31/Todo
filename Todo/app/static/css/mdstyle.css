@@ -227,3 +227,56 @@ table thead{
 .text-right{
 	margin-top: 10px;
 }
+
+/*  以下为InterfaceTest页面中的style*/
+ul, li { list-style: none; }
+.mt-tabpage {
+	/*width: 800px;*/
+	/*margin: 30px auto;*/
+	/*box-shadow: 0 0 5px #999;*/
+	background-color: #FFFFFF;
+}
+.mt-tabpage-title {
+	height: 44px;
+	font-size: 0;
+	background-color: #fff;
+	width: 94%;
+	/*margin: auto;*/
+	background: #fff;
+	border-bottom: 1px solid #f1f1f1;
+}
+.mt-tabpage-title .mt-tabpage-item {
+	display: inline-block;
+	width: 105px;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+	color: #666;
+	font-size: 12px;
+}
+.mt-tabpage-title .mt-tabpage-item:hover{
+	color: #eb4537;
+}
+.mt-tabpage-title .mt-tabpage-item-cur {
+	color: #eb4537;
+	font-size: 14px;
+	border-bottom: 1px solid #F85B5E;
+}
+.mt-tabpage-count {
+	position: relative;
+	/*width: 800px;*/
+	height: 600px;
+	overflow: hidden;
+}
+.mt-tabpage-cont__wrap {
+	position: absolute;
+}
+.mt-tabpage-count .mt-tabpage-item {
+	/*width: 850px;*/
+	/*height: 600px;*/
+	/*line-height: 200px;*/
+	/*text-align: left;*/
+}
+.buttonItems{
+	margin-top: 5px;
+}

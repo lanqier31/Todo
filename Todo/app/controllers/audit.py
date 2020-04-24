@@ -5,7 +5,6 @@ from app.models.Category import Category,Article
 from app.models.Todo import Todo
 import os ,json,sys
 from app import app,db
-from BeautifulSoup import BeautifulSoup
 import HTMLParser
 from datetime import date,timedelta
 from sqlalchemy import extract

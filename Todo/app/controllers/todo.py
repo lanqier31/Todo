@@ -79,14 +79,17 @@ def query_todo():
             query = query.filter(Todo.createtime.between(monday,today))
         if (time == 'last7day'):
             today = date.today()
-            beginday = today - timedelta(7)
+            beginday = today - timedelta(10)
             query = query.filter(Todo.createtime.between(beginday, today))
+
+        if (time == '2019'):
+            year = '2019'
+            query = query.filter(extract('year', Todo.createtime) == year)
 
         if(time == 'last30day'):
             today= date.today()
             beginday = today-timedelta(30)
             query = query.filter(Todo.createtime.between(beginday,today))
-
 
         if (searchText !=''):
             query = Todo.query.filter_by(id=searchText)
