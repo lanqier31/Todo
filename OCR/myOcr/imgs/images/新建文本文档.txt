@@ -1,0 +1,21 @@
+echo Run Tesseract for Training.. 
+tesseract.exe en.font.exp1.tif en.font.exp1 nobatch box.train 
+
+echo Compute the Character Set.. 
+unicharset_extractor.exe en.font.exp1.box 
+mftraining -F font_properties -U unicharset -O num.unicharset en.font.exp1.tr 
+
+
+echo Clustering.. 
+cntraining.exe en.font.exp1.tr 
+
+echo Rename Files.. 
+rename normproto num.normproto 
+rename inttemp num.inttemp 
+rename pffmtable num.pffmtable 
+rename shapetable num.shapetable  
+
+echo Create Tessdata.. 
+combine_tessdata.exe num. 
+
+echo. & pause
