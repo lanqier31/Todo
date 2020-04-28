@@ -27,7 +27,8 @@ class loadFiles(object):
         for folder in folders:
              catg = folder.split(os.sep)[-1]
              for file in os.listdir(folder):
-                 yield catg, file
+                 # yield catg, file    #返回文件名
+                 yield catg, os.path.join(folder, file)   #返回文件路径
 
 
 if __name__ == '__main__':
