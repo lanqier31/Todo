@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="fb3ee432-e98b-419e-a00e-7ab7d1e9f6ae" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../OCR/aip-python-sdk-2.2.15/AipOcr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/aip-python-sdk-2.2.15/IOcr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/aip-python-sdk-2.2.15/resultDemo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/myOcr/StudyOpencv/opencvS01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/myOcr/ocrDemo2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/myOcr/ocrdemo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../OCR/myOcr/orcDemo3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Todo/app/controllers/interfaceTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Todo/app/models/InterfaceTest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Todo/app/static/js/mt-tabpage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Todo/app/templates/InterfaceTest/Leftsidebar.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Todo/app/templates/InterfaceTest/case_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../nlpdemo/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../nlpdemo/demo1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../nlpdemo/demo2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../nlpdemo/demo3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../nlpdemo/jiebademo1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pachong/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pachong/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pachong/demo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pachong/demo2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../pachong/demo3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app.db" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/controllers/audit.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/controllers/audit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/controllers/frontPerform.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/controllers/frontPerform.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/controllers/todo.py" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/controllers/todo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/static/css/mdstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/static/css/mdstyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/templates/knowledge/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/templates/knowledge/test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Todo/app/templates/todo.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Todo/app/templates/todo.html" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-35" />
+    <option name="y" value="21" />
+    <option name="width" value="1620" />
+    <option name="height" value="920" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="myNLp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="myNLp" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js.buildTools.grunt.grunt-cli.package" value="" />
+    <property name="js.buildTools.gulp.gulp_package_dir" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="js.build_tools.grunt">
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fb3ee432-e98b-419e-a00e-7ab7d1e9f6ae" name="Default Changelist" comment="" />
+      <created>1585118322712</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585118322712</updated>
+      <workItem from="1585118372096" duration="1163000" />
+      <workItem from="1585120074997" duration="2173000" />
+      <workItem from="1585122746970" duration="1055000" />
+      <workItem from="1587625835732" duration="14000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="4405000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2642487" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" visible="true" weight="0.32658958" />
+      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>
